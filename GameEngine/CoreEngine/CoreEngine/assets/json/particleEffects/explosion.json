@@ -1,0 +1,289 @@
+{
+  "Explosion": {
+    "EmitCount": 0,
+    "EmitRate": 1000,
+    "MaxParticles": 1000,
+
+    "Configuration": {
+      "EmitterConfig": {
+        "Color": {
+          "R": 1,
+          "G": 0.25,
+          "B": 0,
+          "A": 0
+        },
+        "GlowColor": {
+          "R": 1,
+          "G": 0.25,
+          "B": 0,
+          "A": 1
+        },
+        "UVScale": {
+          "X": 1,
+          "Y": 1
+        },
+        "UVOffset": {
+          "X": 0,
+          "Y": 0
+        },
+        "CubeMapped": false,
+        "CompressedNormalMap": false
+      },
+
+      "RingParticleSpawner": {
+        "Scale": {
+          "Min": 0.01,
+          "Max": 0.1
+        },
+        "Speed": {
+          "Min": 0.1,
+          "Max": 4
+        },
+        "Lifetime": {
+          "Min": 0.5,
+          "Max": 1
+        },
+		"Radius": {
+			"Min": 0.001,
+			"Max": 0.001
+		},
+        "Angle": {
+          "Min": 0,
+          "Max": 0
+        },
+        "Position": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0,
+          "W": 1
+        },
+        "Normal": {
+          "X": 0,
+          "Y": 0,
+          "Z": 1
+        },
+        "Size": {
+          "X": 1,
+          "Y": 1,
+          "Z": 1
+        }
+      }
+    }
+  },
+  
+  "RedExplosion": {
+    "EmitCount": 0,
+    "EmitRate": 1000,
+    "MaxParticles": 1000,
+
+    "Configuration": {
+      "EmitterConfig": {
+        "Color": {
+          "R": 1,
+          "G": 0,
+          "B": 0,
+          "A": 0
+        },
+        "GlowColor": {
+          "R": 1,
+          "G": 0,
+          "B": 0,
+          "A": 1
+        },
+        "UVScale": {
+          "X": 1,
+          "Y": 1
+        },
+        "UVOffset": {
+          "X": 0,
+          "Y": 0
+        },
+        "CubeMapped": false,
+        "CompressedNormalMap": false
+      },
+
+      "RingParticleSpawner": {
+        "Scale": {
+          "Min": 0.01,
+          "Max": 0.1
+        },
+        "Speed": {
+          "Min": 0.1,
+          "Max": 2
+        },
+        "Lifetime": {
+          "Min": 1,
+          "Max": 2
+        },
+		"Radius": {
+			"Min": 0.001,
+			"Max": 0.001
+		},
+        "Angle": {
+          "Min": 0,
+          "Max": 0
+        },
+        "Position": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0,
+          "W": 1
+        },
+        "Normal": {
+          "X": 0,
+          "Y": 0,
+          "Z": 1
+        },
+        "Size": {
+          "X": 1,
+          "Y": 1,
+          "Z": 1
+        }
+      }
+    }
+  },
+  
+  "BlueExplosion": {
+    "EmitCount": 0,
+    "EmitRate": 1000,
+    "MaxParticles": 1000,
+
+    "Configuration": {
+      "EmitterConfig": {
+        "Color": {
+          "R": 0,
+          "G": 0,
+          "B": 1,
+          "A": 0
+        },
+        "GlowColor": {
+          "R": 0,
+          "G": 0,
+          "B": 1,
+          "A": 1
+        },
+        "UVScale": {
+          "X": 1,
+          "Y": 1
+        },
+        "UVOffset": {
+          "X": 0,
+          "Y": 0
+        },
+        "CubeMapped": false,
+        "CompressedNormalMap": false
+      },
+
+      "RingParticleSpawner": {
+        "Scale": {
+          "Min": 0.01,
+          "Max": 0.1
+        },
+        "Speed": {
+          "Min": 0.1,
+          "Max": 4
+        },
+        "Lifetime": {
+          "Min": 0.1,
+          "Max": 0.25
+        },
+		"Radius": {
+			"Min": 0.001,
+			"Max": 0.001
+		},
+        "Angle": {
+          "Min": 0,
+          "Max": 0
+        },
+        "Position": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0,
+          "W": 1
+        },
+        "Normal": {
+          "X": 0,
+          "Y": 0,
+          "Z": 1
+        },
+        "Size": {
+          "X": 1,
+          "Y": 1,
+          "Z": 1
+        }
+      }
+    }
+  },
+  
+  "YellowExplosion": {
+    "EmitCount": 0,
+    "EmitRate": 1000,
+    "MaxParticles": 1000,
+
+    "Configuration": {
+      "EmitterConfig": {
+        "Color": {
+          "R": 1,
+          "G": 1,
+          "B": 0,
+          "A": 0
+        },
+        "GlowColor": {
+          "R": 1,
+          "G": 1,
+          "B": 0,
+          "A": 1
+        },
+        "UVScale": {
+          "X": 1,
+          "Y": 1
+        },
+        "UVOffset": {
+          "X": 0,
+          "Y": 0
+        },
+        "CubeMapped": false,
+        "CompressedNormalMap": false
+      },
+
+      "RingParticleSpawner": {
+        "Scale": {
+          "Min": 0.01,
+          "Max": 0.1
+        },
+        "Speed": {
+          "Min": 0.1,
+          "Max": 4
+        },
+        "Lifetime": {
+          "Min": 0.5,
+          "Max": 1
+        },
+		"Radius": {
+			"Min": 0.001,
+			"Max": 0.001
+		},
+        "Angle": {
+          "Min": 0,
+          "Max": 0
+        },
+        "Position": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0,
+          "W": 1
+        },
+        "Normal": {
+          "X": 0,
+          "Y": 0,
+          "Z": 1
+        },
+        "Size": {
+          "X": 1,
+          "Y": 1,
+          "Z": 1
+        }
+      }
+    }
+  }
+}
