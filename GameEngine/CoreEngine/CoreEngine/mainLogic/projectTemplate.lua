@@ -143,7 +143,7 @@ function CreateObject(scene, meshAsset, material)
 	]]
 	local model = GameObject("Model")
 	model.Parent = transform
-	model.Asset = meshAsset
+	model.Asset = meshAsset or Engine.CoreMeshes.CoreCube
 	model.MaterialProperties = material or defaultMaterial
 	
 	-- Register the model to the scene for rendering
