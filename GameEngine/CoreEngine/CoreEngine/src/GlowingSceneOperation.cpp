@@ -319,7 +319,7 @@ namespace GraphicsEngine
 		{
 			WaterBuffer.lock()->DrawTo();
 
-			Graphics::ClearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			Graphics::ClearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); CheckGLErrors();
 
 			Programs::WaterMatrix->Use();
 
@@ -350,7 +350,7 @@ namespace GraphicsEngine
 
 			normalMapGenBuffer->DrawTo(0, 0, first->GetWidth(), first->GetHeight());
 
-			Graphics::ClearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			Graphics::ClearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); CheckGLErrors();
 
 			Programs::NormalMapGen->heightMap.Set(first, 1);
 			Programs::NormalMapGen->scale.Set(2);
@@ -369,7 +369,7 @@ namespace GraphicsEngine
 
 		sceneBuffer->DrawTo();
 		Graphics::SetClearColor(RGBA(0, 0, 0, 1));
-		Graphics::ClearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		Graphics::ClearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); CheckGLErrors();
 
 		currentScene->DrawTerrain(false);
 		currentScene->Draw(false);
@@ -489,7 +489,7 @@ namespace GraphicsEngine
 
 		Blur.lock()->Render();
 
-		glDisable(GL_DEPTH_TEST);
+		glDisable(GL_DEPTH_TEST);  CheckGLErrors();
 
 		auto hdrBuffer = HDRBuffer.lock();
 
@@ -501,7 +501,7 @@ namespace GraphicsEngine
 		Programs::BlurBlend->blurData.Set(BlurResult.lock()->GetTexture(), 1);
 		Programs::BlurBlend->transform.Set(Matrix3());
 
-		Graphics::ClearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		Graphics::ClearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); CheckGLErrors();
 
 		Programs::BlurBlend->CoreMeshes.Square->Draw();
 
@@ -534,7 +534,7 @@ namespace GraphicsEngine
 
 			current->DrawTo(0, 0, width, height);
 
-			Graphics::ClearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			Graphics::ClearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); CheckGLErrors();
 
 			Programs::Luminescence->finalPass.Set(width == 1 && height == 1);
 
@@ -544,7 +544,7 @@ namespace GraphicsEngine
 			{
 				LuminescenceCacheBuffer.lock()->DrawTo();
 
-				Graphics::ClearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+				Graphics::ClearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); CheckGLErrors();
 
 				Programs::Luminescence->CoreMeshes.Square->Draw();
 
@@ -557,7 +557,7 @@ namespace GraphicsEngine
 			Programs::Luminescence->inputData.Set(back->GetTexture());
 		}
 
-		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_DEPTH_TEST); CheckGLErrors();
 
 		//float luminescence = -1;
 		//
@@ -570,7 +570,7 @@ namespace GraphicsEngine
 		else
 			FrameBuffer::Detatch();
 
-		Graphics::ClearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		Graphics::ClearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); CheckGLErrors();
 		
 		Programs::ToneMap->Use();
 
@@ -605,7 +605,7 @@ namespace GraphicsEngine
 		if (!Output.expired() && Detatch)
 			FrameBuffer::Detatch();
 
-		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_DEPTH_TEST); CheckGLErrors();
 	}
 
 	std::shared_ptr<FrameBuffer> GlowingSceneOperation::GetSceneBuffer() const

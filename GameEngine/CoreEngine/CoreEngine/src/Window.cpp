@@ -139,7 +139,7 @@ float Window::Update()
 void Window::Swap()
 {
 	LastDraw = Time;
-	SDL_GL_SwapWindow(WindowHandle);
+	SDL_GL_SwapWindow(WindowHandle); CheckGLErrors();
 
 	Uint64 currentTime = SDL_GetTicks();
 
