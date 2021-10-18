@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\trevo\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\trevo\\.nuget\\packages"
+    ]
+  }
+}

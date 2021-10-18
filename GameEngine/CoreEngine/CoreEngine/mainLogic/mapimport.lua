@@ -1,5 +1,4 @@
-print("abc")
-	print("hi am thread",coroutine.running())
+dofile("./assets/scripts/apidump.lua")
 
 local resolution = GameObject.FrameBuffer.WindowSize
 
@@ -146,16 +145,7 @@ light.Specular = RGBA(1, 1, 1, 1)--RGBA(0.6, 0.55, 0.95, 1)
 light.Ambient = RGBA(1, 1, 1, 1)--RGBA(0.05, 0.05, 0.05, 1)
 light.Type = Enum.LightType.Directional
 --light.Ambient = RGBA(0.5, 0.5, 0.5, 1)
-light.Parent = simulation --[[ light:SetParent(simulation) ]]
-coroutine.wrap(function()
-print("aaaaaa")
-wait(10)
-light.Parent = nil
-print("lol",wait(10), light, simulation)
-print("lol",pcall(function()
-light.Parent = simulation
-end))
-end)()
+light.Parent = simulation 
 
 local lightOrb = GameObject("Transform")
 lightOrb.Parent = simulation --[[ lightOrb:SetParent(simulation) ]]
