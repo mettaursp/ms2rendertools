@@ -23,8 +23,3 @@ namespace GraphicsEngine
 		Reflected(DrawSceneOperation);
 	};
 }
-
-namespace Engine
-{
-	//Class_Inherits(GraphicsEngine::DrawSceneOperation, GraphicsEngine::RenderOperation);
-}

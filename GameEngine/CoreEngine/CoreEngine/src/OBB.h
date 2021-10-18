@@ -29,7 +29,5 @@ public:
 
 namespace Engine
 {
-	//Class_Inherits(OBB, CoreType);
-
 	Define_Value_Type(OBB);
 }

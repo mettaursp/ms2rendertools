@@ -710,10 +710,7 @@ void MeshData::GenerateCubeMap(const MeshData* meshData)
 	
 	for (int i = 0; i < vertices; ++i)
 	{
-		Vector3 vector = VertexBuffer[i].Normal;//position - getCenter();
-		//vector.X /= size.X;
-		//vector.Y /= size.Y;
-		//vector.Z /= size.Z;
+		Vector3 vector = VertexBuffer[i].Normal;
 
 		Vector3 absolute = Vector3(absf(vector.X), absf(vector.Y), absf(vector.Z));
 

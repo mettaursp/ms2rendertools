@@ -6,11 +6,6 @@
 // Here be dragons! Abandon all hope ye who enter here!
 // this is all mostly book keeping shit
 
-//namespace
-//{
-//	struct dummy { dummy(int); }; // testing dummy for MSVS intellisense template instance checking
-//}
-
 class BaseAllocator
 {
 public:

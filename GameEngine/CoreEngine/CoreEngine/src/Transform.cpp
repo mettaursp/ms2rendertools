@@ -88,16 +88,6 @@ namespace Engine
 		}
 
 		return Transformation != OldTransform;
-			//return true;
-
-		
-		//return false;
-		//Handle<Transform> parent = GetComponent<Transform>();
-		//
-		//if (parent != nullptr && parent->HasChanged())
-		//	return true;
-		//
-		//return Transformation != OldTransform;
 	}
 
 	Vector3 Transform::GetPosition() const
@@ -129,12 +119,6 @@ namespace Engine
 
 	Vector3 Transform::GetWorldPosition()
 	{
-		//Handle<Transform> parent = GetComponent<Transform>();
-		//if (parent != nullptr)
-		//	return (parent->GetWorldTransformation() * Transformation).Translation();
-		//
-		//return Transformation.Translation();
-
 		Recompute();
 		
 		return WorldTransformation.Translation();
@@ -147,12 +131,6 @@ namespace Engine
 
 	const Matrix3& Transform::GetWorldTransformation()
 	{
-		//Recompute();
-		//Handle<Transform> parent = GetComponent<Transform>();
-		//if (parent != nullptr)
-		//	return parent->GetWorldTransformation() * Transformation;
-		//
-		//return Transformation;
 		Recompute();
 		
 		return WorldTransformation;

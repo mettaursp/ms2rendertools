@@ -31,8 +31,3 @@ namespace GraphicsEngine
 		Reflected(CanvasStencil);
 	};
 }
-
-namespace Engine
-{
-	//Class_Inherits(GraphicsEngine::CanvasStencil, Object);
-}

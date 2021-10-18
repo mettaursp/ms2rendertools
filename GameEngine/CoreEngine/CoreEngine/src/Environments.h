@@ -19,6 +19,4 @@ namespace Engine
 
 		Reflected(Environments);
 	};
-
-	//Class_Inherits(Environments, Object);
 }

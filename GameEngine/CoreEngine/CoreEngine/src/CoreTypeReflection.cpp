@@ -6,33 +6,15 @@ LibraryData::LibraryData(const std::string& name, const std::string& description
 
 void LibraryData::Copy(void* object, void* data) const
 {
-	//for (MemberMap::const_iterator i = Members.begin(); i != Members.end(); ++i)
-	//	i->second->Copy(i->second->GetLocation(object), i->second->GetLocation(data));
 }
 
 std::string LibraryData::Format(void* object) const
 {
-	//JSONObject json;
-	//
-	//for (MemberMap::const_iterator i = members.begin(); i != members.end(); ++i)
-	//	json.members[i->first] = i->second->format(object);
-	//
-	//return json.encode();
-
 	return "";
 }
 
 void LibraryData::Parse(void* object, const std::string& data) const
 {
-	//JSONObject json(data);
-	//
-	//for (JSONObject::MemberMap::iterator i = json.members.begin(); i != json.members.end(); ++i)
-	//{
-	//	const Member* member = members.find(i->first)->second;
-	//	
-	//	if (member != nullptr)
-	//		member->parse(object, i->second);
-	//}
 }
 
 ClassData::ClassData(const std::string& name, const std::string& description, const std::string& inherits) : ReflectionData(name, inherits, description, GetType(inherits), true)
@@ -53,27 +35,11 @@ void ClassData::Copy(void* object, void* data) const
 
 std::string ClassData::Format(void* object) const
 {
-	//JSONObject json;
-	//
-	//for (MemberMap::const_iterator i = members.begin(); i != members.end(); ++i)
-	//	json.members[i->first] = i->second->format(object);
-	//
-	//return json.encode();
-
 	return "";
 }
 
 void ClassData::Parse(void* object, const std::string& data) const
 {
-	//JSONObject json(data);
-	//
-	//for (JSONObject::MemberMap::iterator i = json.members.begin(); i != json.members.end(); ++i)
-	//{
-	//	const Member* member = members.find(i->first)->second;
-	//	
-	//	if (member != nullptr)
-	//		member->parse(object, i->second);
-	//}
 }
 
 void ClassData::LoadInheritedData()
@@ -83,7 +49,6 @@ void ClassData::LoadInheritedData()
 
 	for (MemberMap::const_iterator i = ParentData->Members.begin(); i != ParentData->Members.end(); ++i)
 		AddMember(i->second->Name, ParentData);
-		//AddMember(i->second->Name, i->second->Type, i->second->GetLocation(nullptr), i->second->Description, i->second->Archivable, i->second->IsStatic);
 
 	for (FunctionMap::const_iterator i = ParentData->Functions.begin(); i != ParentData->Functions.end(); ++i)
 		if (i->second->Name != i->second->ParentName)

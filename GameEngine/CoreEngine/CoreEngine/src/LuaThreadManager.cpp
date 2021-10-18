@@ -58,12 +58,6 @@ namespace Engine
 			lua_pushstring(lua, "ThreadData");
 			lua_createtable(lua, 0, 0);
 
-			//lua_createtable(lua, 0, 1);
-			//lua_pushstring(lua, "__mode");
-			//lua_pushstring(lua, "v");
-			//lua_settable(lua, -3);
-			//
-			//lua_setmetatable(lua, -2);
 
 			lua_settable(lua, LUA_REGISTRYINDEX);
 
@@ -262,8 +256,6 @@ namespace Engine
 						lua_pop(lua, 4);
 					}
 
-					//lua_pop(lua, 1);
-
 					{
 						int top = lua_gettop(lua);
 						top += 0;
@@ -417,8 +409,6 @@ namespace Engine
 				thread.Running = true;
 
 				ThreadStack.push_back(threadID);
-
-				//std::cout << "Entering thread [" << ThreadStack.size() << "]" << std::endl;
 			}
 
 			return 0;
@@ -433,8 +423,6 @@ namespace Engine
 				Thread& thread = Threads.GetNode(threadID).GetData();
 
 				thread.Running = false;
-
-				//std::cout << "Exiting thread [" << ThreadStack.size() << "]" << std::endl;
 
 				if (ThreadStack.size() > 0 && ThreadStack[ThreadStack.size() - 1] == threadID)
 					ThreadStack.pop_back();
@@ -451,8 +439,6 @@ namespace Engine
 
 				thread.Running = false;
 				thread.Alive = false;
-
-				//std::cout << "Exiting thread [" << ThreadStack.size() << "]" << std::endl;
 
 				ThreadStack.pop_back();
 			}

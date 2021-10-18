@@ -108,9 +108,6 @@ private:
 
 namespace Engine
 {
-	//Class_Inherits(Matrix3, CoreType);
-
-	//Define_Value_Type(Matrix3);
 	namespace LuaTypes
 	{
 		class Lua_Matrix3
@@ -153,7 +150,7 @@ namespace Engine
 						else if (object->Meta != type)
 							Lua::BadArgumentError(*LuaState, ArgumentNumber + 1, "Matrix3", object->Meta->Name.c_str()); 
 							
-						return *reinterpret_cast<Matrix3*>(object->Data);//ObjectReference(object->Reference).GetObjectData<Matrix3>();
+						return *reinterpret_cast<Matrix3*>(object->Data);
 					}
 					else
 						Lua::BadArgumentError(*LuaState, ArgumentNumber + 1, "Matrix3", Lua::GetType(*LuaState, index)); 
@@ -179,21 +176,10 @@ namespace Engine
 			
 					try
 					{
-						//Handle<CoreClass> handle;
-						//
-						//type->Create(handle);
-
-
-						//Handle<CoreClass> handle;
-						//
-						//object->Meta->Create(handle);
-
 						void* data = type->CreateRaw();
 
 						MakeLuaTypeReference(*LuaState, type, data);
-				
-						//Engine::MakeLuaTypeReference(*LuaState, handle.GetID(), type);
-				
+
 						new (data) Matrix3(value);
 					}
 					catch (std::string& err)

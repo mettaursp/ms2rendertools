@@ -45,9 +45,6 @@ namespace GraphicsEngine
 
 	FrameBuffer::~FrameBuffer()
 	{
-		//if (FormerBufferID != 0 && BufferID == 0)
-		//	throw "Attempt to double delete FrameBuffer";
-
 		glBindFramebuffer(GL_FRAMEBUFFER, BufferID); CheckGLErrors();
 
 		ClearTextures();

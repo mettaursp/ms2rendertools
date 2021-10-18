@@ -23,7 +23,7 @@ namespace GraphicsEngine
 
 	void DeviceTransform::Draw(bool updateStencils)
 	{
-		Draw(This.lock()->Cast<Object>(), updateStencils);
+		Draw(This.lock(), updateStencils);
 	}
 
 	Matrix3 DeviceTransform::GetTransformation() const
@@ -35,7 +35,7 @@ namespace GraphicsEngine
 	{
 		UpdateTransformation();
 
-		return Transformation;//((const DeviceTransform*)this)->GetTransformation();
+		return Transformation;
 	}
 
 	Matrix3 DeviceTransform::GetInverseTransformation() const
@@ -47,7 +47,7 @@ namespace GraphicsEngine
 	{
 		UpdateTransformation();
 
-		return InverseTransformation;// ((const DeviceTransform*)this)->GetInverseTransformation();
+		return InverseTransformation;
 	}
 
 	Vector3 DeviceTransform::GetAbsoluteSize() const
@@ -201,14 +201,13 @@ namespace GraphicsEngine
 			parentSize.Y * Size.Y.Scale + Size.Y.Offset
 		);
 
-		//Vector3 offset = 2 * AnchorPoint.Calculate(Vector3(), AbsoluteSize).Scale(1, 1, 1);
 		Vector3 rotationOffset = 2 * RotationAnchor.Calculate(Vector3(), AbsoluteSize).Scale(1, 1, 1);
 
 		Vector3 scale = AbsoluteSize + Vector3(0, 0, 1);
 		Vector3 translation = Vector3(
 			2 * (Position.X.Offset + parentSize.X * Position.X.Scale - AnchorPoint.X.Offset - AbsoluteSize.X * AnchorPoint.X.Scale),
 			2 * (Position.Y.Offset + parentSize.Y * Position.Y.Scale - AnchorPoint.Y.Offset - AbsoluteSize.Y * AnchorPoint.Y.Scale)
-		) - (parentSize - AbsoluteSize);// +offset;
+		) - (parentSize - AbsoluteSize);
 
 		translation = translation.Scale(1, -1, 1);
 
@@ -237,7 +236,7 @@ namespace GraphicsEngine
 	{
 		for (int i = 0; i < object->GetChildren(); ++i)
 		{
-			std::shared_ptr<Object> child = object->Get(i)->Cast<Object>();
+			std::shared_ptr<Object> child = object->Get(i);
 
 			if (child->IsA<DeviceTransform>())
 			{

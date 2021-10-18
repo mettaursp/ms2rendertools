@@ -48,11 +48,6 @@ namespace GraphicsEngine
 	};
 }
 
-namespace Engine
-{
-	//Class_Inherits(GraphicsEngine::SceneObject, Object);
-}
-
 struct lua_State;
 
 namespace GraphicsEngine
@@ -162,9 +157,4 @@ namespace GraphicsEngine
 
 		Reflected(Scene);
 	};
-}
-
-namespace Engine
-{
-	//Class_Inherits(GraphicsEngine::Scene, Object);
 }

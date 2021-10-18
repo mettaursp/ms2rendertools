@@ -10,7 +10,7 @@ typedef void(*VoidFunction)(int);
 
 namespace Engine
 {
-	class ObjectBase;
+	class Object;
 }
 
 class ReflectionData
@@ -138,7 +138,7 @@ public:
 	typedef FunctionOverloadData::ParameterVector ParameterVector;
 	typedef Function::OverloadVector OverloadVector;
 	typedef std::map<std::string, const Function*> FunctionMap;
-	typedef std::function<std::shared_ptr<Engine::ObjectBase>()> AllocateCallback;
+	typedef std::function<std::shared_ptr<Engine::Object>()> AllocateCallback;
 	typedef std::function<void*()> AllocateRawCallback;
 	typedef std::function<void(void* output)> DeleteCallback;
 	typedef std::function<void(void* object, void* copying)> CopyCallback;

@@ -66,8 +66,3 @@ namespace GraphicsEngine
 		Reflected(FrameBuffer);
 	};
 }
-
-namespace Engine
-{
-	//Class_Inherits(GraphicsEngine::FrameBuffer, Object);
-}

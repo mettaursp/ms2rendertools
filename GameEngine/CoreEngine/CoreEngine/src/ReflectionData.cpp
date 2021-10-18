@@ -7,7 +7,6 @@ extern "C" {
 
 #include "ReflectionData.h"
 #include "CoreTypeReflection.h"
-//#include "JSON.h"
 
 ReflectionData::DataVector ReflectionData::Types;
 ReflectionData::IDMap ReflectionData::IDs;
@@ -132,7 +131,6 @@ void ReflectionData::AddFunction(const std::string& functionName, Function* data
 {
 	if (Functions.find(functionName) != Functions.end())
 	{
-		//throw std::string("type '") + Name + "' already has function '" + functionName;
 		Functions.erase(functionName);
 	}
 

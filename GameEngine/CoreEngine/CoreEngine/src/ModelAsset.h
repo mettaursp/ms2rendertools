@@ -39,6 +39,4 @@ namespace Engine
 
 		Reflected(ModelAsset);
 	};
-
-	//Class_Inherits(ModelAsset, Object);
 }

@@ -22,8 +22,3 @@ namespace GraphicsEngine
 		Reflected(Fonts);
 	};
 }
-
-namespace Engine
-{
-	//Class_Inherits(GraphicsEngine::Fonts, Engine::Object);
-}

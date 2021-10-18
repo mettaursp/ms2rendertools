@@ -17,7 +17,6 @@ public:
 	float X, Y, Z, W;
 
 	Vector3(float x = 0, float y = 0, float z = 0, float w = 0);
-	//Vector3(Vector2 vector);
 
 	Vector3& Set(float x = 0, float y = 0, float z = 0, float w = 0);
 	Vector3& Normalize();
@@ -57,8 +56,6 @@ private:
 
 namespace Engine
 {
-	//Class_Inherits(Vector3, CoreType);
-
 	Define_Value_Type(Vector3);
 }
 

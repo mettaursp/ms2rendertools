@@ -12,8 +12,8 @@ namespace GraphicsEngine
 		float Roughness = 0.5f;
 		float Metalness = 0;
 		float RefractiveIndex = 1.1f;
-		float Transparency = 0; // (1 - transparency) * diffuse; transparency * transmitted
-		float Translucency = 0.01f; // light loss from travel distance
+		float Transparency = 0;
+		float Translucency = 0.01f;
 		float Emission = 0;
 
 		void Initialize() {}

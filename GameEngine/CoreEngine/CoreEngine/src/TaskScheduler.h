@@ -18,7 +18,7 @@ extern const float infinity;
 
 namespace Engine
 {
-	class ObjectBase;
+	class Object;
 	class Object;
 }
 
@@ -43,7 +43,7 @@ class Connection
 public:
 	~Connection();
 
-	void Watch(const std::shared_ptr<Engine::ObjectBase>& handle);
+	void Watch(const std::shared_ptr<Engine::Object>& handle);
 	void Disconnect();
 	void Disconnect(int timerID);
 	void Disconnect(EventBase& event, int id = -1);
@@ -53,7 +53,7 @@ public:
 	virtual void Died() {}
 
 private:
-	typedef std::vector<std::weak_ptr<Engine::ObjectBase>> HandleVector;
+	typedef std::vector<std::weak_ptr<Engine::Object>> HandleVector;
 	typedef std::vector<int> IDVector;
 	typedef std::map<EventBase*, IDVector> EventMap;
 
@@ -62,11 +62,6 @@ private:
 	EventMap ConnectedEvents;
 	IDVector ConnectedTimers;
 };
-
-namespace Engine
-{
-	////Class_Base(Connection);
-}
 
 template <typename... Args>
 class Event : public EventBase

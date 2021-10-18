@@ -32,8 +32,3 @@ namespace GraphicsEngine
 		Reflected(Textures);
 	};
 }
-
-namespace Engine
-{
-	//Class_Inherits(GraphicsEngine::Textures, Engine::Object);
-}

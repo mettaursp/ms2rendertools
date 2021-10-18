@@ -6,7 +6,7 @@
 
 namespace Engine
 {
-	class ObjectBase;
+	class Object;
 	class Object;
 	class ModelAsset;
 
@@ -22,7 +22,7 @@ namespace Engine
 		{
 		public:
 			static int GetObjectID(const void*);
-			static void PushObject(lua_State* lua, const std::shared_ptr<Engine::ObjectBase>& object);
+			static void PushObject(lua_State* lua, const std::shared_ptr<Engine::Object>& object);
 
 			template <typename T>
 			class Converter;
@@ -46,7 +46,7 @@ namespace Engine
 					int index = ArgumentNumber + (IsStatic ? 1 : 2);
 
 					if (lua_isuserdata(*LuaState, index))
-						return ObjectBase::GetObjectFromID(GetObjectID(lua_topointer(*LuaState, index)))->Cast<T>();
+						return Object::GetObjectFromID(GetObjectID(lua_topointer(*LuaState, index)))->Cast<T>();
 					else if (HasDefaultValue && (lua_gettop(*LuaState) < index || !lua_isnil(*LuaState, index)))
 						return DefaultValue;
 					else if (lua_isnil(*LuaState, index))
@@ -77,7 +77,7 @@ namespace Engine
 					int index = ArgumentNumber + (IsStatic ? 1 : 2);
 
 					if (lua_isuserdata(*LuaState, index))
-						return ObjectBase::GetObjectFromID(GetObjectID(lua_topointer(*LuaState, index)))->Cast<T>();
+						return Object::GetObjectFromID(GetObjectID(lua_topointer(*LuaState, index)))->Cast<T>();
 					else if (HasDefaultValue && (lua_gettop(*LuaState) < index || !lua_isnil(*LuaState, index)))
 						return DefaultValue;
 					else
@@ -94,21 +94,13 @@ namespace Engine
 
 				lua_State** LuaState = nullptr;
 
-				void operator()(const std::shared_ptr<Engine::ObjectBase>& object)
+				void operator()(const std::shared_ptr<Engine::Object>& object)
 				{
 					if (object == nullptr)
 						lua_pushnil(*LuaState);
 					else
 						PushObject(*LuaState, object);
 				}
-
-				//void operator()(const std::weak_ptr<Engine::ObjectBase>& object)
-				//{
-				//	if (object.expired())
-				//		lua_pushnil(*LuaState);
-				//	else
-				//		PushObject(*LuaState, object.lock());
-				//}
 			};
 		};
 
@@ -225,12 +217,12 @@ namespace Engine
 	}
 
 	template <>
-	class CoreTypes<std::shared_ptr<Engine::ObjectBase>>
+	class CoreTypes<std::shared_ptr<Engine::Object>>
 	{
 	public:
 		typedef LuaTypes::Lua_object LuaType;
 
-		static const std::string GetTypeName() { return "ObjectBase"; };
+		static const std::string GetTypeName() { return "Object"; };
 	};
 
 	template <typename T>
@@ -241,7 +233,7 @@ namespace Engine
 
 		static const std::string& RegisterTypeName(const std::string& name)
 		{
-			static std::string typeName = "ObjectBase";
+			static std::string typeName = "Object";
 			static bool initialized = false;
 
 			if (initialized)

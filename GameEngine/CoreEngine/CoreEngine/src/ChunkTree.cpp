@@ -36,7 +36,7 @@ namespace Engine
 	{
 		if (GridScale == 0)
 		{
-			CenterChunk.lock()->GetParent()->Cast<Object>()->SetParent(nullptr);
+			CenterChunk.lock()->GetParent()->SetParent(nullptr);
 
 			return true;
 		}
@@ -125,7 +125,7 @@ namespace Engine
 			auto centerChunk = CenterChunk.lock();
 
 			if (centerChunk != nullptr && centerChunk->GetParent() != nullptr)
-				centerChunk->GetParent()->Cast<Object>()->SetParent(nullptr);
+				centerChunk->GetParent()->SetParent(nullptr);
 		}
 		else
 		{

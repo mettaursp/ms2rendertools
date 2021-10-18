@@ -47,8 +47,3 @@ namespace GraphicsEngine
 		Reflected(ShadingOperation);
 	};
 }
-
-namespace Engine
-{
-	//Class_Inherits(GraphicsEngine::ShadingOperation, GraphicsEngine::RenderOperation);
-}

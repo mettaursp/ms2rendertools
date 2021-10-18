@@ -11,8 +11,6 @@ namespace GraphicsEngine
 	{
 		if (OperationID != -1)
 			GetOperations().Release(OperationID);
-		//else
-		//	throw "RenderOperation double delete";
 		
 		OperationID = -1;
 	}

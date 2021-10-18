@@ -64,9 +64,6 @@ public:
 
 namespace Engine
 {
-	//Class_Inherits(DeviceAxis, CoreType);
-	//Class_Inherits(DeviceVector, CoreType);
-
 	Define_Value_Type(DeviceAxis);
 	Define_Value_Type(DeviceVector);
 }

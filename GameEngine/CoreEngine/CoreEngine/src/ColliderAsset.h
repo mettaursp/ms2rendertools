@@ -32,6 +32,4 @@ namespace Engine
 			Reflected(ColliderAsset);
 		};
 	}
-
-	//Class_Inherits(Physics::ColliderAsset, Object);
 }

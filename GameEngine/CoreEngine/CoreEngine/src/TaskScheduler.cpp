@@ -28,7 +28,7 @@ Connection::~Connection()
 		Disconnect();
 };
 
-void Connection::Watch(const std::shared_ptr<Engine::ObjectBase>& handle)
+void Connection::Watch(const std::shared_ptr<Engine::Object>& handle)
 {
 	if (!Enabled)
 		throw "Attempt to use dead connection";

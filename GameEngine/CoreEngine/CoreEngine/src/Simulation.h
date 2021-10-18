@@ -19,6 +19,4 @@ namespace Engine
 
 		Reflected(Simulation);
 	};
-
-	//Class_Inherits(Simulation, Object);
 }

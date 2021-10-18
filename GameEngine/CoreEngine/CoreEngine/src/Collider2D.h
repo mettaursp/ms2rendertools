@@ -69,11 +69,7 @@ namespace Engine
 
 	using Physics::Collision;
 
-	//Class_Inherits(Collision, CoreType);
-
 	Define_Value_Type(Collision);
-
-	//Class_Inherits(Physics::Collider2D, Object);
 
 	namespace Physics
 	{

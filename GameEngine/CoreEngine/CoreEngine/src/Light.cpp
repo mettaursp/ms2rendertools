@@ -134,25 +134,6 @@ namespace GraphicsEngine
 	{
 		ShadowsEnabled = enabled;
 		ShadowMapSize = Dimensions(unsigned int(width), unsigned int(height));
-
-		//if (enabled)
-		//{
-		//	GenBuffer(RightMap, width, height);
-		//	GenBuffer(LeftMap, width, height);
-		//	GenBuffer(TopMap, width, height);
-		//	GenBuffer(BottomMap, width, height);
-		//	GenBuffer(FrontMap, width, height);
-		//	GenBuffer(BackMap, width, height);
-		//}
-		//else
-		//{
-		//	DeleteBuffer(RightMap);
-		//	DeleteBuffer(LeftMap);
-		//	DeleteBuffer(TopMap);
-		//	DeleteBuffer(BottomMap);
-		//	DeleteBuffer(FrontMap);
-		//	DeleteBuffer(BackMap);
-		//}
 	}
 
 	bool Light::AreShadowsEnabled() const

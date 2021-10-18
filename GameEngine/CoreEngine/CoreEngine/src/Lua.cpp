@@ -666,8 +666,6 @@ void Lua::ToLua(lua_State* lua, const DataMember* member, void* data, int index)
 		}
 		else if (member->Type->CopyConstructor)
 		{
-			//Handle<CoreClass> handle;
-
 			void* data = member->Type->CreateRaw();
 
 			member->Type->CopyConstructor(data, location);
@@ -684,7 +682,7 @@ void Lua::ToLua(lua_State* lua, const DataMember* member, void* data, int index)
 	else if (member->Type->IsEnum)
 	{
 		
-		std::string enumValue = Engine::EnumType::GetType(member->TypeName).Items.find(*((int*)location))->second.Name;//std::string(member->TypeName.c_str(), member->TypeName.size() - 4) + '\0';
+		std::string enumValue = Engine::EnumType::GetType(member->TypeName).Items.find(*((int*)location))->second.Name;
 
 		lua_getglobal(lua, "Enum");
 

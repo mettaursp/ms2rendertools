@@ -70,6 +70,4 @@ namespace Engine
 
 		Reflected(GameEngine);
 	};
-
-	//Class_Inherits(Environments, Object);
 }

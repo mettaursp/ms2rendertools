@@ -35,24 +35,6 @@ Reflect_Type(Aabb,
 		);
 	);
 	
-	//Bind_Function(Compute,
-	//
-	//	Document("");
-	//	Static Function_Overload
-	//	(
-	//		Document("");
-	//		Overload_Returns(Aabb);
-	//
-	//		Overload_Parameters
-	//		(
-	//			Document("");
-	//			Function_Parameter(std::shared_ptr<Engine::ModelAsset>, model);
-	//		);
-	//		
-	//		Bind_Parameters(Compute, model);
-	//	);
-	//);
-
 	Bind_Function(GetCenter,
 		
 		Document("");

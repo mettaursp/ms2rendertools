@@ -23,7 +23,6 @@ namespace GraphicsEngine
 		ContentsAppearance->Name = "ContentsAppearance";
 		ContentsAppearance->Texture = ContentsTexture;
 		ContentsAppearance->Color = RGBA(0, 0, 0, 0);
-		//ContentsAppearance->TextureColor = RGBA(0, 0, 0, 0);
 		ContentsAppearance->SetParent(This.lock());
 
 		TextTransform = Engine::Create<DeviceTransform>();

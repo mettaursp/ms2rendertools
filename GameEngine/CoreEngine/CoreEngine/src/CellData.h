@@ -20,7 +20,5 @@ namespace Engine
 		Reflected_Type(CellData);
 	};
 
-	//Class_Inherits(CellData, CoreType);
-
 	Define_Value_Type(CellData);
 }

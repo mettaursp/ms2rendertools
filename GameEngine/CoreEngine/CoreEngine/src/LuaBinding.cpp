@@ -165,12 +165,8 @@ namespace Engine
 				lua_settable(lua, typeIndex);temp = lua_gettop(lua);
 
 				lua_pushstring(lua, "IsObject"); temp = lua_gettop(lua);
-				lua_pushboolean(lua, type->Inherits("ObjectBase") || type->Inherits("Object")); temp = lua_gettop(lua);
+				lua_pushboolean(lua, type->Inherits("Object")); temp = lua_gettop(lua);
 				lua_settable(lua, typeIndex); temp = lua_gettop(lua);
-			
-				//lua_pushstring(lua, "IsEnum");temp = lua_gettop(lua);
-				//lua_pushboolean(lua, type->IsEnum);temp = lua_gettop(lua);
-				//lua_settable(lua, typeIndex);temp = lua_gettop(lua);
 			
 				lua_pushstring(lua, "UsesReferences");temp = lua_gettop(lua);
 				lua_pushboolean(lua, type->UseReferences);temp = lua_gettop(lua);
@@ -235,10 +231,6 @@ namespace Engine
 					lua_pushstring(lua, function->Name.c_str());
 					lua_createtable(lua, function->GetOverloads(), 0);
 
-					//lua_pushstring(lua, "Parent");
-					//lua_pushvalue(lua, typeIndex);
-					//lua_settable(lua, functionsIndex);
-				
 					int functionIndex = lua_gettop(lua);
 				
 					for (int k = 0; k < function->GetOverloads(); ++k)
@@ -466,7 +458,6 @@ namespace Engine
 			}
 		
 			lua_setglobal(lua, "Meta");
-			//lua_settable(lua, LUA_REGISTRYINDEX);temp = lua_gettop(lua);
 		}
 
 		luaL_newmetatable(lua, "objectConstructorMetatable");
@@ -717,7 +708,6 @@ namespace Engine
 		lua_gc(lua, LUA_GCCOLLECT, 0);
 
 		while (resumedThreads.size() > 0)
-		//for (int i = 0; i < int(resumedThreads.size()); ++i)
 		{
 			lua_pushstring(lua, "threads");
 			lua_gettable(lua, LUA_REGISTRYINDEX);
@@ -785,7 +775,7 @@ namespace Engine
 
 	void MakeLuaReference(lua_State* lua, int id)
 	{
-		std::shared_ptr<Engine::ObjectBase> object = Engine::Object::GetObjectFromID(id);
+		std::shared_ptr<Engine::Object> object = Engine::Object::GetObjectFromID(id);
 
 		LuaData* newData = (LuaData*)lua_newuserdata(lua, sizeof(LuaData));
 

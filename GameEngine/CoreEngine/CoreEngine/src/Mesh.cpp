@@ -49,9 +49,7 @@ void Mesh::Draw() const
 		glBindVertexArray(MeshID); CheckGLErrors();
 	}
 
-	//_program->UseProgram();
 	glDrawElements(DrawMode, Indices, GL_UNSIGNED_INT, 0); CheckGLErrors();
-	//glBindVertexArray(-1);
 }
 
 void Mesh::Load(const MeshData* data, const ShaderProgram* program)

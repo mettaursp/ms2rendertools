@@ -67,7 +67,3 @@ namespace GraphicsEngine
 		Reflected(Model);
 	};
 }
-namespace Engine
-{
-	//Class_Inherits(GraphicsEngine::Model, GraphicsEngine::SceneObject);
-}

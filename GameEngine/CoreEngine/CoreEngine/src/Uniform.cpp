@@ -6,9 +6,6 @@
 UniformBase::UniformBase(const std::string& name, const std::string& type, ShaderProgram* program) : Name(name), Type(type), Program(program)
 {
 	Handle = program->RegisterUniform(this); CheckGLErrors();
-
-	//if (handle == -1)
-	//	throw "couldn't find uniform";
 }
 
 GLint UniformBase::GetHandle() const

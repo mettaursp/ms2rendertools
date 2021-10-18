@@ -30,8 +30,3 @@ namespace GraphicsEngine
 		Reflected(Appearance);
 	};
 }
-
-namespace Engine
-{
-	////Class_Inherits(GraphicsEngine::Appearance, Object);
-}

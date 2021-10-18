@@ -29,7 +29,7 @@ namespace Engine
 
 		LuaType Type = LuaType::None;
 		void* Data = nullptr;
-		std::shared_ptr<ObjectBase> Reference;
+		std::shared_ptr<Object> Reference;
 		const ReflectionData* Meta = nullptr;
 
 		LuaData(const LuaType& type) : Type(type)

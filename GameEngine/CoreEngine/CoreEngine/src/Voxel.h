@@ -28,6 +28,4 @@ namespace Engine
 
 		Reflected(Voxel);
 	};
-
-	//Class_Inherits(Voxel, Object);
 }

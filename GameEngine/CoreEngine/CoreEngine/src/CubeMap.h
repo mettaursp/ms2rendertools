@@ -85,9 +85,3 @@ public:
 
 	Reflected(CubeMapBuffer);
 };
-
-namespace Engine
-{
-	//Class_Inherits(CubeMapTexture, Engine::Object);
-	//Class_Inherits(CubeMapBuffer, Engine::Object);
-}

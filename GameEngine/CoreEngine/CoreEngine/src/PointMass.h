@@ -25,6 +25,4 @@ namespace Engine
 			Reflected(PointMass);
 		};
 	}
-
-	//Class_Inherits(Physics::PointMass, Object);
 }

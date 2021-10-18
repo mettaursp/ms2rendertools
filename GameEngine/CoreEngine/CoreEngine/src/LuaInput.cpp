@@ -238,7 +238,7 @@ namespace Engine
 			SetState(true, Enum::BoundDevice::Any);
 		
 			return true;
-		}, This.lock()->Cast<Object>());
+		}, This.lock());
 		
 		Input->Changed.ConnectWithObject([this] (::InputObject* data) -> bool
 		{
@@ -255,7 +255,7 @@ namespace Engine
 			}
 		
 			return true;
-		}, This.lock()->Cast<Object>());
+		}, This.lock());
 		
 		Input->Ended.ConnectWithObject([this] (::InputObject*) -> bool
 		{
@@ -263,7 +263,7 @@ namespace Engine
 			SetState(false, Enum::BoundDevice::Any);
 		
 			return true;
-		}, This.lock()->Cast<Object>());
+		}, This.lock());
 
 		Name = Input->GetName();
 	}

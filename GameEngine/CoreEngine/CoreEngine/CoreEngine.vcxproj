@@ -267,7 +267,6 @@
     <ClCompile Include="src\OBB.meta.cpp" />
     <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\Object.meta.cpp" />
-    <ClCompile Include="src\ObjectBase.meta.cpp" />
     <ClCompile Include="src\ObjectReflection.cpp" />
     <ClCompile Include="src\ObjectRegistration.cpp" />
     <ClCompile Include="src\ObjectTemplate.meta.cpp" />
@@ -325,6 +324,9 @@
     <ClCompile Include="src\Terrain.meta.cpp" />
     <ClCompile Include="src\Terrain2DCollider.cpp" />
     <ClCompile Include="src\Terrain2DCollider.meta.cpp" />
+    <ClCompile Include="src\TerrainCollider2D.cpp" />
+    <ClCompile Include="src\TerrainCollider2D.meta.cpp" />
+    <ClCompile Include="src\TerrainColliderAxisEnum.meta.cpp" />
     <ClCompile Include="src\TerrainMaterial.cpp" />
     <ClCompile Include="src\TerrainMaterial.meta.cpp" />
     <ClCompile Include="src\TerrainTypes.cpp" />
@@ -378,6 +380,8 @@
     <ClInclude Include="src\SceneRayCastResults.h" />
     <ClInclude Include="src\Socket.h" />
     <ClInclude Include="src\Terrain2DCollider.h" />
+    <ClInclude Include="src\TerrainCollider2D.h" />
+    <ClInclude Include="src\TerrainColliderAxisEnum.h" />
     <ClInclude Include="src\TerrainTypes.h" />
     <ClInclude Include="src\ChunkStatusEnum.h" />
     <ClInclude Include="src\ChunkTree.h" />

@@ -53,8 +53,3 @@ namespace GraphicsEngine
 		Reflected(Camera);
 	};
 }
-
-namespace Engine
-{
-	//Class_Inherits(GraphicsEngine::Camera, Object);
-}

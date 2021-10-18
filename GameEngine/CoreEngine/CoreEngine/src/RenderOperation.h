@@ -35,8 +35,3 @@ namespace GraphicsEngine
 		Reflected(RenderOperation);
 	};
 }
-
-namespace Engine
-{
-	//Class_Inherits(GraphicsEngine::RenderOperation, Object);
-}

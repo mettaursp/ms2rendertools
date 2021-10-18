@@ -29,11 +29,6 @@ namespace GraphicsEngine
 	};
 }
 
-namespace Engine
-{
-	////Class_Inherits(GraphicsEngine::BlurPassOperation, GraphicsEngine::RenderOperation);
-}
-
 namespace GraphicsEngine
 {
 	class BlurOperation : public RenderOperation
@@ -67,9 +62,4 @@ namespace GraphicsEngine
 
 		Reflected(BlurOperation);
 	};
-}
-
-namespace Engine
-{
-	//Class_Inherits(GraphicsEngine::BlurOperation, GraphicsEngine::RenderOperation);
 }

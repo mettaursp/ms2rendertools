@@ -40,12 +40,10 @@ Window::Window() : Input(new InputHandler(EventHandler))
 	SDL_GL_SetSwapInterval(1);
 	glewInit();
 
-	//glDisable(GL_DEPTH_TEST);
 	glEnable(GL_DEPTH_TEST); CheckGLErrors();
 	glEnable(GL_CULL_FACE); CheckGLErrors();
 	glEnable(GL_BLEND); CheckGLErrors();
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); CheckGLErrors();
-	//glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 
 	int x, y;
 	SDL_GetMouseState(&x, &y);
@@ -69,8 +67,6 @@ Window::~Window()
 
 float Window::Update()
 {
-	//SDL_Timer(1);
-
 	MouseInput.LastPosition = MouseInput.Position;
 
 	glClearColor(0, 0, 0, 1); CheckGLErrors();

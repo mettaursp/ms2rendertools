@@ -116,9 +116,6 @@ namespace Enum
 
 namespace Engine
 {
-	//Class_Inherits(GraphicsEngine::Texture, Object);
-	//Class_Inherits(Dimensions, CoreType);
-
 	Declare_Enum(SampleType);
 	Declare_Enum(WrapType);
 	Declare_Enum(InternalFormat);

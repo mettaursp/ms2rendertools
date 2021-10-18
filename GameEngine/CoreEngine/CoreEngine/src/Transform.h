@@ -88,6 +88,4 @@ namespace Engine
 
 		Reflected(Transform);
 	};
-
-	//Class_Inherits(Transform, Object);
 }

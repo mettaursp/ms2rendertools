@@ -20,12 +20,6 @@ Vector3::Vector3(float x, float y, float z, float w)
 	Set(x, y, z, w);
 }
 
-// construct from 2D vector
-/*Vector3::Vector3(Vector2 vector)
-{
-	set(vector.X, vector.Y, 0, vector.W);
-}*/
-
 // set coordinates
 Vector3& Vector3::Set(float x, float y, float z, float w)
 {

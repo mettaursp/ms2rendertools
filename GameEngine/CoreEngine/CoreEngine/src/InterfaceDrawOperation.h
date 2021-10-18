@@ -22,8 +22,3 @@ namespace GraphicsEngine
 		Reflected(InterfaceDrawOperation);
 	};
 }
-
-namespace Engine
-{
-	//Class_Inherits(GraphicsEngine::InterfaceDrawOperation, GraphicsEngine::RenderOperation);
-}

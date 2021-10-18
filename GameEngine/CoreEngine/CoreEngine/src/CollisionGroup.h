@@ -46,8 +46,6 @@ namespace Engine
 			Reflected(CollisionGroup);
 		};
 	}
-
-	//Class_Inherits(Physics::CollisionGroup, Object);
 }
 
 namespace Enum

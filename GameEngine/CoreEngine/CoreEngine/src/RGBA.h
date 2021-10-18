@@ -34,7 +34,5 @@ std::ostream& operator<<(std::ostream& out, const RGBA& color);
 
 namespace Engine
 {
-	//Class_Inherits(RGBA, CoreType);
-
 	Define_Value_Type(RGBA);
 }

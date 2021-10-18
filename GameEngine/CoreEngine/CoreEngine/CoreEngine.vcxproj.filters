@@ -148,6 +148,9 @@
     <Filter Include="Source Files\Source\Graphics\RayTracing\CPU">
       <UniqueIdentifier>{3c5f6e5f-3135-41ee-89c4-494065d25d46}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Source\Physics\Enums">
+      <UniqueIdentifier>{405c0ee7-0216-4814-9df6-72dc1c450c5c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -229,9 +232,6 @@
       <Filter>Source Files\Source\Engine\Objects</Filter>
     </ClCompile>
     <ClCompile Include="src\Object.cpp">
-      <Filter>Source Files\Source\Engine\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ObjectBase.meta.cpp">
       <Filter>Source Files\Source\Engine\Objects</Filter>
     </ClCompile>
     <ClCompile Include="src\InputEnums.cpp">
@@ -759,6 +759,15 @@
     <ClCompile Include="src\SceneRayCastResults.cpp">
       <Filter>Source Files\Source\Graphics\Types</Filter>
     </ClCompile>
+    <ClCompile Include="src\TerrainCollider2D.cpp">
+      <Filter>Source Files\Source\Physics\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TerrainCollider2D.meta.cpp">
+      <Filter>Source Files\Source\Physics\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TerrainColliderAxisEnum.meta.cpp">
+      <Filter>Source Files\Source\Physics\Enums</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Graphics.h">
@@ -1159,6 +1168,12 @@
     </ClInclude>
     <ClInclude Include="src\SceneRayCastResults.h">
       <Filter>Source Files\Source\Graphics\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TerrainCollider2D.h">
+      <Filter>Source Files\Source\Physics\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TerrainColliderAxisEnum.h">
+      <Filter>Source Files\Source\Physics\Enums</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

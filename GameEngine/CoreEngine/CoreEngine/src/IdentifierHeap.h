@@ -60,10 +60,6 @@ private:
 		HeapNode(HeapNode&& original) noexcept : Used(original.Used), ChildrenUsed(original.ChildrenUsed), Item(std::move(original.Item)) {}
 		HeapNode(HeapNode& other) : Used(other.Used), ChildrenUsed(other.ChildrenUsed), Item(other.Item) {}
 
-		//HeapNode() {}
-		//HeapNode(const HeapNode& other) : Used(other.Used), ChildrenUsed(other.ChildrenUsed), Item(other.Item) {}
-		//HeapNode(HeapNode&& original) : Item(std::move(original.Item)), Used(original.Used), ChildrenUsed(original.ChildrenUsed) {}
-		//
 		HeapNode& operator=(const HeapNode& other)
 		{
 			Used = other.Used;

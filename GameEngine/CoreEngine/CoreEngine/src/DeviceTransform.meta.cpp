@@ -38,12 +38,6 @@ namespace GraphicsEngine
 		Document("");
 		Archivable Class_Member(float, Rotation);
 		
-		//Document("");
-		//Archivable Class_Member(LuaEnum<Enum::Alignment>, AlignX);
-		//
-		//Document("");
-		//Archivable Class_Member(LuaEnum<Enum::Alignment>, AlignY);
-
 		Document("");
 		Archivable Class_Member(DeviceVector, Size);
 

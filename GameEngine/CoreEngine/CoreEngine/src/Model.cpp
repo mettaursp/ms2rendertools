@@ -43,7 +43,6 @@ namespace GraphicsEngine
 	{
 		Matrix3 transform = camera->GetTransformationInverse() * transformation;
 		Programs::Phong->transform.Set(camera->GetProjectionMatrix() * transform);
-		//Programs::Phong->transform.Set(camera->GetProjectionMatrix());
 		Programs::Phong->objectTransform.Set(transform);
 		Programs::Phong->objectRotation.Set(Matrix3().ExtractRotation(transform));
 
@@ -73,7 +72,6 @@ namespace GraphicsEngine
 		Programs::Phong->boxScale.Set(BoxScale);
 		Programs::Phong->uvScale.Set(UVScale);
 		Programs::Phong->uvOffset.Set(UVOffset);
-		//Programs::Phong->reflective.Set(Handle<GraphicsEngine::Material>(MaterialProperties)->Name == "Reflective");
 
 		mesh->Draw();
 	}
@@ -82,20 +80,17 @@ namespace GraphicsEngine
 	{
 		Matrix3 transform = camera->GetTransformationInverse() * transformation;
 		Programs::PhongForward->transform.Set(camera->GetProjectionMatrix() * transform);
-		//Programs::PhongForward->transform.Set(camera->GetProjectionMatrix());
 		Programs::PhongForward->objectTransform.Set(transform);
 		Programs::PhongForward->objectRotation.Set(Matrix3().ExtractRotation(transform));
 
 		Programs::PhongForward->useOffsetMap.Set(UseOffsetMap);
 		Programs::PhongForward->color.Set(Color);
-		//Programs::PhongForward->specularColor.Set(specularColor);
 		Programs::PhongForward->glowColor.Set(GlowColor);
 		Programs::PhongForward->SetTexture(DiffuseTexture.lock());
 		Programs::PhongForward->SetNormalMap(NormalMap.lock());
 		Programs::PhongForward->SetSpecularMap(SpecularMap.lock());
 		Programs::PhongForward->textureColor.Set(TextureColor);
 		Programs::PhongForward->blendTexture.Set(BlendTexture);
-		//Programs::PhongForward->flipCubeMapV.Set(flipCubeMapV);
 		Programs::PhongForward->singleCubeMapped.Set(CubeMapped);
 		Programs::PhongForward->compressedNormalMap.Set(CompressedNormalMap);
 		Programs::PhongForward->boxScale.Set(BoxScale);
@@ -110,12 +105,6 @@ namespace GraphicsEngine
 		Matrix3 transform = camera->GetTransformationInverse() * transformation;
 		Programs::ShadowMap->transform.Set(camera->GetProjectionMatrix() * transform);
 		Programs::ShadowMap->objectZTransform.Set(transform.Data[2][0], transform.Data[2][1], transform.Data[2][2], transform.Data[2][3]);
-
-		//Programs::ShadowMap->color.Set(Color);
-		//Programs::ShadowMap->textureColor.Set(TextureColor);
-		//Programs::ShadowMap->blendTexture.Set(BlendTexture);
-		//Programs::ShadowMap->SetTexture(DiffuseTexture);
-		//Programs::ShadowMap->blendTexture.Set(BlendTexture);
 
 		mesh->Draw();
 	}
@@ -163,11 +152,6 @@ namespace GraphicsEngine
 
 	bool Model::HasMoved() const
 	{
-		//WeakHandle<Engine::Transform> transform = GetComponent<Engine::Transform>();
-		//
-		//if (!transform.IsNull())
-		//	return transform->HasMoved();
-
 		return !IsStatic();
 	}
 
@@ -208,7 +192,7 @@ namespace GraphicsEngine
 				Color,
 				GlowColor.A * Vector3(GlowColor).Scale(Vector3(1, 1, 1)),
 				MaterialProperties.lock(),
-				This.lock()->Cast<Object>()
+				This.lock()
 			});
 		};
 

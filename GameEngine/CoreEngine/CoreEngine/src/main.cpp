@@ -101,15 +101,13 @@ int main(int argc, char* argv[])
 
 			TaskScheduler::Update(delta);
 
-			std::shared_ptr<Engine::ObjectBase>(Engine::Root())->UpdateBase(delta);
+			std::shared_ptr<Engine::Object>(Engine::Root())->UpdateBase(delta);
 
 			Engine::UpdateLua(lua.GetState(), delta);
 
 			GraphicsEngine::RenderOperation::RenderOperations();
 
 			window.Swap();
-
-			//Engine::CollectGarbage();
 		}
 	}
 
@@ -117,10 +115,8 @@ int main(int argc, char* argv[])
 	try
 	{
 		Engine::CleanEngine();
-		//Engine::CollectGarbage();
 
 		Graphics::Clean();
-		//Engine::CleanHandles();
 		ReflectionData::CleanUp();
 	}
 	catch (std::string& error)

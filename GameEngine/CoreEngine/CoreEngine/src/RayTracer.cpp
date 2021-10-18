@@ -559,7 +559,6 @@ namespace GraphicsEngine
 	Vector3 RayTracer::CookTorranceBRDF(const LightingParameters& parameters, float reflectedDot, float lightDot) const
 	{
 		float normalDistribution = NormalDistribution(reflectedDot, parameters.QuadRoughness);
-		//float geometryContribution = GeometryContribution(lookDot, lightDot, parameters.MaterialProperties->Roughness);
 		float geometryContribution = GeometryShadowing(parameters.LookDot, parameters.LookRoughness) * GeometryShadowing(lightDot, parameters.LightRoughness);
 		Vector3 fresnelSchlick = FresnelSchlick(reflectedDot, parameters.BaseReflectivity);
 
@@ -573,7 +572,7 @@ namespace GraphicsEngine
 
 	Vector3 RayTracer::GetReflectionFilter(const Material* material, float reflectedDot, float lookDot, float lightDot, const Vector3& baseReflectivity) const
 	{
-		float normalDistribution = 1 / ((0.4f + material->Roughness) * std::sqrtf(2 * PI));//NormalDistribution(lookDot, material->Roughness);
+		float normalDistribution = 1 / ((0.4f + material->Roughness) * std::sqrtf(2 * PI));
 		float geometryContribution = GeometryContribution(lookDot, lightDot, material->Roughness);
 		Vector3 fresnelSchlick = FresnelSchlick(lookDot, baseReflectivity);
 
@@ -634,7 +633,6 @@ namespace GraphicsEngine
 			return Vector3();
 
 		float reflectedDot = std::max((lightDirection + parameters.Look).Unit() * parameters.Normal, 0.f);
-		//float reflectedDot2 = std::max((lightDirection + parameters.Look), 0.f);
 
 		Vector3 lightContribution = CookTorranceBRDF(parameters, reflectedDot, lightDot);
 
@@ -741,9 +739,6 @@ namespace GraphicsEngine
 		if (distanceSquared > AtmosphereRadiusSquared)
 			return 0;
 
-		//if (distanceSquared < PlanetRadiusSquared && dot + std::sqrtf(PlanetRadiusSquared - distanceSquared) > 0)
-		//	return 0;
-
 		float root = std::sqrtf(AtmosphereRadiusSquared - distanceSquared);
 
 		return std::max(dot + root, 0.f);
@@ -758,8 +753,6 @@ namespace GraphicsEngine
 		{
 			float density = ComputeAtmosphericDensity(scatterPoint - t * direction);
 
-			//std::cout << " | " << t << ", " << density << (scatterPoint - t * direction) << std::endl;
-
 			opticalDepth += density * step;
 		}
 
@@ -770,8 +763,6 @@ namespace GraphicsEngine
 	{
 		float height = (scatterPoint - PlanetPosition).Length() - PlanetRadius;
 		float relativeHeight = std::min(std::max(height / (AtmosphereRadius - PlanetRadius), 0.f), 1.f);
-
-		//std::cout << relativeHeight << ": " << height << "; " << AtmosphereRadius << ", " << PlanetRadius << std::endl;
 
 		return std::expf(-relativeHeight * AtmosphericDensityFalloff) * (1 - relativeHeight);
 	}
@@ -792,8 +783,6 @@ namespace GraphicsEngine
 		Vector3 scatteredLight = 0;
 		float scatterPointStep = distance * AtmosphereStep;
 		
-		//std::cout << ">>>>>>>>>>>>> " << intersection.Entry << " " << end << " " << scatterPointStep << std::endl;
-
 		for (float t = intersection.Entry; t < end; t += scatterPointStep)
 		{
 			scatterPoint = ray.Start + t * ray.Direction;
@@ -808,22 +797,10 @@ namespace GraphicsEngine
 			);
 			float localDensity = ComputeAtmosphericDensity(scatterPoint);
 
-			//if (t + scatterPointStep >= end)
-
-				//std::cout << "\t" << t << " " << sunOpticalDepth << " " << viewOpticalDepth << " " << transmittance << " " << localDensity << " " << localDensity * transmittance * AtmosphereStep << " " << scatteredLight << std::endl;
-
 			scatteredLight += (localDensity * scatterPointStep) * transmittance.Scale(ScatterCoefficients);
 		}
 
-		//std::cout << "" << end << " " << intersection.Exit << " " << intersection.Surface << std::endl;
-		
-		//return Vector3(scatteredLight);//, (0.5f * (end - intersection.Surface) / AtmosphereRadius));
-
-		//std::cout << ScatterCoefficients << std::endl;
-
 		return (light->Brightness) * Vector3(light->Color).Scale(scatteredLight);
-
-		//return (0.5f * (end - intersection.Surface) / AtmosphereRadius) * light->Color;
 	}
 
 	Vector3 RayTracer::ProcessRay(const QueuedRay& rayData, Thread& thread, const Vector3& lightFilter, int bounces, int rayID) const
@@ -886,8 +863,6 @@ namespace GraphicsEngine
 				castData.Illumination += CHECK_VALUE((results.MaterialProperties->Emission * Vector3(color.X, color.Y, color.Z)).Scale(castData.LightFilter));
 
 			{
-				//castData.Illumination += results.Color.W * (results.GlowColor.W * results.GlowColor +results.MaterialProperties->Emission.A * Vector3(results.MaterialProperties->Emission));
-
 				int shadowCacheOffset = rayID * (GetLights() + 1);
 
 				ShadowCastData shadowData{ results.ObjectID, thread.RayCache[rayID].FaceIndex };
@@ -896,8 +871,6 @@ namespace GraphicsEngine
 
 				for (int i = GetLight(-1) != nullptr ? -1 : 0; i < GetLights(); ++i)
 					castData.Illumination += ComputeLighting(parameters, GetLight(i), castData.LightFilter, thread.RayShadowCache[shadowCacheOffset + i + 1], shadowData, thread);
-
-				//castData.Illumination += (0.5f * results.Normal + Vector3(0.5f, 0.5f, 0.5f)).Scale(castData.LightFilter);
 
 				if (PerformAnalytics)
 				{
@@ -909,9 +882,8 @@ namespace GraphicsEngine
 			if (bounces + 1 < MaxBounces)
 			{
 				int samples = std::max(1, Samples / (bounces + 1));
-				float weight = 1;//1.f / float(samples);
+				float weight = 1;
 
-				//for (int i = 0; i < samples; ++i)
 				{
 					Vector3 microfacetNormal;
 
@@ -924,7 +896,6 @@ namespace GraphicsEngine
 
 					Vector3 reflectionFilter = ComputeReflectionFilter(-castData.RayData.Data.Direction, reflected, normal, microfacetNormal, baseReflectivity, squaredRoughness).Scale(castData.LightFilter);
 					reflectionFilter = CHECK_VALUE(reflectionFilter);
-					//castData.Illumination += reflectionFilter.Scale(castData.LightFilter);
 
 					if (Largest(reflectionFilter) > 0)
 					{
@@ -941,7 +912,6 @@ namespace GraphicsEngine
 
 						Vector3 refractionFilter = fresnel * (1 - results.Color.W) * (Vector3(1, 1, 1) - results.Color.W * Vector3(1 - results.Color.X, 1 - results.Color.Y, 1 - results.Color.Z)).Scale(castData.LightFilter);
 						refractionFilter = CHECK_VALUE(refractionFilter);
-						//castData.Illumination += refractionFilter.Scale(castData.LightFilter);
 
 						if (Largest(refractionFilter) > 0)
 						{
@@ -996,48 +966,41 @@ namespace GraphicsEngine
 
 		int increment = 8;
 
-		for (int y = std::max(0, MinY - startY); y < BatchHeight && y + startY < MaxY; ++y)//y += increment)
+		for (int y = std::max(0, MinY - startY); y < BatchHeight && y + startY < MaxY; ++y)
 		{
-			for (int x = std::max(0, MinX - startX); x < BatchWidth && x + startX < MaxX; ++x)//x += increment)
+			for (int x = std::max(0, MinX - startX); x < BatchWidth && x + startX < MaxX; ++x)
 			{
-				//for (int i = 0; i < increment * increment; ++i)
-				//{
-					int px = startX + x;// + (i % increment);
-					int py = startY + y;// + (i / increment);
+				int px = startX + x;
+				int py = startY + y;
 
-					if (px >= MaxX || py >= MaxY)
-						continue;
+				if (px >= MaxX || py >= MaxY)
+					continue;
 
-					Ray ray = GetRay(px, py);
+				Ray ray = GetRay(px, py);
 
-					float weight = 1 / float(Samples);
+				float weight = 1 / float(Samples);
 
-					Vector3 illumination;
+				Vector3 illumination;
 
-					for (int i = 0; i < Samples; ++i)
+				for (int i = 0; i < Samples; ++i)
+				{
+					QueueRay(Threads[threadID], QueuedRay{ 0, 0, -1, -1, Vector3(weight, weight, weight), ray, ThisCamera->GetFarPlane() });
+
+					for (int i = 0; i < int(Threads[threadID].QueuedRays.size()); ++i)
 					{
-						QueueRay(Threads[threadID], QueuedRay{ 0, 0, -1, -1, Vector3(weight, weight, weight), ray, ThisCamera->GetFarPlane() });
+						const QueuedRay& ray = Threads[threadID].QueuedRays[i];
 
-						for (int i = 0; i < int(Threads[threadID].QueuedRays.size()); ++i)
-						{
-							const QueuedRay& ray = Threads[threadID].QueuedRays[i];
-
-							illumination += CHECK_VALUE(ProcessRay(ray, Threads[threadID], ray.LightFilter, ray.Bounces, ray.RayID));
-						}
-
-						Threads[threadID].QueuedRays.clear();
+						illumination += CHECK_VALUE(ProcessRay(ray, Threads[threadID], ray.LightFilter, ray.Bounces, ray.RayID));
 					}
 
-					Pixel& pixel = GetPixel(px, py);
+					Threads[threadID].QueuedRays.clear();
+				}
 
-					pixel.R = illumination.X;
-					pixel.G = illumination.Y;
-					pixel.B = illumination.Z;
+				Pixel& pixel = GetPixel(px, py);
 
-					//pixel.R = unsigned char(0XFF * std::min(illumination.X, 1.f));
-					//pixel.G = unsigned char(0XFF * std::min(illumination.Y, 1.f));
-					//pixel.B = unsigned char(0XFF * std::min(illumination.Z, 1.f));
-				//}
+				pixel.R = illumination.X;
+				pixel.G = illumination.Y;
+				pixel.B = illumination.Z;
 			}
 		}
 
@@ -1090,8 +1053,6 @@ namespace GraphicsEngine
 		new (ThreadData) std::thread([this](RayTracer* tracer, int nextX, int nextY, int threadID)
 			{
 				ThreadStarted = std::chrono::high_resolution_clock::now();
-
-				//tracer->ProcessBatch(nextX, nextY, threadID);
 			}, rayTracer, x, y, threadID);
 
 		rayTracer->ProcessBatch(x, y, threadID);
@@ -1122,9 +1083,6 @@ namespace GraphicsEngine
 				for (Batch batch = tracer->GetNext(); batch.Y < tracer->MaxY; batch = tracer->GetNext())
 					tracer->ProcessBatch(batch.X, batch.Y, threadID);
 			}, rayTracer, threadID);
-
-		//for (Batch batch = rayTracer->GetNext(); batch.Y < rayTracer->Height; batch = rayTracer->GetNext())
-		//	rayTracer->ProcessBatch(batch.X, batch.Y, threadID);
 	}
 
 	void RayTracer::Thread::Free(RayTracer* rayTracer)

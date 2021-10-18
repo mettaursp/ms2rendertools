@@ -60,9 +60,6 @@ namespace GraphicsEngine
 
 namespace Engine
 {
-	//Class_Inherits(GraphicsEngine::Font, Engine::Object);
-	//Class_Inherits(GraphicsEngine::Font::Character, CoreClass);
-
 	namespace
 	{
 		typedef GraphicsEngine::Font::Character Character;

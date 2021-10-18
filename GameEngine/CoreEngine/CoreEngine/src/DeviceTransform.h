@@ -15,8 +15,6 @@ namespace GraphicsEngine
 		bool InheritTransformation = true;
 		float AspectRatio = 0;
 		float Rotation = 0;
-		//Alignment AlignX = Alignment::Minimum;
-		//Alignment AlignY = Alignment::Minimum;
 		DeviceVector Size = DeviceVector(1, 0, 1, 0);
 		DeviceVector Position = DeviceVector(0, 0, 0, 0);
 		DeviceVector AnchorPoint = DeviceVector(0, 0, 0, 0);

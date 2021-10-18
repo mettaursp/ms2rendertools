@@ -6,55 +6,50 @@
 
 namespace Engine
 {
-	ObjectBase::FactoryCallbackMap ObjectBase::FactoryFunctions;
-	ObjectBase::ObjectHandleHeap ObjectBase::ObjectIDs = ObjectHandleHeap();
+	Object::FactoryCallbackMap Object::FactoryFunctions;
+	Object::ObjectHandleHeap Object::ObjectIDs = ObjectHandleHeap();
 
-	ObjectBase::~ObjectBase()
-	{
-		ObjectIDs.Release(ObjectID);
-	}
-
-	void ObjectBase::Initialize()
+	void Object::Initialize()
 	{
 		ObjectID = ObjectIDs.RequestID(This);
 		OriginalID = ObjectID;
 	}
 
-	int ObjectBase::GetTypeID() const
+	int Object::GetTypeID() const
 	{
 		return GetMetaData()->ID;
 	}
 
-	const std::string& ObjectBase::GetTypeName() const
+	const std::string& Object::GetTypeName() const
 	{
 		return GetMetaData()->Name;
 	}
 
-	bool ObjectBase::IsA(const std::string& className, bool inherited) const
+	bool Object::IsA(const std::string& className, bool inherited) const
 	{
 		MetaData* data = GetMetaData();
 		
 		return data->Name == className || (inherited && data->Inherits(className));
 	}
 
-	bool ObjectBase::IsA(MetaData* metadata, bool inherited) const
+	bool Object::IsA(MetaData* metadata, bool inherited) const
 	{
 		MetaData* data = GetMetaData();
 
 		return data == metadata || data->Inherits(metadata->Name);
 	}
 
-	const ClassData::Property* ObjectBase::GetProperty(const std::string& name) const
+	const ClassData::Property* Object::GetProperty(const std::string& name) const
 	{
 		return reinterpret_cast<const ClassData*>(GetMetaData())->GetProperty(name);
 	}
 
-	bool ObjectBase::HasRequirements() const
+	bool Object::HasRequirements() const
 	{
 		return GetRequirements().size() > 0;
 	}
 
-	void ObjectBase::SetObjectID(int id)
+	void Object::SetObjectID(int id)
 	{
 		if (ObjectID != -1)
 			throw "Attempt to set ID";
@@ -65,17 +60,17 @@ namespace Engine
 			OriginalID = id;
 	}
 
-	int ObjectBase::GetObjectID() const
+	int Object::GetObjectID() const
 	{
 		return ObjectID;
 	}
 
-	ObjectBase::operator std::string() const
+	Object::operator std::string() const
 	{
 		return Name;
 	}
 
-	const ObjectBase::FactoryCallback& ObjectBase::GetFactoryFunction(const std::string& className)
+	const Object::FactoryCallback& Object::GetFactoryFunction(const std::string& className)
 	{
 		FactoryCallbackMap::iterator i = FactoryFunctions.find(className);
 
@@ -85,16 +80,9 @@ namespace Engine
 		throw "Attempt to get factory function of unregistered type: " + className;
 	}
 
-	std::shared_ptr<ObjectBase> CreateObject(const std::string& className)
+	std::shared_ptr<Object> CreateObject(const std::string& className)
 	{
-		return ObjectBase::GetFactoryFunction(className)();
-	}
-
-	void Object::Initialize()
-	{
-		//SetObjectID(This.GetID());
-
-		//std::cout << "Object(" << GetObjectID() << ")" << std::endl;
+		return Object::GetFactoryFunction(className)();
 	}
 
 	void Object::Update(float delta)
@@ -110,19 +98,20 @@ namespace Engine
 
 	Object::~Object()
 	{
-		//std::cout << "~Object(" << GetObjectID() << ")" << std::endl;
 		auto parent = Parent.lock();
 
 		if (parent != nullptr)
-			parent->Cast<Object>()->RemoveChild(This.lock());
+			parent->RemoveChild(This.lock());
 
 		while (GetChildren() > 0)
 		{
 			if (Children.back() != nullptr)
-				Children.back()->Cast<Object>()->Parent.reset();
+				Children.back()->Parent.reset();
 
 			Children.pop_back();
 		}
+
+		ObjectIDs.Release(ObjectID);
 	}
 
 	std::string Object::GetFullName() const
@@ -132,7 +121,7 @@ namespace Engine
 
 		std::string name = Name;
 		
-		for (std::shared_ptr<Object> parent = Parent.lock()->Cast<Object>(); parent != nullptr && !parent->Parent.expired(); parent = parent->Parent.lock()->Cast<Object>())
+		for (std::shared_ptr<Object> parent = Parent.lock(); parent != nullptr && !parent->Parent.expired(); parent = parent->Parent.lock())
 			name = parent->Name + "." + name;
 
 		return name;
@@ -143,7 +132,7 @@ namespace Engine
 		return int(Children.size());
 	}
 
-	std::shared_ptr<ObjectBase> Object::Get(const std::string& className, bool inherited)
+	std::shared_ptr<Object> Object::Get(const std::string& className, bool inherited)
 	{
 		for (int i = 0; i < int(Children.size()); ++i)
 			if (Children[i]->IsA(className, inherited))
@@ -152,7 +141,7 @@ namespace Engine
 		return nullptr;
 	}
 
-	std::shared_ptr<ObjectBase> Object::Get(int index)
+	std::shared_ptr<Object> Object::Get(int index)
 	{
 		if (index < 0 || index >= int(Children.size()))
 			return nullptr;
@@ -160,7 +149,7 @@ namespace Engine
 		return Children[index];
 	}
 
-	std::shared_ptr<ObjectBase> Object::GetByName(const std::string& name)
+	std::shared_ptr<Object> Object::GetByName(const std::string& name)
 	{
 		for (int i = 0; i < int(Children.size()); ++i)
 			if (Children[i]->Name == name)
@@ -169,7 +158,7 @@ namespace Engine
 		return nullptr;
 	}
 
-	std::shared_ptr<ObjectBase> Object::GetAncestor(const std::string& className, bool inherited)
+	std::shared_ptr<Object> Object::GetAncestor(const std::string& className, bool inherited)
 	{
 		auto ancestor = Parent.lock();
 
@@ -178,18 +167,18 @@ namespace Engine
 			if (ancestor->IsA(className, inherited))
 				return ancestor;
 
-			ancestor = ancestor->Cast<Object>()->Parent.lock();
+			ancestor = ancestor->Parent.lock();
 		}
 
 		return nullptr;
 	}
 
-	std::shared_ptr<ObjectBase> Object::GetComponent(const std::string& className, bool inherited) const
+	std::shared_ptr<Object> Object::GetComponent(const std::string& className, bool inherited) const
 	{
 		return GetComponent(ReflectionData::GetType(className), inherited);
 	}
 
-	std::shared_ptr<ObjectBase> Object::GetComponent(MetaData* data, bool inherited) const
+	std::shared_ptr<Object> Object::GetComponent(MetaData* data, bool inherited) const
 	{
 		auto parent = Parent.lock();
 
@@ -200,18 +189,18 @@ namespace Engine
 
 			if (SiblingComponents)
 			{
-				for (int i = 0; i < parent->Cast<Object>()->GetChildren(); ++i)
+				for (int i = 0; i < parent->GetChildren(); ++i)
 				{
 					std::shared_ptr<Object> child = parent->Cast<Object>()->Get(i)->Cast<Object>();
 
-					if (child != This.lock()->Cast<Object>() && child->IsA(data, inherited))
-						return parent->Cast<Object>()->Get(i);
+					if (child != This.lock() && child->IsA(data, inherited))
+						return parent->Get(i);
 				}
 			}
 
 			if (AncestorComponents || SuperSiblingComponents)
 			{
-				std::shared_ptr<Object> ancestor = Parent.lock()->Cast<Object>();
+				std::shared_ptr<Object> ancestor = Parent.lock();
 
 				for (int height = 0; (SuperComponentHeight == -1 || height < SuperComponentHeight) && ancestor != nullptr; ++height)
 				{
@@ -222,15 +211,15 @@ namespace Engine
 					{
 						for (int i = 0; i < ancestor->GetChildren(); ++i)
 						{
-							std::shared_ptr<Object> child = ancestor->Get(i)->Cast<Object>();
+							std::shared_ptr<Object> child = ancestor->Get(i);
 
-							if (child != This.lock()->Cast<Object>() && child->IsA(data, inherited))
+							if (child != This.lock() && child->IsA(data, inherited))
 								return ancestor->Get(i);
 						}
 					}
 
 					if (!ancestor->Parent.expired())
-						ancestor = ancestor->Parent.lock()->Cast<Object>();
+						ancestor = ancestor->Parent.lock();
 					else
 						ancestor = nullptr;
 				}
@@ -252,17 +241,17 @@ namespace Engine
 		return false;
 	}
 
-	void Object::AddChild(const std::shared_ptr<ObjectBase>& child)
+	void Object::AddChild(const std::shared_ptr<Object>& child)
 	{
-		if (!child->Cast<Object>()->CheckRestriction(This.lock()))
+		if (!child->CheckRestriction(This.lock()))
 			throw "Attempt to add duplicate child type: " + child->GetTypeName() + " restricts types of siblings; Adding \"" + child->Name + "\" to \"" + Name + "\"";
 
-		const std::string& missingRequirement = child->Cast<Object>()->CheckRequirements(This.lock());
+		const std::string& missingRequirement = child->CheckRequirements(This.lock());
 
 		if (missingRequirement != "")
 			throw "Attempt to add child to object with missing required siblings: " + child->GetTypeName() + " requires a sibling of type " + missingRequirement + "; Adding \"" + child->Name + "\" to \"" + Name + "\"";
 
-		child->Cast<Object>()->Parent = This;
+		child->Parent = This;
 
 		Children.push_back(child);
 	}
@@ -272,7 +261,7 @@ namespace Engine
 		SetParent(nullptr);
 	}
 
-	void Object::RemoveChild(const std::shared_ptr<ObjectBase>& child)
+	void Object::RemoveChild(const std::shared_ptr<Object>& child)
 	{
 		int index = 0;
 
@@ -288,7 +277,7 @@ namespace Engine
 		}
 	}
 
-	void Object::SetParent(const std::shared_ptr<ObjectBase>& newParent)
+	void Object::SetParent(const std::shared_ptr<Object>& newParent)
 	{
 		if (newParent != nullptr && IsAncestorOf(newParent))
 			throw "Attempt to create circular reference: " + GetTypeName() + " '" + Name + "' is already an ancestor of " + newParent->GetTypeName() + " '" + newParent->Name + "'";
@@ -296,27 +285,27 @@ namespace Engine
 		auto parent = Parent.lock();
 
 		if (parent != nullptr)
-			parent->Cast<Object>()->RemoveChild(This.lock());
+			parent->RemoveChild(This.lock());
 
 		if (newParent != nullptr)
-			newParent->Cast<Object>()->AddChild(This.lock());
+			newParent->AddChild(This.lock());
 		else
 			Parent.reset();
 	}
 
-	std::shared_ptr<ObjectBase> Object::GetParent() const
+	std::shared_ptr<Object> Object::GetParent() const
 	{
 		return Parent.lock();
 	}
 
-	bool Object::CheckRestriction(const std::shared_ptr<ObjectBase>& object) const
+	bool Object::CheckRestriction(const std::shared_ptr<Object>& object) const
 	{
-		return !RestrictsSiblings() || object->Cast<Object>()->HasA(GetTypeName());
+		return !RestrictsSiblings() || object->HasA(GetTypeName());
 	}
 
 	std::string NoRequirements = "";
 
-	const std::string& Object::CheckRequirements(const std::shared_ptr<ObjectBase>& object) const
+	const std::string& Object::CheckRequirements(const std::shared_ptr<Object>& object) const
 	{
 		if (!HasRequirements())
 			return NoRequirements;
@@ -324,21 +313,21 @@ namespace Engine
 		const StringVector& requirements = GetRequirements();
 
 		for (int i = 0; i < int(requirements.size()); ++i)
-			if (!object->Cast<Object>()->HasA(requirements[i]))
+			if (!object->HasA(requirements[i]))
 				return requirements[i];
 
 		return NoRequirements;
 	}
 
-	bool Object::IsAncestorOf(const std::shared_ptr<ObjectBase>& object) const
+	bool Object::IsAncestorOf(const std::shared_ptr<Object>& object) const
 	{
 		if (object == nullptr)
 			return false;
 
-		return object->Cast<Object>()->IsDescendantOf(This.lock());
+		return object->IsDescendantOf(This.lock());
 	}
 
-	bool Object::IsDescendantOf(const std::shared_ptr<ObjectBase>& object) const
+	bool Object::IsDescendantOf(const std::shared_ptr<Object>& object) const
 	{
 		if (object == nullptr)
 			return false;
@@ -350,32 +339,11 @@ namespace Engine
 			if (focus == object)
 				return true;
 
-			focus = focus->Cast<Object>()->Parent.lock();
+			focus = focus->Parent.lock();
 		}
 
 		return false;
 	}
-
-	//template <>
-	//Handle<Object> Object::Get(bool inherited)
-	//{
-	//	for (int i = 0; i < GetChildren(); ++i)
-	//		return Get(i)->Cast<Object>();
-	//
-	//	return Handle<Object>();
-	//}
-	//
-	//template <>
-	//Handle<Object> Object::Get(int index)
-	//{
-	//	return Get(index)->Cast<Object>();
-	//}
-	//
-	//template <>
-	//Handle<Object> Object::GetByName(const std::string& name)
-	//{
-	//	return GetByName(name)->Cast<Object>();
-	//}
 
 	namespace LuaTypes
 	{
@@ -383,10 +351,10 @@ namespace Engine
 		{
 			LuaData* object = (LuaData*)(data);
 
-			return object->Reference->Cast<Object>()->GetObjectID();
+			return object->Reference->GetObjectID();
 		}
 
-		void Lua_object::PushObject(lua_State* lua, const std::shared_ptr<ObjectBase>& object)
+		void Lua_object::PushObject(lua_State* lua, const std::shared_ptr<Object>& object)
 		{
 			lua_pushstring(lua, "Objects");
 			lua_gettable(lua, LUA_REGISTRYINDEX);

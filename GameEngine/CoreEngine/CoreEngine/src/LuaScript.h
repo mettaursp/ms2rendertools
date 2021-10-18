@@ -60,7 +60,6 @@ namespace Engine
 		Reflected(LuaScript);
 	};
 
-	//Class_Inherits(LuaScript, Object);
 	Declare_Enum(ScriptStatus);
 }
 

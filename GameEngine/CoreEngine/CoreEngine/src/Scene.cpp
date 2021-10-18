@@ -108,7 +108,6 @@ namespace GraphicsEngine
 
 			objectReference->Reference.lock()->CastRay(ray, [&hits, &callback] (const SceneRayCastResults& results)
 			{
-				//callback(results);
 				hits.push(results);
 			});
 		};
@@ -242,7 +241,7 @@ namespace GraphicsEngine
 	{
 		if (object->IsStatic())
 		{
-			SceneObjectReference* handle = StaticObjectHandles.Create<SceneObjectReference>(This.lock()->Cast<Object>(), object);
+			SceneObjectReference* handle = StaticObjectHandles.Create<SceneObjectReference>(This.lock(), object);
 
 			handle->ID = StaticObjects.Insert(handle, object->GetBoundingBox());
 
@@ -250,15 +249,11 @@ namespace GraphicsEngine
 		}
 		else
 		{
-			SceneObjectReference* handle = StaticObjectHandles.Create<SceneObjectReference>(This.lock()->Cast<Object>(), object);
+			SceneObjectReference* handle = StaticObjectHandles.Create<SceneObjectReference>(This.lock(), object);
 
 			handle->ID = DynamicObjects.Insert(handle, object->GetBoundingBox());
 
 			DynamicObjectReferences.push_back(handle);
-			//Objects.push_back(object);
-			//
-			//Objects[Objects.size() - 1].SetParent(This);
-			//Objects[Objects.size() - 1] = object;
 		}
 	}
 
@@ -380,22 +375,6 @@ namespace GraphicsEngine
 
 		Draw(StaticObjects, drawTransparent, camera);
 		Draw(DynamicObjects, drawTransparent, camera);
-
-		//StaticObjects.CastFrustum(camera->GetFrustum(), [drawTransparent, &camera] (const AabbTree::Node* node)
-		//{
-		//	SceneObjectReference* thingamajig = node->GetData<SceneObjectReference>();
-		//	//WeakHandle<SceneObject> object = thingamajig->Reference;
-		//
-		//	if (thingamajig->Reference->Visible && thingamajig->Reference->IsTransparent() == drawTransparent && !thingamajig->Reference->MaterialProperties.IsNull())
-		//	{
-		//		if (drawTransparent)
-		//			Programs::PhongForward->SetMaterial(thingamajig->Reference->MaterialProperties);
-		//		else
-		//			Programs::Phong->SetMaterial(thingamajig->Reference->MaterialProperties);
-		//
-		//		thingamajig->Reference->Draw(camera);
-		//	}
-		//});
 	}
 
 	void Scene::Draw(const AabbTree& tree, bool drawTransparent, const std::shared_ptr<Camera>& targetCamera)
@@ -404,7 +383,6 @@ namespace GraphicsEngine
 		tree.CastFrustum(targetCamera->GetFrustum(), [drawTransparent, &targetCamera, &drawn] (const AabbTree::Node* node)
 		{
 			SceneObjectReference* thingamajig = node->GetData<SceneObjectReference>();
-			//WeakHandle<SceneObject> object = thingamajig->Reference;
 
 			auto reference = thingamajig->Reference.lock();
 

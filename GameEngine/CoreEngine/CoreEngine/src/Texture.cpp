@@ -109,12 +109,6 @@ namespace GraphicsEngine
 			if (std::string(headerType, 4) != "DDS ")
 				throw std::string("not a valid DDS: '" + fileName + "'");
 
-			//char headerBits[4];
-			//
-			//file.Read(headerBits, 4);
-			//
-			//int headerSize = headerBits[0] | (headerBits[1] << 8) | (headerBits[2] << 16) | (headerBits[3] << 24);
-
 			unsigned char header[124];
 
 			file.read((char*)header, 124);
@@ -192,7 +186,7 @@ namespace GraphicsEngine
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, mipMapCount == 0 ? 0 : mipMapCount - 1); CheckGLErrors();
 
-			for (int level = 0; (level < int(mipMapCount) && (widthI || heightI)) || (mipMapCount == 0 && level == 0); ++level)//&& level < int(mipMapCount) && (widthI > 0 || heightI > 0); ++level)
+			for (int level = 0; (level < int(mipMapCount) && (widthI || heightI)) || (mipMapCount == 0 && level == 0); ++level)
 			{
 				if (widthI < 4 || heightI < 4) {
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, level == 0 ? 0 : level - 1); CheckGLErrors();

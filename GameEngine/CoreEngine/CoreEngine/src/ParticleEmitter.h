@@ -38,7 +38,6 @@ namespace GraphicsEngine
 		Vector3 UVOffset;
 		Vector3 BoxScale = Vector3(1, 1, 1);
 		bool CubeMapped = false;
-		//bool flip = false;
 		bool CompressedNormalMap = false;
 
 		void Initialize() {}
@@ -52,11 +51,6 @@ namespace GraphicsEngine
 
 		Reflected(EmitterConfig);
 	};
-}
-
-namespace Engine
-{
-	//Class_Inherits(GraphicsEngine::EmitterConfig, Engine::Object);
 }
 
 namespace GraphicsEngine
@@ -149,11 +143,6 @@ namespace GraphicsEngine
 	};
 }
 
-namespace Engine
-{
-	//Class_Inherits(GraphicsEngine::ParticleEmitter, Engine::Object);
-}
-
 namespace GraphicsEngine
 {
 	class ParticleConfiguration : public Engine::Object
@@ -190,7 +179,7 @@ namespace GraphicsEngine
 
 		void AttachTo(const std::shared_ptr<ParticleEmitter>& emitter)
 		{
-			emitter->SetSpawn(std::ref(*this), This.lock()->Cast<Object>());
+			emitter->SetSpawn(std::ref(*this), This.lock());
 		}
 
 		void operator()(Particle& particle, float delta);
@@ -222,7 +211,7 @@ namespace GraphicsEngine
 
 		void AttachTo(const std::shared_ptr<ParticleEmitter>& emitter)
 		{
-			emitter->SetSpawn(std::ref(*this), This.lock()->Cast<Object>());
+			emitter->SetSpawn(std::ref(*this), This.lock());
 		}
 
 		void operator()(Particle& particle, float delta);
@@ -253,7 +242,7 @@ namespace GraphicsEngine
 
 		void AttachTo(const std::shared_ptr<ParticleEmitter>& emitter)
 		{
-			emitter->SetSpawn(std::ref(*this), This.lock()->Cast<Object>());
+			emitter->SetSpawn(std::ref(*this), This.lock());
 		}
 
 		void operator()(Particle& particle, float delta);
@@ -282,7 +271,7 @@ namespace GraphicsEngine
 
 		void AttachTo(const std::shared_ptr<ParticleEmitter>& emitter)
 		{
-			emitter->SetSpawn(std::ref(*this), This.lock()->Cast<Object>());
+			emitter->SetSpawn(std::ref(*this), This.lock());
 		}
 
 		void operator()(Particle& particle, float delta);
@@ -312,7 +301,7 @@ namespace GraphicsEngine
 
 		void AttachTo(const std::shared_ptr<ParticleEmitter>& emitter)
 		{
-			emitter->SetSpawn(std::ref(*this), This.lock()->Cast<Object>());
+			emitter->SetSpawn(std::ref(*this), This.lock());
 		}
 
 		void operator()(Particle& particle, float delta);
@@ -341,7 +330,7 @@ namespace GraphicsEngine
 
 		void AttachTo(const std::shared_ptr<ParticleEmitter>& emitter)
 		{
-			emitter->SetSpawn(std::ref(*this), This.lock()->Cast<Object>());
+			emitter->SetSpawn(std::ref(*this), This.lock());
 		}
 
 		void operator()(Particle& particle, float delta);
@@ -363,7 +352,7 @@ namespace GraphicsEngine
 
 		void AttachTo(const std::shared_ptr<ParticleEmitter>& emitter)
 		{
-			emitter->SetUpdate(std::ref(*this), This.lock()->Cast<Object>());
+			emitter->SetUpdate(std::ref(*this), This.lock());
 		}
 
 		bool operator()(Particle& particle, float delta);
@@ -385,7 +374,7 @@ namespace GraphicsEngine
 
 		void AttachTo(const std::shared_ptr<ParticleEmitter>& emitter)
 		{
-			emitter->SetUpdate(std::ref(*this), This.lock()->Cast<Object>());
+			emitter->SetUpdate(std::ref(*this), This.lock());
 		}
 
 		bool operator()(Particle& particle, float delta);
@@ -408,7 +397,7 @@ namespace GraphicsEngine
 
 		void AttachTo(const std::shared_ptr<ParticleEmitter>& emitter)
 		{
-			emitter->SetUpdate(std::ref(*this), This.lock()->Cast<Object>());
+			emitter->SetUpdate(std::ref(*this), This.lock());
 		}
 
 		bool operator()(Particle& particle, float delta);
@@ -434,7 +423,7 @@ namespace GraphicsEngine
 
 		void AttachTo(const std::shared_ptr<ParticleEmitter>& emitter)
 		{
-			emitter->SetUpdate(std::ref(*this), This.lock()->Cast<Object>());
+			emitter->SetUpdate(std::ref(*this), This.lock());
 		}
 
 		bool operator()(Particle& particle, float delta);
@@ -445,19 +434,4 @@ namespace GraphicsEngine
 
 		Reflected(CubicBezierUpdater);
 	};
-}
-
-namespace Engine
-{
-	//Class_Inherits(GraphicsEngine::ParticleConfiguration, Engine::Object);
-	//Class_Inherits(GraphicsEngine::DirectionalParticleSpawner, Engine::Object);
-	//Class_Inherits(GraphicsEngine::RisingParticleSpawner, Engine::Object);
-	//Class_Inherits(GraphicsEngine::PlanarParticleSpawner, Engine::Object);
-	//Class_Inherits(GraphicsEngine::LineParticleSpawner, Engine::Object);
-	//Class_Inherits(GraphicsEngine::RingParticleSpawner, Engine::Object);
-	//Class_Inherits(GraphicsEngine::ConeParticleSpawner, Engine::Object);
-	//Class_Inherits(GraphicsEngine::GravityParticleUpdater, Engine::Object);
-	//Class_Inherits(GraphicsEngine::DragParticleUpdater, Engine::Object);
-	//Class_Inherits(GraphicsEngine::DampenedForceUpdater, Engine::Object);
-	//Class_Inherits(GraphicsEngine::CubicBezierUpdater, Engine::Object);
 }

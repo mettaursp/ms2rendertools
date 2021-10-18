@@ -61,7 +61,7 @@ namespace GraphicsEngine
 				return nullptr;
 		}
 
-		std::shared_ptr<InputSubscriber> focus = object->Get<InputSubscriber>();//object->IsA<InputSubscriber>() ? object->Cast<InputSubscriber>() : nullptr;
+		std::shared_ptr<InputSubscriber> focus = object->Get<InputSubscriber>();
 
 		for (int i = 0; i < object->GetChildren(); ++i)
 		{

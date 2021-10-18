@@ -41,9 +41,6 @@ namespace Engine
 	{
 		LuaData* object = reinterpret_cast<LuaData*>(const_cast<void*>(data));
 
-		//if (object == nullptr || object->Data == nullptr)
-		//	Lua::BadArgumentError(lua, 0, "Object", "nil");
-
 		return object;
 	}
 
@@ -101,15 +98,15 @@ namespace Engine
 				}
 				else if (object->Type == LuaData::LuaType::Object)
 				{
-					std::shared_ptr<Object> thisObject = object->Reference->Cast<Object>(); // note: Matrix3.Scale() fails
+					std::shared_ptr<Object> thisObject = object->Reference; // note: Matrix3.Scale() fails
 
-					std::shared_ptr<ObjectBase> childObject = thisObject->GetByName(index);
+					std::shared_ptr<Object> childObject = thisObject->GetByName(index);
 
 					if (childObject == nullptr)
 						Lua::BadMemberError(lua, 1, 2);
 					else
 					{
-						std::shared_ptr<Object> child = childObject->Cast<Object>();
+						std::shared_ptr<Object> child = childObject;
 
 						lua_pushstring(lua, "Objects");
 
@@ -935,11 +932,11 @@ namespace Engine
 		else
 			Lua::BadArgumentError(lua, 1, "Enum.ObjectType", Lua::GetType(lua, 2));
 
-		Engine::ObjectBase::FactoryCallback factory = nullptr;
+		Engine::Object::FactoryCallback factory = nullptr;
 
 		try
 		{
-			factory = ObjectBase::GetFactoryFunction(typeName);
+			factory = Object::GetFactoryFunction(typeName);
 		}
 		catch (std::string& err)
 		{
@@ -954,7 +951,7 @@ namespace Engine
 
 		try
 		{
-			newObject = factory()->Cast<Object>();
+			newObject = factory();
 
 			MakeLuaReference(lua, newObject->GetObjectID());
 		}
@@ -1001,10 +998,6 @@ namespace Engine
 
 		try
 		{
-			//Handle<CoreClass> handle;
-			//
-			//object->Meta->Create(handle);
-
 			MakeLuaTypeReference(lua, object->Meta, object->Meta->CreateRaw());
 
 			lua_replace(lua, 1);

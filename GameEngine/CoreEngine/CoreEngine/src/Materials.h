@@ -20,8 +20,3 @@ namespace GraphicsEngine
 	};
 
 }
-
-namespace Engine
-{
-	//Class_Inherits(GraphicsEngine::Materials, Engine::Object);
-}

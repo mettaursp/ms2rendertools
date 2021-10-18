@@ -54,9 +54,6 @@ struct NumberRange
 
 namespace Engine
 {
-	//Class_Inherits(VectorGenerator, CoreType);
-	//Class_Inherits(NumberRange, CoreType);
-
 	Define_Value_Type(VectorGenerator);
 	Define_Value_Type(NumberRange);
 }
@@ -126,10 +123,6 @@ public:
 
 namespace Engine
 {
-	//Class_Inherits(PointGenerator, VectorGenerator);
-	//Class_Inherits(UnitVectorGenerator, VectorGenerator);
-	//Class_Inherits(ConeUnitVectorGenerator, VectorGenerator);
-
 	Define_Value_Type(PointGenerator);
 	Define_Value_Type(UnitVectorGenerator);
 	Define_Value_Type(ConeUnitVectorGenerator);

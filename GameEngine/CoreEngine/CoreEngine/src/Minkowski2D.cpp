@@ -428,11 +428,6 @@ namespace Engine
 				Vector3 entryPoint = distance * velocity;
 
 				return GetVelocityOffset(mesh, velocity - entryPoint, entrySide, entryPoint, LeftNormal(mesh.Normals[entrySide]) * velocity > 0);
-
-				/*if (leftNormal(mesh.normals[entrySide]) * velocity > 0)
-					return getVelocityOffsetClockwise(mesh, velocity - entryPoint, entrySide, entryPoint);
-				else
-					return getVelocityOffsetCounterClockwise(mesh, velocity - entryPoint, entrySide, entryPoint);*/
 			}
 			else
 				return Vector3();
@@ -441,7 +436,7 @@ namespace Engine
 		void GetClosestCollision(const ColliderInfoVector& colliders, Vector3 point, Vector3 velocity, ColliderInfoVector::const_iterator& ignore, ColliderInfoVector::const_iterator& closestCollider, float& closestDistance, int& closestSide)
 		{
 			closestCollider = colliders.begin();
-			closestSide = -1;//getEntrySide(*closestCollider->collider, Vector(), velocity, closestDistance);
+			closestSide = -1;
 
 			for (ColliderInfoVector::const_iterator i = colliders.begin(); i != colliders.end(); ++i)
 			{

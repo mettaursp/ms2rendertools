@@ -86,7 +86,7 @@ void ObjParser::Parse(const std::string& filePath)
 		{
 			auto i = &Faces[index];
 
-			Vector3 normal = (Vertices[i->Vertices[1].Position] - Vertices[i->Vertices[0].Position]).Cross(Vertices[i->Vertices[2].Position] - Vertices[i->Vertices[0].Position]);//cross(Vertices[i->Vertices[0].Position], Vertices[i->Vertices[1].Position], Vertices[i->Vertices[2].Position]);
+			Vector3 normal = (Vertices[i->Vertices[1].Position] - Vertices[i->Vertices[0].Position]).Cross(Vertices[i->Vertices[2].Position] - Vertices[i->Vertices[0].Position]);
 
 			float length = normal.SquareLength();
 

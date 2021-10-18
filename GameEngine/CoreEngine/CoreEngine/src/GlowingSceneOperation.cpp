@@ -101,15 +101,11 @@ namespace GraphicsEngine
     float Water_xRange;
     float Water_yRange;
     float Water_c;
-    //float Water_time;
 
     Water_xRange = 32;
     Water_yRange = 32;
     Water_c = 0.9f;
 
-	  //Water_xRange = 10;
-    //Water_yRange = 10;
-    //Water_c = 3;
 
 
     for (int m = 1; m <= WATER_MAT_SIDE_LENGTH; ++m)
@@ -191,7 +187,6 @@ namespace GraphicsEngine
 		sceneBuffer->AttachTexture(4, Textures::Create(width, height, GL_LINEAR, GL_CLAMP_TO_EDGE, GL_UNSIGNED_BYTE, GL_RGB8, GL_RGB), GL_COLOR_ATTACHMENT4, true);
 		sceneBuffer->AttachTexture(5, Textures::Create(width, height, GL_LINEAR, GL_CLAMP_TO_EDGE, GL_UNSIGNED_BYTE, GL_RGB8, GL_RGB), GL_COLOR_ATTACHMENT5, true);
 		sceneBuffer->AttachTexture(6, Textures::Create(width, height, GL_LINEAR, GL_CLAMP_TO_EDGE, GL_FLOAT, GL_RGBA16F, GL_RGBA), GL_COLOR_ATTACHMENT6, true);
-		//SceneBuffer->AttachTexture(7, Textures::Create(width, height, GL_LINEAR, GL_CLAMP_TO_EDGE, GL_UNSIGNED_BYTE, GL_RGBA, GL_RGBA), GL_COLOR_ATTACHMENT7, true);
 
 		sceneBuffer->BindAttachments();
 
@@ -268,8 +263,6 @@ namespace GraphicsEngine
 
 		blur->Radius = Radius;
 		blur->Sigma = Sigma;
-		//Blur->Radius = 0;
-		//Blur->Sigma = 1;
 		blur->Resolution = Resolution;
 		blur->Transform = Transform;
 
@@ -335,7 +328,6 @@ namespace GraphicsEngine
 
 		for (int i = 0; i < int(NormalMapQueue.size()); ++i)
 		{
-			//NormalMapGenBuffer->DrawTo(0, 0, NormalMapQueue[i].first->GetWidth(), NormalMapQueue[i].first->GetHeight());
 			auto normalMapGenBuffer = NormalMapGenBuffer.lock();
 			auto first = NormalMapQueue[i].first.lock();
 			auto second = NormalMapQueue[i].second.lock();
@@ -398,20 +390,6 @@ namespace GraphicsEngine
 		); CheckGLErrors();
 
 		lightingBuffer->DrawTo();
-
-		//Graphics::ClearScreen(GL_DEPTH_BUFFER_BIT); CheckGLErrors();
-
-		//Programs::DepthUpdate->Use();
-		//
-		//const Matrix3& projection = SceneDraw->CurrentScene->CurrentCamera->GetProjectionMatrix();
-		//
-		//Programs::DepthUpdate->inputPosition.Set(SceneBuffer->GetDepthTexture());
-		//Programs::DepthUpdate->transform.Set(Matrix3());
-		//Programs::DepthUpdate->resolution.Set(Resolution);
-		//Programs::DepthUpdate->projectionData.Set(projection.Data[2][2], projection.Data[2][3]);
-		//
-		//Programs::DepthUpdate->CoreMeshes.Square->Draw();
-
 
 		Shader.lock()->Render();
 
@@ -508,31 +486,8 @@ namespace GraphicsEngine
 
 		glEnable(GL_DEPTH_TEST); CheckGLErrors();
 
-		//float luminescence = -1;
-		//
-		//glReadPixels(0, 0, 1, 1, GL_RED, GL_FLOAT, &luminescence); CheckGLErrors();
-		//
-		//luminescence = expf(luminescence / (1920 * 1080));
-
 		GetHDRColorCorrection()->Render();
 
-		//if (!DebugViewLight.IsNull())
-		//{
-		//	Programs::Screen->Use();
-		//
-		//	Programs::Screen->uvScale.Set(1, 1);
-		//	Programs::Screen->uvOffset.Set(0, 0);
-		//	Programs::Screen->blendTexture.Set(true);
-		//	Programs::Screen->textureColor.Set(RGBA(0xFFFFFFFF));
-		//	Programs::Screen->color.Set(RGBA(0x00000000));
-		//	Programs::Screen->resolution.Set(Graphics::ActiveWindow->Resolution);
-		//	Programs::Screen->SetTexture();
-		//	Programs::Screen->transform.Set(Matrix3());
-		//	Programs::Screen->useClippingMask.Set(false);
-		//
-		//	Programs::Screen->CoreMeshes.Square->Draw();
-		//}
-		
 		if (!Output.expired() && Detatch)
 			FrameBuffer::Detatch();
 

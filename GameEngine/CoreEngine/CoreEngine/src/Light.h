@@ -105,8 +105,6 @@ namespace GraphicsEngine
 
 namespace Engine
 {
-	//Class_Inherits(GraphicsEngine::Light, Object);
-
 	Declare_Enum(LightType);
 }
 

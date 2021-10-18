@@ -54,8 +54,3 @@ private:
 
 	Reflected(DebugDraw);
 };
-
-namespace Engine
-{
-	//Class_Inherits(DebugDraw, Engine::Object);
-}

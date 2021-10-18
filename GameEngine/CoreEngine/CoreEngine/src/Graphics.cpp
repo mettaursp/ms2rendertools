@@ -97,11 +97,6 @@ void Graphics::Initialize()
 	Programs::Blend = init(System->Programs.Blend);
 	Programs::BlurBlend = init(System->Programs.BlurBlend);
 	Programs::ClippingMask = init(System->Programs.ClippingMask);
-
-  /*
-  Programs::WaterMatrix = init(System->Programs.WaterMatrix);
-  Programs::WaterSim = init(System->Programs.WaterSim);
-  */
 }
 
 void Graphics::Clean()
@@ -126,93 +121,6 @@ void Graphics::ClearScreen(GLbitfield mask)
 void Graphics::SetBlendMode(GLenum sMode, GLenum dMode)
 {
 	glBlendFunc(sMode, dMode); CheckGLErrors();
-}
-
-namespace
-{
-	//void generateNormalMesh(const std::string& name)
-	//{
-	//	MeshData normalMesh;
-	//	normalMesh.GenerateVertexNormals(MeshLoader::GetMeshData(MeshLoader::GetMeshID(name)));
-	//	normalMesh.DrawMode = GL_LINES;
-	//	MeshLoader::RegisterMeshData(&normalMesh, name + "Normals");
-	//}
-	//
-	//void generateSmoothMesh(const std::string& name)
-	//{
-	//	char* newName = new char[name.size() + 1];
-	//
-	//	for (int i = 1; i < int(name.size()); ++i)
-	//		newName[i] = name[i];
-	//
-	//	newName[0] = (name[0] >= 'a' && name[0] <= 'z') ? (name[0] + 'A' - 'a') : name[0];
-	//	newName[name.size()] = 0;
-	//
-	//	MeshData mesh = MeshData(MeshLoader::GetMeshData(MeshLoader::GetMeshID(name)), MeshData::VertexMode::Smoothened);
-	//
-	//	MeshLoader::RegisterMeshData(&mesh, std::string("smooth") + std::string(newName));
-	//}
-	//
-	//void generateFaceNormalMesh(const std::string& name)
-	//{
-	//	MeshData normalMesh;
-	//	normalMesh.GenerateFaceNormals(MeshLoader::GetMeshData(MeshLoader::GetMeshID(name)));
-	//	normalMesh.DrawMode = GL_LINES;
-	//	MeshLoader::RegisterMeshData(&normalMesh, name + "Normals");
-	//}
-	//
-	//void generateCylinderMap(const std::string& name)
-	//{
-	//	MeshData cylinderMapMesh;
-	//	cylinderMapMesh.GenerateCylinderMap(MeshLoader::GetMeshData(MeshLoader::GetMeshID(name)));
-	//	MeshLoader::RegisterMeshData(&cylinderMapMesh, name + "CylinderMapped");
-	//}
-	//
-	//void generateSphereMap(const std::string& name)
-	//{
-	//	MeshData sphereMapMesh;
-	//	sphereMapMesh.GenerateSphereMap(MeshLoader::GetMeshData(MeshLoader::GetMeshID(name)));
-	//	MeshLoader::RegisterMeshData(&sphereMapMesh, name + "SphereMapped");
-	//}
-	//
-	//void generateCubeMap(const std::string& name)
-	//{
-	//	MeshData cubeMapMesh;
-	//	cubeMapMesh.GenerateCubeMap(MeshLoader::GetMeshData(MeshLoader::GetMeshID(name)));
-	//	MeshLoader::RegisterMeshData(&cubeMapMesh, name + "CubeMapped");
-	//}
-	//
-	//void generateTBNDebugMesh(int id)
-	//{
-	//	MeshData tbnDebugMesh;
-	//	tbnDebugMesh.GenerateTBNDebug(MeshLoader::GetMeshData(id));
-	//	tbnDebugMesh.DrawMode = GL_LINES;
-	//	MeshLoader::RegisterMeshData(&tbnDebugMesh, MeshLoader::GetMeshName(id) + "TBNDebug");
-	//}
-
-	void generateNormalMap(const std::string& input, const std::string& output, float scale = 1)
-	{
-		//const Texture* texture = TextureLoader::GetTexture(input);
-		//
-		//int width = texture->GetWidth();
-		//int height = texture->GetHeight();
-		//
-		//unsigned int* pixels = new unsigned int[width * height];
-		//
-		//for (int x = 0; x < width; ++x)
-		//{
-		//	for (int y = 0; y < height; ++y)
-		//	{
-		//		Vector3 S = Vector3(1, 0, scale * (texture->GetPixel(x - 1, y).G - texture->GetPixel(x + 1, y).G));
-		//		Vector3 T = Vector3(0, 1, scale * (texture->GetPixel(x, y - 1).G - texture->GetPixel(x, y + 1).G));
-		//		Vector3 N = 0.5f * S.Cross(T).Normalize() + 0.5f * Vector3(1, 1, 1);
-		//
-		//		pixels[x + width * y] = RGBA(N.X, N.Y, N.Z, 1).ABGR();
-		//	}
-		//}
-		//
-		//TextureLoader::RegisterTexture(new Texture(width, height, reinterpret_cast<unsigned char*>(pixels), GL_LINEAR), output);
-	}
 }
 
 std::shared_ptr<Engine::ModelAsset> Graphics::LoadCore(const std::string& name, const MeshData& data, const std::shared_ptr<Engine::Object>& parent)
@@ -262,12 +170,12 @@ const char* getErrorName(GLenum error)
 	case GL_INVALID_ENUM: return "GL_INVALID_ENUM";
 	case GL_INVALID_VALUE: return "GL_INVALID_VALUE";
 	case GL_INVALID_OPERATION: return "GL_INVALID_OPERATION";
-		//case GL_STACK_OVERFLOW: return "GL_STACK_OVERFLOW";
-		//case GL_STACK_UNDERFLOW: return "GL_STACK_UNDERFLOW";
+	case GL_STACK_OVERFLOW: return "GL_STACK_OVERFLOW";
+	case GL_STACK_UNDERFLOW: return "GL_STACK_UNDERFLOW";
 	case GL_OUT_OF_MEMORY: return "GL_OUT_OF_MEMORY";
 	case GL_INVALID_FRAMEBUFFER_OPERATION: return "GL_INVALID_FRAMEBUFFER_OPERATION";
-		//case GL_CONTEXT_LOST: return "GL_CONTEXT_LOST";
-		//case GL_TABLE_TOO_LARGE: return "GL_TABLE_TOO_LARGE";
+	case GL_CONTEXT_LOST: return "GL_CONTEXT_LOST";
+	case GL_TABLE_TOO_LARGE: return "GL_TABLE_TOO_LARGE";
 	}
 
 	return "";

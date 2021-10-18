@@ -49,7 +49,7 @@ void Shader::Compile(const std::string& filePath, int shaderType)
 	ShaderID = glCreateShader(shaderType); CheckGLErrors();
 	
 
-	glShaderSource(ShaderID, 1, &sourceCode, 0); CheckGLErrors();// glShaderSource(s)
+	glShaderSource(ShaderID, 1, &sourceCode, 0); CheckGLErrors();
 	
 	glCompileShader(ShaderID); CheckGLErrors();
 	

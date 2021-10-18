@@ -76,6 +76,8 @@
 #include "Terrain.h"
 #include "TerrainMaterial.h"
 #include "ChunkLoader.h"
+#include "TerrainCollider2D.h"
+#include "TerrainColliderAxisEnum.h"
 
 #include "ChunkLoaderShapeEnum.h"
 #include "ChunkStatusEnum.h"
@@ -103,7 +105,6 @@ namespace Engine
 		Register_Type(DeviceAxis);
 		Register_Type(DeviceVector);
 
-		Register_Class(ObjectBase);
 		Register_Class(Object);
 
 		Register_Type(ProcessArguments);
@@ -154,6 +155,7 @@ namespace Engine
 		Register_Class(GraphicsEngine::SceneObject);
 
 		Register_Enum(ChunkLoaderShape);
+		Register_Enum(TerrainColliderAxis);
 
 		Register_Class(TerrainMaterial);
 		Register_Class(Voxel);
@@ -206,6 +208,8 @@ namespace Engine
 		Register_Class(Physics::PointMass);
 		Register_Class(Physics::RigidBody);
 		Register_Class(Physics::PhysicsEnvironment);
+
+		Register_Class(TerrainCollider2D);
 
 		Register_Class(GraphicsEngine::EmitterConfig);
 		Register_Class(GraphicsEngine::ParticleEmitter);

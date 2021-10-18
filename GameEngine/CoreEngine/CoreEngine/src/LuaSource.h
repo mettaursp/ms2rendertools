@@ -28,6 +28,4 @@ namespace Engine
 
 		Reflected(LuaSource);
 	};
-
-	//Class_Inherits(LuaSource, Object);
 }

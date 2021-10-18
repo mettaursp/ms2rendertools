@@ -100,9 +100,6 @@ void JsonParser::Parse()
 					ReadArrayItem();
 				else
 					ReadDictionaryItem();
-				//ReadTrue();
-				//
-				//CheckForComma();
 			}
 			else if (Input[Index] == 'f' || Input[Index] == 'F')
 			{
@@ -111,9 +108,6 @@ void JsonParser::Parse()
 					ReadArrayItem();
 				else
 					ReadDictionaryItem();
-				//ReadFalse();
-				//
-				//CheckForComma();
 			}
 			else if (Input[Index] == '}')
 			{

@@ -28,7 +28,6 @@ public:
 	Quaternion Slerp(const Quaternion& destination, float t) const;
 
 	Quaternion operator*(const Quaternion& rhs) const;
-	//Vector3 operator*(const Vector3& rhs) const;
 
 	Matrix3 Matrix() const;
 
@@ -66,8 +65,6 @@ private:
 
 namespace Engine
 {
-	//Class_Inherits(Quaternion, CoreType);
-
 	Define_Value_Type(Quaternion);
 }
 

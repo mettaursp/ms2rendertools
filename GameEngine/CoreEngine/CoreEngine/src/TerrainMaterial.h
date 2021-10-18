@@ -21,6 +21,4 @@ namespace Engine
 		Reflected(TerrainMaterial);
 
 	};
-
-	//Class_Inherits(TerrainMaterial, Object);
 }

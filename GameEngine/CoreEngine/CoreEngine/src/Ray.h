@@ -25,7 +25,5 @@ private:
 
 namespace Engine
 {
-	//Class_Inherits(Ray, CoreType);
-
 	Define_Value_Type(Ray);
 }

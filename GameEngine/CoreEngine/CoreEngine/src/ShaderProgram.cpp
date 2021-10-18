@@ -93,8 +93,6 @@ void ShaderProgram::Link()
 	CheckErrors(ProgramID, GL_LINK_STATUS);
 
 	Use();
-
-	//Meshes.InitLoadedMeshes();
 }
 
 void ShaderProgram::CheckErrors(GLuint data, int action) const

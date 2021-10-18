@@ -179,7 +179,7 @@ std::string fetchInherited<ClassData>();
 
 #define NonInstantiable private: static bool IsInstantiable() { return false; }\
 template <typename T>\
-static std::shared_ptr<Engine::ObjectBase> Allocate()\
+static std::shared_ptr<Engine::Object> Allocate()\
 {\
 	throw std::string("Attempt to create non-instantiable type ") + GetClassMetaData()->Name;\
 }
@@ -190,7 +190,7 @@ static std::shared_ptr<Engine::ObjectBase> Allocate()\
 
 #define Instantiable private: static bool IsInstantiable() { return true; }\
 template <typename T>\
-static std::shared_ptr<Engine::ObjectBase> Allocate()\
+static std::shared_ptr<Engine::Object> Allocate()\
 {\
 	return GameObjectAllocator<T>::Create();\
 }
@@ -281,7 +281,7 @@ public:\
 		\
 		static void Initialize();\
 		\
-		static std::shared_ptr<Engine::ObjectBase> Create()\
+		static std::shared_ptr<Engine::Object> Create()\
 		{\
 			return Allocate<className>();\
 		}\
@@ -352,7 +352,7 @@ className::className(const std::string& name) : Name(name) {}
 */
 
 #define Reflect_Inherited(className, baseName, ...)\
-using Engine::ObjectBase;\
+using Engine::Object;\
 \
 Init_Reflection(className);\
 \
@@ -461,12 +461,9 @@ void typeName::TypeData::Initialize()\
 	\
 	Data = new TypeData();\
 	\
-	Data->Create = [] () -> std::shared_ptr<Engine::ObjectBase>\
+	Data->Create = [] () -> std::shared_ptr<Engine::Object>\
 	{\
-		return nullptr;/*std::shared_ptr<typeName>(reinterpret_cast<typeName*>(typeName::TypeData::Allocator.Allocate()), [](typeName* data)*/\
-		/*{*/\
-			/*typeName::TypeData::Allocator.Destroy<typeName>(data);*/\
-		/*});*/\
+		return nullptr;\
 	};\
 	\
 	Data->CreateRaw = [] () -> void*\
@@ -507,7 +504,7 @@ MetaData* ClassA::GetMetaData() const\
 }\
 \
 ClassA::ObjectData* ClassA::ObjectData::Data = nullptr;\
-ObjectBase::StringVector ClassA::SiblingRequirements = StringVector();\
+Object::StringVector ClassA::SiblingRequirements = StringVector();\
 bool ClassA::SiblingsRestricted = false;
 
 /*
@@ -605,7 +602,7 @@ Define_Type(typeName,\
 				else if (object->Meta != type)\
 					Lua::BadArgumentError(*LuaState, ArgumentNumber + 1, #typeName, object->Meta->Name.c_str(), FuncName);\
 				\
-				return *reinterpret_cast<typeName*>(object->Data);/*ObjectReference(object->Reference).GetObjectData<typeName>();*/\
+				return *reinterpret_cast<typeName*>(object->Data);\
 			}\
 			else\
 				Lua::BadArgumentError(*LuaState, ArgumentNumber + 1, #typeName, Lua::GetType(*LuaState, index), FuncName);\

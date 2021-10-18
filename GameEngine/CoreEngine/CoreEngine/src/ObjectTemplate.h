@@ -53,14 +53,3 @@ namespace ExampleNamespace
 		Reflected(ObjectTemplate);
 	};
 }
-
-namespace Engine
-{
-	/*
-		These must be in namespace Engine.
-		These register class inheritance hierarchy meta data for Handles to use internally in type deduction.
-		These are required to be used before using any Handles that reference that type.
-		To make an object that contains handles that reference its own type, look at Object & ObjectBase's base class workaround.
-	*/
-	//Class_Inherits(ExampleNamespace::ObjectTemplate, Engine::Object);
-}

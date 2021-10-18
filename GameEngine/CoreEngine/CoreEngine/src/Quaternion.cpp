@@ -107,17 +107,6 @@ Quaternion Quaternion::operator*(const Quaternion& rhs) const
 	);
 }
 
-//Vector3 Quaternion::operator*(const Vector3& rhs) const
-//{
-//	float a = 2 * (rhs * (Vector3)(*this));
-//	float b = w * w - Quaternion(x, y, z).SquareLength();
-//	float c = 2 * w;
-//
-//	Quaternion product = cross(rhs);
-//
-//	return a * Vector3(x, y, z) + b * rhs + c * Vector3(product.X, product.Y, product.Z);
-//}
-
 Matrix3 Quaternion::Matrix() const
 {
 	float xx = X * X;

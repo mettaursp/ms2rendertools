@@ -36,7 +36,6 @@ namespace GraphicsEngine
 		float R = 0;
 		float G = 0;
 		float B = 0;
-		//unsigned char A = 0xFF;
 
 		Pixel() {}
 		Pixel(const RGBA& color);

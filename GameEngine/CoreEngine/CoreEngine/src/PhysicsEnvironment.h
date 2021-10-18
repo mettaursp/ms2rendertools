@@ -81,9 +81,5 @@ namespace Engine
 
 	using Physics::RayCastResults;
 
-	//Class_Inherits(RayCastResults, CoreType);
-
 	Define_Value_Type(RayCastResults);
-
-	//Class_Inherits(Physics::PhysicsEnvironment, Object);
 }

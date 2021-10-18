@@ -29,8 +29,3 @@ namespace GraphicsEngine
 		Reflected(ScreenCanvas);
 	};
 }
-
-namespace Engine
-{
-	//Class_Inherits(GraphicsEngine::ScreenCanvas, Object);
-}

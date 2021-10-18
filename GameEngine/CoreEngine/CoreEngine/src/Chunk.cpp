@@ -22,14 +22,10 @@ namespace Engine
 
 	Chunk::~Chunk()
 	{
-		//updateCount(-1);
 	}
 
 	void Chunk::Initialize()
 	{
-		//updateCount(1);
-
-		
 	}
 
 	void Chunk::Update(float)
@@ -48,7 +44,6 @@ namespace Engine
 
 		std::shared_ptr<Transform> transform = Engine::Create<Transform>();
 
-		//transform->IsStatic = false;
 		transform->SetParent(This.lock());
 		transform->Transformation = Matrix3(float(chunk.X) * 16, float(chunk.Y) * 16, float(chunk.Z) * 16);
 
@@ -61,7 +56,6 @@ namespace Engine
 
 		chunkMesh->SetParent(model);
 
-		//model->Asset = MeshLoader::GetAsset(1);
 		model->Asset = chunkMesh;
 
 		ChunkModel = model;
@@ -310,8 +304,6 @@ namespace Engine
 
 				index = GetCoordinates();
 				terrain = GetTerrain()->Cast<Terrain>();
-
-				//std::cout << "attempt unload: " << index.X << ", " << index.Y << ", " << index.Z << std::endl;
 
 				if (terrain != nullptr)
 					terrain->Cast<Terrain>()->UnloadChunk(index);

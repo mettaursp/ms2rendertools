@@ -102,46 +102,7 @@ typename Enum::IntersectionType Aabb::Intersects(const Plane& plane, float epsil
 	else
 		return Enum::IntersectionType::Outside;
 	
-	/*Vector3 halfExtent = 0.5f * (Max - Min);
-	Vector3 center = 0.5f * (Min + Max);
-
-	if (plane.X < 0)
-		halfExtent.X *= -1;
-
-	if (plane.Y < 0)
-		halfExtent.Y *= -1;
-
-	if (plane.Z < 0)
-		halfExtent.Z *= -1;
-
-	Enum::IntersectionType extent1 = plane.Compare(center + halfExtent, epsilon);
-	Enum::IntersectionType extent2 = plane.Compare(center - halfExtent, epsilon);
-
-	if (extent1 == Enum::IntersectionType::Coplanar)
-		extent1 = Enum::IntersectionType::Overlaps;
-
-	if (extent2 == Enum::IntersectionType::Coplanar)
-		extent2 = Enum::IntersectionType::Overlaps;
-
-	if (extent1 == extent2 || extent2 == Enum::IntersectionType::Overlaps)
-		return extent1;
-	else if (extent1 == Enum::IntersectionType::Overlaps)
-		return extent2;
-	else
-		return Enum::IntersectionType::Overlaps;*/
 }
-
-//void Aabb::Compute(const MeshData::VertexVector& points)
-//{
-//	Min.Set(FLT_MAX, FLT_MAX, FLT_MAX);
-//	Max.Set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
-//	for (size_t i = 0; i < points.size(); ++i)
-//	{
-//		const Vector3& point = points[i].Position;
-//		Min = MinVector(Min, point);
-//		Max = MaxVector(Max, point);
-//	}
-//}
 
 void Aabb::Compute(const std::vector<Vector3>& points)
 {
@@ -154,17 +115,6 @@ void Aabb::Compute(const std::vector<Vector3>& points)
 		Max = MaxVector(Max, point);
 	}
 }
-
-//Aabb Aabb::Compute(std::shared_ptr<Engine::ModelAsset> model)
-//{
-//	int meshID = model->GetMeshID();
-//
-//	Aabb boundingBox;
-//
-//	boundingBox.Compute(MeshLoader::GetMeshData(meshID)->VertexBuffer);
-//
-//	return boundingBox;
-//}
 
 Aabb Aabb::Transform(const Matrix3& transformation) const
 {

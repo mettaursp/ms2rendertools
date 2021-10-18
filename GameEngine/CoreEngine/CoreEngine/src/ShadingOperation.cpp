@@ -173,7 +173,6 @@ namespace GraphicsEngine
 
 		glDepthMask(GL_TRUE); CheckGLErrors();
 		glDisable(GL_STENCIL_TEST); CheckGLErrors();
-		//glEnable(GL_DEPTH_TEST); CheckGLErrors();
 		glDepthFunc(GL_LEQUAL); CheckGLErrors();
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); CheckGLErrors();
 	}
@@ -232,7 +231,7 @@ namespace GraphicsEngine
 				float direction = 1;
 
 				if (light->Direction == Vector3(0, -1, 0))
-					rotation = Matrix3().RotatePitch(PI);//direction = -1;
+					rotation = Matrix3().RotatePitch(PI);
 				else if (light->Direction != Vector3(0, 1, 0))
 					rotation = Matrix3().RotateYaw(atan2f(light->Direction.X, -light->Direction.Z)) * Matrix3().RotatePitch(-acosf(light->Direction.Y));
 
@@ -302,8 +301,6 @@ namespace GraphicsEngine
 		float lightRadius = light->GetRadius() * 1.1f;
 
 		Matrix3 backPanelTransform = Matrix3(0, 0, -lightRadius + 0.01f) * Matrix3().Scale(lightRadius, lightRadius, 0);
-
-		//Matrix3 base = Matrix3().ExtractRotation(CurrentCamera->GetTransformation(), light->Position);
 
 		Dimensions bufferSize = light->GetShadowMapSize();
 
@@ -377,7 +374,6 @@ namespace GraphicsEngine
 			Programs::DepthTrace->CoreMeshes.Cube->Draw();
 		}
 
-		//if (light->Type != Enum::LightType::Spot || light->OuterRadius <= PI / 4 + 0.001f)
 		{
 			TopMap.lock()->DrawTo(0, 0, bufferSize.Width, bufferSize.Height);
 

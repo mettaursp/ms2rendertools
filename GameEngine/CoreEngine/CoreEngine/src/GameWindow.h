@@ -27,8 +27,3 @@ namespace GraphicsEngine
 		Reflected(GameWindow);
 	};
 }
-
-namespace Engine
-{
-	//Class_Inherits(GraphicsEngine::GameWindow, Object);
-}

@@ -40,10 +40,7 @@ public:
 
 	Enum::IntersectionType Intersects(const Plane& plane, float epsilon = 1e-5f) const;
 
-	// To easily make a Aabb from a set of points, helps with the implementation of GJK
-	//void Compute(const std::vector<VertexData>& points);
 	void Compute(const std::vector<Vector3>& points);
-	//static Aabb Compute(Handle<Engine::ModelAsset> model);
 
 	bool operator==(const Aabb& other) const;
 	bool operator!=(const Aabb& other) const;
@@ -60,7 +57,5 @@ namespace Enum
 
 namespace Engine
 {
-	////Class_Inherits(Aabb, CoreType);
-
 	Define_Value_Type(Aabb);
 }

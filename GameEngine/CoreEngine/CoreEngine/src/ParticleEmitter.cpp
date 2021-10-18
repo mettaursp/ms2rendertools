@@ -136,7 +136,7 @@ namespace GraphicsEngine
 	{
 		particle.Time = 10 - delta;
 		particle.Position.Set(0, 0, -1, 1);
-		particle.Direction = 0.1f * UnitVectorGenerator().Generate();//.Set(0, 0, -0.1f);
+		particle.Direction = 0.1f * UnitVectorGenerator().Generate();
 		particle.Size.Set(.1f, .1f, .1f);
 	}
 
@@ -150,10 +150,6 @@ namespace GraphicsEngine
 
 	void ParticleEmitter::DefaultDraw(const Particle& particle, const std::shared_ptr<Camera>& camera, const Mesh* particleMesh)
 	{
-		//Vector3 translation = camera->GetTransformationInverse() * particle.Position;
-		//
-		//program->SetTransform(camera->GetProjectionMatrix() * Matrix3().Translate(translation) * Matrix3().Scale(particle.size()));
-
 		// v this is equivalent to this ^ but faster
 		Matrix3 inv = camera->GetTransformationInverse();
 
@@ -198,9 +194,6 @@ namespace GraphicsEngine
 			Programs::DepthTrace->transform.Set(persp);
 			Programs::DepthTrace->objectTransform.Set(translation);
 		}
-		//Programs::Phong->objectTransform.Set(Matrix3().SetVectors(particle.Position, camera->GetTransformation().RightVector(), camera->GetTransformation().UpVector(), camera->GetTransformation().FrontVector()));
-
-		//particleMesh->Draw();
 
 		// inlined for optimization
 		glDrawElements(GL_TRIANGLES, particleMesh->GetIndicesID(), GL_UNSIGNED_INT, 0);
@@ -215,7 +208,6 @@ namespace GraphicsEngine
 			Programs::Phong->SetTexture(nullptr);
 			Programs::Phong->SetNormalMap(nullptr);
 			Programs::Phong->SetSpecularMap(nullptr);
-			//Programs::Phong->globalEmissive.Set(0);;
 			Programs::Phong->textureColor.Set(0xFFFFFFFF);
 			Programs::Phong->blendTexture.Set(false);
 			Programs::Phong->compressedNormalMap.Set(CompressedNormalMap);
@@ -228,7 +220,6 @@ namespace GraphicsEngine
 		else if (current == Programs::PhongForward)
 		{
 			Programs::PhongForward->SetTexture(nullptr);
-			//Programs::Phong->globalEmissive.Set(0);
 			Programs::PhongForward->color.Set(Color);
 			Programs::PhongForward->glowColor.Set(GlowColor);
 			Programs::PhongForward->SetTexture(nullptr);
@@ -236,7 +227,6 @@ namespace GraphicsEngine
 			Programs::PhongForward->SetSpecularMap(nullptr);
 			Programs::PhongForward->textureColor.Set(0xFFFFFFFF);
 			Programs::PhongForward->blendTexture.Set(false);
-			//Programs::PhongForward->flipCubeMapV.Set(flipCubeMapV);
 			Programs::PhongForward->singleCubeMapped.Set(CubeMapped);
 			Programs::PhongForward->compressedNormalMap.Set(CompressedNormalMap);
 			Programs::PhongForward->boxScale.Set(BoxScale);
@@ -403,7 +393,7 @@ namespace GraphicsEngine
 
 		Vector3 point = t2 * t2*t2 * Start + 3 * t2*t2*t * Control1 + 3 * t2*t*t * Control2 + t * t*t * End;
 
-		particle.Direction = /* 0.5f * particle.Direction + 0.5f */ (point - particle.Position);
+		particle.Direction = (point - particle.Position);
 
 		float s = 1 / (particle.Position - End).SquareLength();
 
@@ -415,6 +405,6 @@ namespace GraphicsEngine
 
 		particle.Position = (1 - s) * particle.Position + s * point;
 
-		return particle.Time > 0;//(particle.Position - end).SquareLength() > finishThreshold;//particle.Time > 0;
+		return particle.Time > 0;
 	}
 }

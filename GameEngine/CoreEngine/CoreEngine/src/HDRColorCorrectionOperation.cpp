@@ -9,9 +9,9 @@ namespace GraphicsEngine
 {
 	void HDRColorCorrectionOperation::Initialize()
 	{
-		std::shared_ptr<FrameBuffer> luminescenceBuffer = FrameBuffer::Create(Resolution.Width, Resolution.Height, Textures::Create(Resolution.Width, Resolution.Height, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_FLOAT, GL_RG32F, GL_RG), true);// , false);
-		std::shared_ptr<FrameBuffer> luminescenceBackBuffer = FrameBuffer::Create(Resolution.Width, Resolution.Height, Textures::Create(Resolution.Width, Resolution.Height, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_FLOAT, GL_RG32F, GL_RG), true);//, false);
-		std::shared_ptr<FrameBuffer> luminescenceCacheBuffer = FrameBuffer::Create(Resolution.Width, Resolution.Height, Textures::Create(Resolution.Width, Resolution.Height, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_FLOAT, GL_RG32F, GL_RG), true);//, false);
+		std::shared_ptr<FrameBuffer> luminescenceBuffer = FrameBuffer::Create(Resolution.Width, Resolution.Height, Textures::Create(Resolution.Width, Resolution.Height, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_FLOAT, GL_RG32F, GL_RG), true);
+		std::shared_ptr<FrameBuffer> luminescenceBackBuffer = FrameBuffer::Create(Resolution.Width, Resolution.Height, Textures::Create(Resolution.Width, Resolution.Height, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_FLOAT, GL_RG32F, GL_RG), true);
+		std::shared_ptr<FrameBuffer> luminescenceCacheBuffer = FrameBuffer::Create(Resolution.Width, Resolution.Height, Textures::Create(Resolution.Width, Resolution.Height, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_FLOAT, GL_RG32F, GL_RG), true);
 
 		luminescenceBuffer->Name = "LuminescencePrimaryBuffer";
 		luminescenceBackBuffer->Name = "LuminescenceSecondaryBuffer";

@@ -42,7 +42,5 @@ public:
 
 namespace Engine
 {
-	//Class_Inherits(BoundingSphere, CoreType);
-
 	Define_Value_Type(BoundingSphere);
 }

@@ -50,14 +50,6 @@ void PhongOutputProgram::SetInputBuffer(const std::shared_ptr<GraphicsEngine::Fr
 		inputSpecular.Set(buffer->GetTexture(3), 6);
 		inputAmbient.Set(buffer->GetTexture(4), 7);
 	}
-	else
-	{
-		//inputPosition.Set(Engine::Null);
-		//inputNormal.Set(Engine::Null);
-		//inputDiffuse.Set(Engine::Null);
-		//inputSpecular.Set(Engine::Null);
-		//inputAmbient.Set(Engine::Null);
-	}
 }
 
 void PhongOutputStencilProgram::SetInputBuffer(const std::shared_ptr<GraphicsEngine::FrameBuffer>& buffer)

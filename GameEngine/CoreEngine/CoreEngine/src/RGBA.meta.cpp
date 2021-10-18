@@ -108,34 +108,6 @@ Reflect_Type(RGBA,
 		);
 	);
 	
-	//Bind_Function(ARGB,
-	//
-	//	Document("");
-	//	Function_Overload
-	//	(
-	//		Document("");
-	//		Overload_Returns(unsigned int);
-	//
-	//		Overload_Parameters();
-	//		
-	//		Bind_Parameters(ARGB);
-	//	);
-	//);
-	//
-	//Bind_Function(ABGR,
-	//
-	//	Document("");
-	//	Function_Overload
-	//	(
-	//		Document("");
-	//		Overload_Returns(unsigned int);
-	//
-	//		Overload_Parameters();
-	//		
-	//		Bind_Parameters(ABGR);
-	//	);
-	//);
-	
 	Bind_Function(operator==,
 	
 		Document("");
@@ -171,20 +143,6 @@ Reflect_Type(RGBA,
 			Bind_Parameters(operator!=, other);
 		);
 	);
-	
-	//Bind_Function(Hex,
-	//
-	//	Document("");
-	//	Function_Overload
-	//	(
-	//		Document("");
-	//		Overload_Returns(unsigned int);
-	//
-	//		Overload_Parameters();
-	//		
-	//		Bind_Parameters(operator unsigned int);
-	//	);
-	//);
 	
 	Bind_Function(Vector,
 	

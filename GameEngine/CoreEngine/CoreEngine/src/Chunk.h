@@ -52,6 +52,8 @@ namespace Engine
 		void SetMaterial(const Vector3& cell, const std::shared_ptr<TerrainMaterial>& material) { return SetMaterial(Coordinates(cell), material); }
 		void SetData(const Vector3& cell, const std::shared_ptr<Voxel>& data) { return SetData(Coordinates(cell), data); }
 
+		std::shared_ptr<Chunk> FetchChunk(int chunkX, int chunkY, int chunkZ);
+
 		std::shared_ptr<Object> GetTerrain() const;
 
 		template <typename T>
@@ -78,7 +80,6 @@ namespace Engine
 		TerrainTypes::VoxelData& Get(const Coordinates& cell);
 		const TerrainTypes::VoxelData& Get(const Coordinates& cell) const;
 
-		std::shared_ptr<Chunk> FetchChunk(int chunkX, int chunkY, int chunkZ);
 		void RegenerateNeighbors(bool changedLeft = true, bool changedBottom = true, bool changedBack = true);
 		void AttemptRegeneration(int chunkX, int chunkY, int chunkZ);
 		void Triangulate(VoxelTriangulation& triangulator, std::shared_ptr<Chunk>* chunks, bool* chunksCanLoad, int x, int y, int z);

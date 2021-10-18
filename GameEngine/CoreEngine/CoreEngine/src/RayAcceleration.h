@@ -128,10 +128,6 @@ namespace GraphicsEngine
 					1 / direction.Y,
 					1 / direction.Z
 				};
-
-				//Sign[0] = (InverseDirection.X < 0);
-				//Sign[1] = (InverseDirection.Y < 0);
-				//Sign[2] = (InverseDirection.Z < 0);
 			}
 
 			FastRay(const Vector& start, const Vector& direction) : Start{ start.X, start.Y, start.Z }, Direction{ direction.X, direction.Y, direction.Z }
@@ -141,15 +137,10 @@ namespace GraphicsEngine
 					1 / direction.Y,
 					1 / direction.Z
 				};
-
-				//Sign[0] = (InverseDirection.X < 0);
-				//Sign[1] = (InverseDirection.Y < 0);
-				//Sign[2] = (InverseDirection.Z < 0);
 			}
 
 			Vector Start, Direction;
 			Vector InverseDirection;
-			//int Sign[3];
 		};
 
 		class RayTest
