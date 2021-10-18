@@ -12,9 +12,11 @@ float maxf(float a, float b)
 	return a > b ? a : b;
 }
 
+const float infinity = std::numeric_limits<float>::max();
+
 bool Ray::Intersects(const Aabb& box, float& t, float epsilon) const
 {
-	float tMax = std::numeric_limits<float>::max();
+	float tMax = infinity;
 	float tMin = -tMax;
 
 	if (!(
@@ -24,7 +26,7 @@ bool Ray::Intersects(const Aabb& box, float& t, float epsilon) const
 	) || tMax < 0)
 		return false;
 
-	t = maxf(0, tMin);
+	t = std::max(0.f, tMin);
 
 	return true;
 }
@@ -38,13 +40,13 @@ bool Ray::IntersectsAxis(float start, float direction, float min, float max, flo
 
 		if (t1 > t2)
 		{
-			tMin = maxf(tMin, t2);
-			tMax = minf(tMax, t1);
+			tMin = std::max(tMin, t2);
+			tMax = std::min(tMax, t1);
 		}
 		else
 		{
-			tMin = maxf(tMin, t1);
-			tMax = minf(tMax, t2);
+			tMin = std::max(tMin, t1);
+			tMax = std::min(tMax, t2);
 		}
 	}
 	else

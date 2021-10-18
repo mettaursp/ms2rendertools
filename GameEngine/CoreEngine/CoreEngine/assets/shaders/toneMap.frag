@@ -63,6 +63,14 @@ void main()
 		
 		outputValue = vec4(scaledColor * (1 + scaledColor / burnoutRange) / (1 + scaledColor), 1);
 	}
+	else if (rangeFittingMode == 2)
+	{
+		vec3 mapped = vec3(1.0f) - exp(-color.rgb * exposure);
+		
+		outputValue = vec4(mapped, 1);
+		
+		//outputValue = vec4(max(vec3(0), color.rgb - vec3(1)), 1);
+	}
 	
-	outputValue = vec4(power(outputValue.xyz, 1 / 2.2), outputValue.w);
+	//outputValue = vec4(pow(outputValue.xyz, vec3(1 / 2.2f)), outputValue.w);
 }

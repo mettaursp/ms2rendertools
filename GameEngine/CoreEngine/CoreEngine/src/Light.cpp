@@ -11,6 +11,11 @@ extern "C" {
 
 namespace GraphicsEngine
 {
+	void Light::Update(float delta)
+	{
+		Direction = Direction.Unit();
+	}
+
 	float Light::ComputeRadius(float a, float b, float c, float value)
 	{
 		return (
@@ -26,7 +31,11 @@ namespace GraphicsEngine
 		float b = Attenuation.Y;
 		float c = Attenuation.X;
 
-		ComputedRadius = ComputeRadius(a, b, c, 10 / 255.0f);
+		ComputedRadius = ComputeRadius(a, b, c, 10 / 255.0f / Brightness );
+
+		float maxRadius = ComputedRadius * 1.5f;
+
+		AttenuationOffset = 1.f / (Attenuation.X + maxRadius * Attenuation.Y + maxRadius * maxRadius * Attenuation.Z);
 
 		if (Type == LightType::Spot)
 		{

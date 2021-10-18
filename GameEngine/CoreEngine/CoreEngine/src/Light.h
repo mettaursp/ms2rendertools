@@ -7,6 +7,7 @@
 #include "Object.h"
 #include "AabbTree.h"
 #include "Dimensions.h"
+#include "RGBA.h"
 
 namespace GraphicsEngine
 {
@@ -45,7 +46,7 @@ namespace GraphicsEngine
 		virtual ~Light() {}
 
 		void Initialize() {}
-		void Update(float) {}
+		void Update(float delta);
 
 		bool ShadowDebugView = false;
 		bool Enabled = true;
@@ -62,6 +63,7 @@ namespace GraphicsEngine
 		LightType Type = LightType::Directional;
 
 		float GetRadius() const { return ComputedRadius; }
+		float GetAttenuationOffset() const { return AttenuationOffset; }
 		void RecomputeRadius();
 		Dimensions GetShadowMapSize() const;
 		void SetShadowsEnabled(bool enabled, int width = 128, int height = 128);
@@ -77,6 +79,7 @@ namespace GraphicsEngine
 	private:
 		bool ShadowsEnabled = false;
 		float ComputedRadius = 0;
+		float AttenuationOffset = 0;
 		Matrix3 ShadowMapTransformation;
 		Matrix3 ShadowMapInverseTransformation;
 

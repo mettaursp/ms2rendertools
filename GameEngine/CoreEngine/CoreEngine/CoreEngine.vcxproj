@@ -150,6 +150,7 @@
     <ClCompile Include="src\Aabb.cpp" />
     <ClCompile Include="src\Aabb.meta.cpp" />
     <ClCompile Include="src\AabbTree.cpp" />
+    <ClCompile Include="src\AcceleratedKDTree.cpp" />
     <ClCompile Include="src\Appearance.cpp" />
     <ClCompile Include="src\Appearance.meta.cpp" />
     <ClCompile Include="src\BasicMeshes.cpp" />
@@ -216,6 +217,8 @@
     <ClCompile Include="src\GlowingSceneOperation.meta.cpp" />
     <ClCompile Include="src\Graphics.cpp" />
     <ClCompile Include="src\HalfBoundingVolume.cpp" />
+    <ClCompile Include="src\HDRColorCorrectionOperation.cpp" />
+    <ClCompile Include="src\HDRColorCorrectionOperation.meta.cpp" />
     <ClCompile Include="src\InheritedTemplate.meta.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\InputContext.cpp" />
@@ -275,6 +278,8 @@
     <ClCompile Include="src\ParticleEmitter.cpp" />
     <ClCompile Include="src\ParticleEmitter.meta.cpp" />
     <ClCompile Include="src\PCA.cpp" />
+    <ClCompile Include="src\PhysicalMaterial.cpp" />
+    <ClCompile Include="src\PhysicalMaterial.meta.cpp" />
     <ClCompile Include="src\PhysicsEnvironment.cpp" />
     <ClCompile Include="src\PhysicsEnvironment.meta.cpp" />
     <ClCompile Include="src\Plane.cpp" />
@@ -287,6 +292,9 @@
     <ClCompile Include="src\Quaternion.meta.cpp" />
     <ClCompile Include="src\Ray.cpp" />
     <ClCompile Include="src\Ray.meta.cpp" />
+    <ClCompile Include="src\RayAcceleration.cpp" />
+    <ClCompile Include="src\RayTracer.cpp" />
+    <ClCompile Include="src\RayTracer.meta.cpp" />
     <ClCompile Include="src\ReflectionData.cpp" />
     <ClCompile Include="src\RenderOperation.cpp" />
     <ClCompile Include="src\RenderOperation.meta.cpp" />
@@ -298,6 +306,8 @@
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\Scene.meta.cpp" />
     <ClCompile Include="src\SceneObject.meta.cpp" />
+    <ClCompile Include="src\SceneRayCastResults.cpp" />
+    <ClCompile Include="src\SceneRayCastResults.meta.cpp" />
     <ClCompile Include="src\ScreenCanvas.cpp" />
     <ClCompile Include="src\ScreenCanvas.meta.cpp" />
     <ClCompile Include="src\Shader.cpp" />
@@ -344,6 +354,7 @@
   <ItemGroup>
     <ClInclude Include="src\Aabb.h" />
     <ClInclude Include="src\AabbTree.h" />
+    <ClInclude Include="src\AcceleratedKDTree.h" />
     <ClInclude Include="src\Alignment.h" />
     <ClInclude Include="src\Appearance.h" />
     <ClInclude Include="src\BoundingSphere.h" />
@@ -356,10 +367,15 @@
     <ClInclude Include="src\Connection.h" />
     <ClInclude Include="src\Dimensions.h" />
     <ClInclude Include="src\GameEngine.h" />
+    <ClInclude Include="src\HDRColorCorrectionOperation.h" />
     <ClInclude Include="src\InputContext.h" />
     <ClInclude Include="src\InputSubscriber.h" />
     <ClInclude Include="src\LightBuffer.h" />
     <ClInclude Include="src\Packet.h" />
+    <ClInclude Include="src\PhysicalMaterial.h" />
+    <ClInclude Include="src\RayAcceleration.h" />
+    <ClInclude Include="src\RayTracer.h" />
+    <ClInclude Include="src\SceneRayCastResults.h" />
     <ClInclude Include="src\Socket.h" />
     <ClInclude Include="src\Terrain2DCollider.h" />
     <ClInclude Include="src\TerrainTypes.h" />

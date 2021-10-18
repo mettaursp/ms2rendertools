@@ -22,6 +22,7 @@ namespace GraphicsEngine
 		void Initialize() {}
 		void Update(float);
 
+		float Reflectivity = 0;
 		bool BlendTexture = true;
 		RGBA Color;
 		RGBA TextureColor;
@@ -51,6 +52,7 @@ namespace GraphicsEngine
 		Aabb GetBoundingBox() const;
 		bool HasMoved() const;
 		bool IsStatic() const;
+		void CastRay(const Ray& ray, const CastResultsCallback& callback) const;
 
 	private:
 		void DrawMesh(const std::shared_ptr<Camera>& camera, const Mesh* mesh, const Matrix3& transformation) const;

@@ -8,6 +8,9 @@ extern "C" {
 #include "Vector3.h"
 #include "RGBA.h"
 #include "VertexModeEnum.h"
+#include "Ray.h"
+#include "SceneRayCastResults.h"
+#include "AabbTree.h"
 
 class ObjParser;
 class PlyParser;
@@ -65,11 +68,21 @@ struct VertexData
 	Vector3 TVector, BVector;
 };
 
+struct TriangleData
+{
+	int VertexA = -1;
+	int VertexB = -1;
+	int VertexC = -1;
+	int Index = -1;
+};
+
 class MeshData
 {
 public:
 	typedef std::vector<VertexData> VertexVector;
 	typedef std::vector<int> IntVector;
+	typedef std::vector<TriangleData> TriangleVector;
+	typedef std::function<void(const SceneRayCastResults& results)> CastResultsCallback;
 
 	Enum::VertexMode Mode;
 
@@ -82,6 +95,7 @@ public:
 	MeshData(const ObjParser* parser, Enum::VertexMode mode = Enum::VertexMode::Seperate);
 	MeshData(const PlyParser* parser, Enum::VertexMode mode = Enum::VertexMode::Seperate);
 	MeshData(const MeshData* meshData, Enum::VertexMode mode = Enum::VertexMode::Seperate);
+	MeshData(const MeshData& other);
 
 	void UpdateBounds();
 	void Initialize(const ObjParser* parser);
@@ -98,11 +112,21 @@ public:
 	Vector3 GetMaximumCorner() const;
 	Vector3 GetCenter() const;
 	Vector3 GetSize() const;
+	void PushTriangle(int vertexA, int vertexB, int vertexC);
+	void ConfigurePartitioning();
+	void CastRay(const Ray& ray, const CastResultsCallback& callback) const;
+	const AabbTree& GetTree() const { return TrianglePartition; }
+	int GetTriangle(const AabbTree::Node* node) const { return node->GetData<TriangleData>()->Index; }
+
+	MeshData& operator=(const MeshData& other);
 
 private:
 	void Smoothen();
 
 	Vector3 Minimum;
 	Vector3 Maximum;
+
+	TriangleVector Triangles;
+	AabbTree TrianglePartition;
 };
 

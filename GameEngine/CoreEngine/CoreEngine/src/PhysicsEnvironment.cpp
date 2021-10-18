@@ -129,7 +129,7 @@ namespace Engine
 						CollisionPair collision;
 
 						collision.Collider1 = collider;
-						//collision.Collider2 = terrain;
+						collision.Collider2 = terrain;
 
 						if (collider->IsCircle)
 						{

@@ -153,4 +153,18 @@ namespace GraphicsEngine
 	{
 		return CameraFrustum;
 	}
+
+	Ray Camera::GetRay(int x, int y, int resolutionX, int resolutionY, float length) const
+	{
+		Vector3 direction = Vector3(
+			Width * (float(x) - float(0.5f * resolutionX)) / resolutionX,
+			Height * -(float(y) - float(0.5f * resolutionY)) / resolutionY,
+			-ProjectionPlane
+		).Unit();
+
+		return Ray(
+			Transformation.Translation(),
+			Transformation * direction * length
+		);
+	}
 }

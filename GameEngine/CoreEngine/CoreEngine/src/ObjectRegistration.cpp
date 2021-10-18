@@ -18,6 +18,7 @@
 #include "MeshLoader.h"
 #include "ModelAsset.h"
 #include "Material.h"
+#include "PhysicalMaterial.h"
 #include "Materials.h"
 #include "Dimensions.h"
 #include "Texture.h"
@@ -28,9 +29,11 @@
 #include "Camera.h"
 #include "Light.h"
 #include "Model.h"
+#include "SceneRayCastResults.h"
 #include "Scene.h"
 #include "RenderOperation.h"
 #include "ShadingOperation.h"
+#include "HDRColorCorrectionOperation.h"
 #include "GlowingSceneOperation.h"
 #include "DrawSceneOperation.h"
 #include "BlurOperation.h"
@@ -57,6 +60,7 @@
 #include "PhysicsEnvironment.h"
 #include "CollisionGroup.h"
 #include "Text.h"
+#include "RayTracer.h"
 
 #include "Lua.h"
 #include "PageAllocator.h"
@@ -129,6 +133,7 @@ namespace Engine
 
 		Register_Class(MeshLoader);
 		Register_Class(GraphicsEngine::Material);
+		Register_Class(GraphicsEngine::PhysicalMaterial);
 		Register_Class(GraphicsEngine::Materials);
 		Register_Enum(SampleType);
 		Register_Enum(WrapType);
@@ -145,6 +150,7 @@ namespace Engine
 		Register_Class(GraphicsEngine::Camera);
 		Register_Enum(LightType);
 		Register_Class(GraphicsEngine::Light);
+		Register_Type(SceneRayCastResults);
 		Register_Class(GraphicsEngine::SceneObject);
 
 		Register_Enum(ChunkLoaderShape);
@@ -168,6 +174,7 @@ namespace Engine
 		Register_Class(CubeMapBuffer);
 		Register_Enum(LuminescenceMode);
 		Register_Enum(RangeFittingMode);
+		Register_Class(GraphicsEngine::HDRColorCorrectionOperation);
 		Register_Class(GraphicsEngine::GlowingSceneOperation);
 		Register_Enum(ScriptStatus);
 		Register_Class(LuaSource);
@@ -214,6 +221,7 @@ namespace Engine
 		Register_Class(GraphicsEngine::DampenedForceUpdater);
 		Register_Class(GraphicsEngine::CubicBezierUpdater);
 		Register_Class(DebugDraw);
+		Register_Class(GraphicsEngine::RayTracer);
 
 		const ReflectionData::DataVector& types = ReflectionData::GetTypes();
 

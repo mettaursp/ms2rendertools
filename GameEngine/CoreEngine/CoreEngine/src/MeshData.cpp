@@ -54,6 +54,11 @@ MeshData::MeshData(const MeshData* meshData, Enum::VertexMode mode) : Mode(mode)
 		DrawMode = GL_LINES;
 }
 
+MeshData::MeshData(const MeshData& other)
+{
+	*this = other;
+}
+
 namespace
 {
 	typedef std::map<std::string, int> IndexMap;
@@ -145,10 +150,14 @@ void MeshData::Initialize(const ObjParser* parser)
 
 			IndexBuffer.push_back(index);
 		}
+
+		Triangles.push_back(TriangleData { IndexBuffer[IndexBuffer.size() - 3], IndexBuffer[IndexBuffer.size() - 2], IndexBuffer[IndexBuffer.size() - 1], int(Triangles.size()) });
 	}
 
 	Minimum.W = 1;
 	Maximum.W = 1;
+
+	ConfigurePartitioning();
 }
 
 void MeshData::InitializeWireframe(const ObjParser* parser)
@@ -267,6 +276,8 @@ void MeshData::Initialize(const PlyParser* parser)
 					IndexBuffer.push_back(data.get<int>(0));
 					IndexBuffer.push_back(data.get<int>(1));
 					IndexBuffer.push_back(data.get<int>(2));
+
+					Triangles.push_back(TriangleData { IndexBuffer[IndexBuffer.size() - 3], IndexBuffer[IndexBuffer.size() - 2], IndexBuffer[IndexBuffer.size() - 1], int(Triangles.size()) });
 				}
 			}
 		}
@@ -274,6 +285,8 @@ void MeshData::Initialize(const PlyParser* parser)
 
 	Minimum.W = 1;
 	Maximum.W = 1;
+
+	ConfigurePartitioning();
 }
 
 void MeshData::InitializeWireframe(const PlyParser* parser)
@@ -392,6 +405,88 @@ void MeshData::GenerateTBNDebug(const MeshData* meshData)
 	}
 }
 
+void MeshData::PushTriangle(int vertexA, int vertexB, int vertexC)
+{
+	Triangles.push_back(TriangleData { vertexA, vertexB, vertexC, int(Triangles.size()) });
+}
+
+void MeshData::ConfigurePartitioning()
+{
+	for (int i = 0; i < int(Triangles.size()); ++i)
+	{
+		const Vector3Raw& vertexA = VertexBuffer[Triangles[i].VertexA].Position;
+		const Vector3Raw& vertexB = VertexBuffer[Triangles[i].VertexB].Position;
+		const Vector3Raw& vertexC = VertexBuffer[Triangles[i].VertexC].Position;
+		
+		Aabb triangleBox(
+			Vector3(
+				std::min(std::min(vertexA.X, vertexB.X), vertexC.X) - 0.01f,
+				std::min(std::min(vertexA.Y, vertexB.Y), vertexC.Y) - 0.01f,
+				std::min(std::min(vertexA.Z, vertexB.Z), vertexC.Z) - 0.01f,
+				1
+			),
+			Vector3(
+				std::max(std::max(vertexA.X, vertexB.X), vertexC.X) + 0.01f,
+				std::max(std::max(vertexA.Y, vertexB.Y), vertexC.Y) + 0.01f,
+				std::max(std::max(vertexA.Z, vertexB.Z), vertexC.Z) + 0.01f,
+				1
+			)
+		);
+
+		TrianglePartition.Insert(&Triangles[i], triangleBox);
+	}
+}
+
+void MeshData::CastRay(const Ray& ray, const CastResultsCallback& callback) const
+{
+	TrianglePartition.CastRay(ray, [this, &ray, &callback] (const AabbTree::Node* node, float t)
+	{
+		TriangleData* triangleData = node->GetData<TriangleData>();
+
+		const Vector3Raw& vertexA = VertexBuffer[triangleData->VertexA].Position;
+		const Vector3Raw& vertexB = VertexBuffer[triangleData->VertexB].Position;
+		const Vector3Raw& vertexC = VertexBuffer[triangleData->VertexC].Position;
+
+		Vector3 normal = Vector3(vertexB - vertexA).Cross(vertexC - vertexA);
+
+		float normalDot = normal * ray.Direction;
+
+		if (normalDot >= 0)
+			return;
+
+		float distance = (normal * (vertexA - ray.Start)) / normalDot;
+
+		if (distance > 1 || distance < 0)
+			return;
+
+		Vector3 intersection = ray.Start + distance * ray.Direction;
+
+		float dot1 = Vector3(vertexB - vertexA).Cross(intersection - vertexA).Dot(normal);
+		float dot2 = Vector3(vertexC - vertexB).Cross(intersection - vertexB).Dot(normal);
+		float dot3 = Vector3(vertexA - vertexC).Cross(intersection - vertexC).Dot(normal);
+
+		if (!(std::signbit(dot1) == std::signbit(dot2) && std::signbit(dot1) == std::signbit(dot3)))
+			return;
+
+		callback(SceneRayCastResults { distance, 0, intersection, normal });
+	});
+}
+
+MeshData& MeshData::operator=(const MeshData& other)
+{
+	Mode = other.Mode;
+	VertexBuffer = other.VertexBuffer;
+	IndexBuffer = other.IndexBuffer;
+	DrawMode = other.DrawMode;
+	Minimum = other.Minimum;
+	Maximum = other.Maximum;
+	Triangles = other.Triangles;
+
+	ConfigurePartitioning();
+
+	return *this;
+}
+
 namespace
 {
 	typedef std::vector<int> ReferenceVector;
@@ -454,6 +549,7 @@ void MeshData::GenerateCylinderMap(const MeshData* meshData)
 	{
 		VertexBuffer = meshData->VertexBuffer;
 		IndexBuffer = meshData->IndexBuffer;
+		Triangles = meshData->Triangles;
 	}
 	else
 	{
@@ -461,6 +557,9 @@ void MeshData::GenerateCylinderMap(const MeshData* meshData)
 		{
 			VertexBuffer.push_back(meshData->VertexBuffer[meshData->IndexBuffer[i]]);
 			IndexBuffer.push_back(i);
+
+			if (i % 3 == 2)
+				Triangles.push_back(TriangleData { IndexBuffer[IndexBuffer.size() - 3], IndexBuffer[IndexBuffer.size() - 2], IndexBuffer[IndexBuffer.size() - 1], int(Triangles.size()) });
 		}
 	}
 
@@ -511,6 +610,8 @@ void MeshData::GenerateCylinderMap(const MeshData* meshData)
 		VertexBuffer[i + 1].BVector = bVector;
 		VertexBuffer[i + 2].BVector = bVector;
 	}
+
+	ConfigurePartitioning();
 }
 
 void MeshData::GenerateSphereMap(const MeshData* meshData)
@@ -519,6 +620,7 @@ void MeshData::GenerateSphereMap(const MeshData* meshData)
 	{
 		VertexBuffer = meshData->VertexBuffer;
 		IndexBuffer = meshData->IndexBuffer;
+		Triangles = meshData->Triangles;
 	}
 	else
 	{
@@ -526,6 +628,9 @@ void MeshData::GenerateSphereMap(const MeshData* meshData)
 		{
 			VertexBuffer.push_back(meshData->VertexBuffer[meshData->IndexBuffer[i]]);
 			IndexBuffer.push_back(i);
+
+			if (i % 3 == 2)
+				Triangles.push_back(TriangleData { IndexBuffer[IndexBuffer.size() - 3], IndexBuffer[IndexBuffer.size() - 2], IndexBuffer[IndexBuffer.size() - 1], int(Triangles.size()) });
 		}
 	}
 
@@ -577,6 +682,8 @@ void MeshData::GenerateSphereMap(const MeshData* meshData)
 		VertexBuffer[i + 1].BVector = bVector;
 		VertexBuffer[i + 2].BVector = bVector;
 	}
+
+	ConfigurePartitioning();
 }
 
 namespace
@@ -591,6 +698,7 @@ void MeshData::GenerateCubeMap(const MeshData* meshData)
 {
 	VertexBuffer = meshData->VertexBuffer;
 	IndexBuffer = meshData->IndexBuffer;
+	Triangles = meshData->Triangles;
 	Minimum = meshData->Minimum;
 	Maximum = meshData->Maximum;
 	Mode = meshData->Mode;
@@ -637,6 +745,8 @@ void MeshData::GenerateCubeMap(const MeshData* meshData)
 
 		VertexBuffer[i].UV = Vector2Raw(0.5f * u + 0.5f, 0.5f * v + 0.5f);
 	}
+
+	ConfigurePartitioning();
 }
 
 Vector3 MeshData::GetMinimumCorner() const

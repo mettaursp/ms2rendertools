@@ -332,7 +332,7 @@ namespace Engine
 
 	bool Object::IsAncestorOf(const std::shared_ptr<ObjectBase>& object) const
 	{
-		if (object != nullptr)
+		if (object == nullptr)
 			return false;
 
 		return object->Cast<Object>()->IsDescendantOf(This.lock());
@@ -340,7 +340,7 @@ namespace Engine
 
 	bool Object::IsDescendantOf(const std::shared_ptr<ObjectBase>& object) const
 	{
-		if (object != nullptr)
+		if (object == nullptr)
 			return false;
 
 		auto focus = This.lock();

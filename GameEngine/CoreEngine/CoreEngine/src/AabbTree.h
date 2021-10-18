@@ -54,6 +54,8 @@ public:
 
 	void Clear();
 
+	int Size() const { return Nodes.Size(); }
+
 	int Insert(void* data, const Aabb& box);
 	void Update(int nodeID, const Aabb& box);
 	void ChangeData(int nodeID, void* data);

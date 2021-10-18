@@ -3,6 +3,9 @@
 #include "Object.h"
 #include "AabbTree.h"
 #include "PageAllocator.h"
+#include "Ray.h"
+#include "SceneRayCastResults.h"
+#include "RGBA.h"
 
 namespace Engine
 {
@@ -14,10 +17,13 @@ namespace GraphicsEngine
 	class Camera;
 	class Light;
 	class Material;
+	class PhysicalMaterial;
 
 	class SceneObject : public Engine::Object
 	{
 	public:
+		typedef std::function<void(const SceneRayCastResults& results)> CastResultsCallback;
+
 		virtual ~SceneObject() {}
 
 		void Initialize() {}
@@ -25,12 +31,14 @@ namespace GraphicsEngine
 
 		bool Visible = true;
 		std::weak_ptr<Material> MaterialProperties;
+		std::weak_ptr<PhysicalMaterial> PhysicalMaterialProperties;
 
 		virtual Aabb GetBoundingBox() const { return Aabb(); }
 		virtual bool HasMoved() const { return false; }
 		virtual bool IsStatic() const { return false; }
 		virtual void Draw(const std::shared_ptr<Camera>& camera) {}
 		virtual bool IsTransparent() const { return false; }
+		virtual void CastRay(const Ray& ray, const CastResultsCallback& callback) const {}
 
 		Instantiable;
 
@@ -45,12 +53,15 @@ namespace Engine
 	//Class_Inherits(GraphicsEngine::SceneObject, Object);
 }
 
+struct lua_State;
+
 namespace GraphicsEngine
 {
 	class Scene : public Engine::Object
 	{
 	public:
 		typedef std::vector<int> IDVector;
+		typedef std::function<void(const SceneRayCastResults& results)> CastResultsCallback;
 
 		virtual ~Scene() {}
 
@@ -71,8 +82,16 @@ namespace GraphicsEngine
 		void RefreshWatches();
 		const AabbTree& GetWatched(int lightIndex) const;
 
+		void CastRay(const Ray& ray, const CastResultsCallback& callback) const;
+		int CastRay(lua_State* lua);
+
 		int GetObjectID(const AabbTree::Node* node) const { return node->GetData<SceneObjectReference>()->Reference.lock()->GetObjectID(); }
 		const AabbTree& GetStaticObjects() const { return StaticObjects; }
+		const AabbTree& GetDynamicObjects() const { return DynamicObjects; }
+		int GetStaticObjectCount() const { return int(StaticObjectReferences.size()); }
+		int GetDynamicbjectCount() const { return int(DynamicObjectReferences.size()); }
+		std::shared_ptr<SceneObject> GetStaticObject(const AabbTree::Node* node) const;
+		std::shared_ptr<SceneObject> GetDynamicObject(const AabbTree::Node* node) const;
 		void ClearStaticObjects();
 		void AddObject(const std::shared_ptr<SceneObject>& object);
 		void AddLight(const std::shared_ptr<Light>& light);

@@ -1,5 +1,7 @@
 #include "Scene.h"
 
+#include <queue>
+
 #include "Materials.h"
 #include "Graphics.h"
 #include "LuaBinding.h"
@@ -94,6 +96,89 @@ namespace GraphicsEngine
 	const AabbTree& Scene::GetWatched(int lightIndex) const
 	{
 		return Lights[lightIndex].Watch;
+	}
+
+	void Scene::CastRay(const Ray& ray, const CastResultsCallback& callback) const
+	{
+		std::queue<SceneRayCastResults> hits;
+
+		auto resultsProcessorLambda = [&hits, &ray, &callback] (const AabbTree::Node* node, float t)
+		{
+			SceneObjectReference* objectReference = node->GetData<SceneObjectReference>();
+
+			objectReference->Reference.lock()->CastRay(ray, [&hits, &callback] (const SceneRayCastResults& results)
+			{
+				//callback(results);
+				hits.push(results);
+			});
+		};
+
+		StaticObjects.CastRay(ray, std::ref(resultsProcessorLambda));
+
+		DynamicObjects.CastRay(ray, std::ref(resultsProcessorLambda));
+
+		while (!hits.empty())
+		{
+			callback(hits.front());
+		
+			hits.pop();
+		}
+	}
+
+	int Scene::CastRay(lua_State* lua)
+	{
+		int arguments;
+
+		Engine::LuaTypes::Lua_Ray::Converter<Ray> rayValue(0, arguments, false);
+
+		rayValue.FuncName = "CastRay";
+		rayValue.LuaState = &lua;
+
+		Ray ray = (Ray)rayValue;
+
+		if (lua_type(lua, 3) != LUA_TFUNCTION)
+			Lua::BadArgumentError(lua, 2, "function", Lua::GetType(lua, 3), "CastRay");
+
+		int top = lua_gettop(lua);
+		bool stopped = false;
+
+		CastRay(ray, [&lua, &stopped](const SceneRayCastResults& results)
+		{
+			if (stopped) return;
+
+			int top = lua_gettop(lua);
+
+			lua_pushvalue(lua, 3);
+
+			Engine::LuaTypes::Lua_SceneRayCastResults::ReturnValue returned;
+
+			returned.LuaState = &lua;
+
+			returned(results);
+
+			lua_call(lua, returned.ReturnValues, 1);
+
+			if (lua_isboolean(lua, 4) && lua_toboolean(lua, 4))
+				stopped = true;
+
+			lua_pop(lua, 1);
+		});
+
+		return 0;
+	}
+
+	std::shared_ptr<SceneObject> Scene::GetStaticObject(const AabbTree::Node* node) const
+	{
+		SceneObjectReference* objectReference = node->GetData<SceneObjectReference>();
+
+		return objectReference->Reference.lock();
+	}
+
+	std::shared_ptr<SceneObject> Scene::GetDynamicObject(const AabbTree::Node* node) const
+	{
+		SceneObjectReference* objectReference = node->GetData<SceneObjectReference>();
+
+		return objectReference->Reference.lock();
 	}
 
 	void Scene::ClearStaticObjects()

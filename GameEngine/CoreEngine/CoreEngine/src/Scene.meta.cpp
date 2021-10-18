@@ -15,6 +15,15 @@ namespace GraphicsEngine
 
 		Document("");
 		Archivable Class_Member(std::weak_ptr<Light>, GlobalLight);
+
+		Bind_Function(CastRay,
+	
+			Document("");
+			Function_Overload
+			(
+				Bind_Lua_Function(CastRay);
+			);
+		);
 	
 		Bind_Function(AddObject,
 	

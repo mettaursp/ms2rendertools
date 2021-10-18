@@ -142,6 +142,12 @@
     <Filter Include="Source Files\Source\Networking\Types">
       <UniqueIdentifier>{de1cd31d-cfeb-41bb-b4cf-ce19948caf1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Source\Graphics\RayTracing">
+      <UniqueIdentifier>{0eec6e33-ab2c-4fb4-905d-0b691505b71c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source\Graphics\RayTracing\CPU">
+      <UniqueIdentifier>{3c5f6e5f-3135-41ee-89c4-494065d25d46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -723,6 +729,36 @@
     <ClCompile Include="src\Packet.meta.cpp">
       <Filter>Source Files\Source\Networking\Types</Filter>
     </ClCompile>
+    <ClCompile Include="src\HDRColorCorrectionOperation.cpp">
+      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+    </ClCompile>
+    <ClCompile Include="src\HDRColorCorrectionOperation.meta.cpp">
+      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicalMaterial.cpp">
+      <Filter>Source Files\Source\Graphics\Objects\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicalMaterial.meta.cpp">
+      <Filter>Source Files\Source\Graphics\Objects\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RayTracer.cpp">
+      <Filter>Source Files\Source\Graphics\RayTracing\CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RayTracer.meta.cpp">
+      <Filter>Source Files\Source\Graphics\RayTracing\CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RayAcceleration.cpp">
+      <Filter>Source Files\Source\Graphics\RayTracing\CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AcceleratedKDTree.cpp">
+      <Filter>Source Files\Source\Engine\Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneRayCastResults.meta.cpp">
+      <Filter>Source Files\Source\Graphics\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneRayCastResults.cpp">
+      <Filter>Source Files\Source\Graphics\Types</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Graphics.h">
@@ -1105,6 +1141,24 @@
     </ClInclude>
     <ClInclude Include="src\Packet.h">
       <Filter>Source Files\Source\Networking\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="src\HDRColorCorrectionOperation.h">
+      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicalMaterial.h">
+      <Filter>Source Files\Source\Graphics\Objects\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RayAcceleration.h">
+      <Filter>Source Files\Source\Graphics\RayTracing\CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RayTracer.h">
+      <Filter>Source Files\Source\Graphics\RayTracing\CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AcceleratedKDTree.h">
+      <Filter>Source Files\Source\Engine\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SceneRayCastResults.h">
+      <Filter>Source Files\Source\Graphics\Types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

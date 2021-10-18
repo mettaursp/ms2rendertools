@@ -233,8 +233,8 @@ sceneDraw.SkyColor = RGBA(15/255, 5/255, 15/255, 1)--RGBA(1, 167/255 +.1, 124/25
 sceneDraw.SkyBackgroundColor = RGBA(0, 0, 0, 0)
 sceneDraw.Resolution = Vector3(resolution.Width, resolution.Height)
 sceneDraw.RenderAutomatically = true
---sceneDraw:GetHDRColorCorrection().RangeFittingType = Enum.RangeFittingMode.Exposure
---sceneDraw:GetHDRColorCorrection().Exposure = 0.5
+sceneDraw:GetHDRColorCorrection().RangeFittingType = Enum.RangeFittingMode.Exposure
+sceneDraw:GetHDRColorCorrection().Exposure = 0.5
 
 local viewportX = 200
 local viewportY = 200
@@ -248,68 +248,70 @@ local viewMinY = centerY - 0.5 * viewportY
 local viewMaxX = centerX + 0.5 * viewportX
 local viewMaxY = centerY + 0.5 * viewportY
 
--- ray tracing not supported yet, need to copy over files from a different branch first. lemme know if you want/need
+local rayTracer = GameObject("RayTracer")
+rayTracer.Parent = Engine
+rayTracer.CurrentScene = scene
+rayTracer.BatchWidth = 8--resX/4
+rayTracer.BatchHeight = 8--resY/3
+rayTracer.MaxBounces = 10
+rayTracer.Samples = 1
+rayTracer:SetMaxThreads(rayTracer:GetHardwareThreads())
+rayTracer:Configure(resX, resY)
 
---local rayTracer = GameObject("RayTracer")
---rayTracer.Parent = Engine
---rayTracer.CurrentScene = scene
---rayTracer.BatchWidth = 8--resX/4
---rayTracer.BatchHeight = 8--resY/3
---rayTracer.MaxBounces = 10
---rayTracer.Samples = 10
---rayTracer:SetMaxThreads(rayTracer:GetHardwareThreads())
---rayTracer:Configure(resX, resY)
---
---if useViewport then
---	rayTracer:SetViewport(viewMinX, viewMinY, viewMaxX, viewMaxY)
---end
---
---print("hardware threads:", rayTracer:GetHardwareThreads())
+if useViewport then
+	rayTracer:SetViewport(viewMinX, viewMinY, viewMaxX, viewMaxY)
+end
 
---local screen = GameObject("DeviceTransform")
---screen.Parent = rayTracer
---screen.Size = DeviceVector(0, resolution.Width, 0, resolution.Height)
---
---local uiDraw = GameObject("InterfaceDrawOperation")
---uiDraw.Parent = rayTracer
---uiDraw.RenderAutomatically = true
---uiDraw.CurrentScreen = screen
---
---local rayTracedScene = GameObject("DeviceTransform")
---rayTracedScene.Parent = screen
---rayTracedScene.Size = DeviceVector(0, resolution.Width, 0, resolution.Height)
---
---local rayTracedSceneSub = GameObject("DeviceTransform")
---rayTracedSceneSub.Parent = screen
---rayTracedSceneSub.Position = DeviceVector(0, viewMinX, 0, viewMinY)
---rayTracedSceneSub.Size = DeviceVector(0, viewMaxX - viewMinX, 0, viewMaxY - viewMinY)
---
---local rayTracedCanvas = GameObject("ScreenCanvas")
---rayTracedCanvas.Parent = useViewport and rayTracedSceneSub or rayTracedScene
---
---local rayTracedTexture = GameObject.Textures.Create(resX, resY, Enum.SampleType.Nearest, Enum.WrapType.ClampExtend, Enum.DataType.Float)
---rayTracedTexture.Parent = rayTracedCanvas
---
---local rayTracedColorCorrection = GameObject("HDRColorCorrectionOperation")
---rayTracedColorCorrection.Parent = screen
---rayTracedColorCorrection.Input = rayTracedTexture
---rayTracedColorCorrection.Exposure = 1
---rayTracedColorCorrection.RangeFittingType = Enum.RangeFittingMode.Reinhard
---rayTracedColorCorrection:Resize(resX, resY)
---
---local rayTracedHDRTexture = GameObject.Textures.Create(resX, resY, Enum.SampleType.Nearest, Enum.WrapType.ClampExtend, Enum.DataType.Float)
---
---local rayTracedHDRBuffer = GameObject.FrameBuffer.Create(resX, resY, rayTracedHDRTexture)
---rayTracedHDRBuffer.Parent = rayTracedColorCorrection
---
---rayTracedColorCorrection.Output = rayTracedHDRBuffer
---
---local rayTracedAppearance = GameObject("Appearance")
---rayTracedAppearance.Texture = rayTracedHDRTexture--rayTracedTexture
---rayTracedAppearance.Color = RGBA(0, 0, 0, 0)
---
---rayTracedCanvas.Appearance = rayTracedAppearance
---rayTracedCanvas.Visible = false
+print("hardware threads:", rayTracer:GetHardwareThreads())
+
+local screen = GameObject("DeviceTransform")
+screen.Parent = rayTracer
+screen.Size = DeviceVector(0, resolution.Width, 0, resolution.Height)
+
+local uiDraw = GameObject("InterfaceDrawOperation")
+uiDraw.Parent = rayTracer
+uiDraw.RenderAutomatically = true
+uiDraw.CurrentScreen = screen
+
+local rayTracedScene = GameObject("DeviceTransform")
+rayTracedScene.Parent = screen
+rayTracedScene.Size = DeviceVector(0, resolution.Width, 0, resolution.Height)
+
+local rayTracedSceneSub = GameObject("DeviceTransform")
+rayTracedSceneSub.Parent = screen
+rayTracedSceneSub.Position = DeviceVector(0, viewMinX, 0, viewMinY)
+rayTracedSceneSub.Size = DeviceVector(0, viewMaxX - viewMinX, 0, viewMaxY - viewMinY)
+
+local rayTracedCanvas = GameObject("ScreenCanvas")
+rayTracedCanvas.Parent = useViewport and rayTracedSceneSub or rayTracedScene
+
+local rayTracedTexture = GameObject.Textures.Create(resX, resY, Enum.SampleType.Nearest, Enum.WrapType.ClampExtend, Enum.DataType.Float)
+rayTracedTexture.Parent = rayTracedCanvas
+
+print(rayTracedTexture)
+
+local rayTracedColorCorrection = GameObject("HDRColorCorrectionOperation")
+rayTracedColorCorrection.Parent = screen
+rayTracedColorCorrection.Input = rayTracedTexture
+rayTracedColorCorrection.Exposure = 1
+rayTracedColorCorrection.RangeFittingType = Enum.RangeFittingMode.Reinhard
+rayTracedColorCorrection:Resize(resX, resY)
+
+print(rayTracedColorCorrection.Input)
+
+local rayTracedHDRTexture = GameObject.Textures.Create(resX, resY, Enum.SampleType.Nearest, Enum.WrapType.ClampExtend, Enum.DataType.Float)
+
+local rayTracedHDRBuffer = GameObject.FrameBuffer.Create(resX, resY, rayTracedHDRTexture)
+rayTracedHDRBuffer.Parent = rayTracedColorCorrection
+
+rayTracedColorCorrection.Output = rayTracedHDRBuffer
+
+local rayTracedAppearance = GameObject("Appearance")
+rayTracedAppearance.Texture = rayTracedHDRTexture--rayTracedTexture
+rayTracedAppearance.Color = RGBA(0, 0, 0, 0)
+
+rayTracedCanvas.Appearance = rayTracedAppearance
+rayTracedCanvas.Visible = false
 
 --[=[local skybox = GameObject("CubeMapTexture")
 skybox.Front = textures.skyFront
@@ -337,8 +339,8 @@ material.Specular = RGBA(0.5, 0.5, 0.5, 0)--RGBA(0.5, 0.5, 0.5, 0)
 material.Ambient = RGBA(0.5, 0.5, 0.5, 0)--RGBA(0.5, 0.5, 0.5, 0)
 material.Emission = RGBA(0, 0, 0, 0)
 
---local physicalMaterial = GameObject("PhysicalMaterial")
---physicalMaterial.Parent = materials
+local physicalMaterial = GameObject("PhysicalMaterial")
+physicalMaterial.Parent = materials
 
 local waterMaterial = GameObject("Material")
 waterMaterial.Name = "WaterMaterial"
@@ -365,7 +367,7 @@ underwaterMaterial.Ambient = RGBA(1, 1, 1, 0)--RGBA(0.5, 0.5, 0.5, 0)
 underwaterMaterial.Emission = RGBA(0, 0, 0, 0)
 
 lightOrbModel.MaterialProperties = material
---lightOrbModel.PhysicalMaterialProperties = physicalMaterial
+lightOrbModel.PhysicalMaterialProperties = physicalMaterial
 
 for i=1,0 do
 	local transform = GameObject("Transform")
@@ -392,14 +394,14 @@ robloxMaterialContainer.Name = "RobloxMaterials"
 robloxMaterialContainer.Parent = Engine
 
 for name, properties in pairs(robloxMaterials) do
-	--local newMaterial = GameObject("PhysicalMaterial")
-	--newMaterial.Name = name
-	--
-	--for i,v in pairs(properties) do
-	--	newMaterial[i] = v
-	--end
-	--
-	--newMaterial.Parent = robloxMaterialContainer
+	local newMaterial = GameObject("PhysicalMaterial")
+	newMaterial.Name = name
+	
+	for i,v in pairs(properties) do
+		newMaterial[i] = v
+	end
+	
+	newMaterial.Parent = robloxMaterialContainer
 end
 
 function UpdateMaterials()
@@ -412,7 +414,7 @@ function UpdateMaterials()
 	end
 end
 
---lightOrbModel.PhysicalMaterialProperties = robloxMaterialContainer.Glass
+lightOrbModel.PhysicalMaterialProperties = robloxMaterialContainer.Glass
 
 math.randomseed(os.time())
 
@@ -494,9 +496,9 @@ if true then
 				
 				local sizeOffset = Vector3()
 				
-				--if robloxMaterialContainer[current.material].Transparency ~= 0 then
-				--	--sizeOffset = Vector3(0.01, 0.01, 0.01)
-				--end
+				if robloxMaterialContainer[current.material].Transparency ~= 0 then
+					--sizeOffset = Vector3(0.01, 0.01, 0.01)
+				end
 				
 				transform.Parent = mapContainer --[[ transform:SetParent(mapContainer) ]]
 				transform.Transformation = Matrix3(
@@ -516,7 +518,7 @@ if true then
 
 				model.Parent = transform --[[ model:SetParent(transform) ]]
 				model.Color = color
-				--model.Reflectivity = current.reflectivity
+				model.Reflectivity = current.reflectivity
 				model.GlowColor = (current.material == "Neon") and color or (current.material == "ForceField" and RGBA(color.R*.5,color.G*.5,color.B*.5,color.A*.5) or RGBA(0, 0, 0, 0))
 				model.TextureColor = color
 
@@ -534,7 +536,7 @@ if true then
 				model.FlipCubeMapV = true
 				model.CompressedNormalMap = true
 				model.MaterialProperties = material
-				--model.PhysicalMaterialProperties = robloxMaterialContainer[current.material]
+				model.PhysicalMaterialProperties = robloxMaterialContainer[current.material]
 				model.Asset = loadedMeshes[current.shape]
 
 				--local physicsBody = GameObject("PhysicsBody")
@@ -677,51 +679,95 @@ coroutine.wrap(function()
 	
 	local time = 0
 
-	--local rayTraceDebounce = false
-	--local rayTraceMode = false
+	local rayTraceDebounce = false
+	local rayTraceMode = false
+	local lastB = false
+	
+	local hitMaterial = GameObject("Material")
+	hitMaterial.Shininess = 75
+	hitMaterial.Diffuse = RGBA(1, 0.5, 0.5, 0)--RGBA(0.5, 0.5, 0.5, 0)
+	hitMaterial.Specular = RGBA(1, 0.5, 0.5, 0)--RGBA(0.5, 0.5, 0.5, 0)
+	hitMaterial.Ambient = RGBA(1, 0.5, 0.5, 0)--RGBA(0.5, 0.5, 0.5, 0)
+	hitMaterial.Emission = RGBA(1, 0, 0, 0)
 
+	local lastHit
+	local lastHitMaterial
+	
 	while true do
-		local delta = wait(1 / 60)
+		local delta = wait()
 		
 		time = time + delta
 		
-		--rayTracedCanvas.Visible = keyN:GetState() or rayTraceMode
-		--rayTraceDebounce = rayTraceDebounce and not keyN:GetState()
+		local currentPosition = mousePosition:GetPosition()
+		
+		local hit
+		local hits = 0
+		local distance = math.huge
+		
+		scene:CastRay(camera:GetRay(currentPosition.X, currentPosition.Y, resolution.Width, resolution.Height, 5000), function(results)
+			hits = hits + 1
+			
+			if results.Distance < distance then
+				hit = results.Hit
+				distance = results.Distance
+			end
+			
+			--return true
+		end)
+		
+		if hit ~= lastHit then
+			if lastHit then
+				lastHit.MaterialProperties = lastHitMaterial
+			end
+			
+			if hit then
+				lastHitMaterial = hit.MaterialProperties
+				hit.MaterialProperties = hitMaterial
+			else
+				lastHitMaterial = nil
+			end
+			
+			lastHit = hit
+		end
+		
+		rayTracedCanvas.Visible = keyN:GetState() or rayTraceMode
+		rayTraceDebounce = rayTraceDebounce and not keyN:GetState()
 		--sceneDraw.RenderAutomatically = not rayTraceMode
 		
-		--if not rayTraceDebounce and keyB:GetStateChanged() and keyB:GetState() then
-		--	print"rendering"
-		--	
-		--	for i=1,1 do
-		--		rayTracer:Render()
-		--	end
-		--	rayTracer:DrawTo(rayTracedTexture)
-		--	rayTracedColorCorrection:Render()
-		--	
-		--	rayTraceDebounce = true
-		--end
-		--
-		--if keyR:GetState() then
-		--	LoadMaterials()
-		--	UpdateMaterials()
-		--end
-		--
-		--if not rayTraceDebounce and keyM:GetState() then
-		--	rayTraceDebounce = true
-		--	rayTraceMode = not rayTraceMode
-		--	
-		--	if rayTraceMode then
-		--		sceneDraw:Configure(1, 1, emptyScene)
-		--	else
-		--		sceneDraw:Configure(resolution.Width, resolution.Height, scene)
-		--	end
-		--end
-		--
-		--if rayTraceMode then
-		--	rayTracer:Render()
-		--	rayTracer:DrawTo(rayTracedTexture)
-		--	rayTracedColorCorrection:Render()
-		--end
+		if not rayTraceDebounce and keyB:GetState() ~= lastB and keyB:GetState() then
+			print"rendering"
+			
+			for i=1,1 do
+				rayTracer:Render()
+			end
+			rayTracer:DrawTo(rayTracedTexture)
+			rayTracedColorCorrection:Render()
+			
+			rayTraceDebounce = true
+		end
+		lastB = keyB:GetState()
+		
+		if keyR:GetState() then
+			LoadMaterials()
+			UpdateMaterials()
+		end
+		
+		if not rayTraceDebounce and keyM:GetState() then
+			rayTraceDebounce = true
+			rayTraceMode = not rayTraceMode
+			
+			if rayTraceMode then
+				sceneDraw:Configure(1, 1, emptyScene)
+			else
+				sceneDraw:Configure(resolution.Width, resolution.Height, scene)
+			end
+		end
+		
+		if rayTraceMode then
+			rayTracer:Render()
+			rayTracer:DrawTo(rayTracedTexture)
+			rayTracedColorCorrection:Render()
+		end
 
 		local x = 0
 		local y = 0
@@ -779,7 +825,6 @@ coroutine.wrap(function()
 		end
 		
 		if mouseRight:GetState() then
-			local currentPosition = mousePosition:GetPosition()
 			local mouseDelta = currentPosition - previousPosition
 
 			yaw = (yaw - mouseDelta.X * delta * 0.1 + 2 * math.pi) % (2 * math.pi)

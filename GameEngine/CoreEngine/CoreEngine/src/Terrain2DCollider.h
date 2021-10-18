@@ -2,6 +2,7 @@
 
 #include "Object.h"
 #include "AabbTree.h"
+#include "Collider2D.h"
 
 namespace Engine
 {
@@ -15,7 +16,7 @@ namespace Engine
 		class ColliderData;
 	}
 
-	class Terrain2DCollider : public Object
+	class Terrain2DCollider : public Physics::Collider2D
 	{
 	public:
 		typedef std::function<void(const std::shared_ptr<Physics::Collider2D>& collider, const Physics::ColliderData& cell)> TerrainPairCallback;

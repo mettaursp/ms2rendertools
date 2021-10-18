@@ -252,6 +252,18 @@ namespace GraphicsEngine
 		glBindTexture(GL_TEXTURE_2D, 0); CheckGLErrors();
 	}
 
+	void Texture::Upload(int width, int height, void* pixelData, GLenum dataType, GLint internalFormat, GLenum format)
+	{
+		if (TextureID == 0)
+			return;
+
+		glBindTexture(GL_TEXTURE_2D, TextureID); CheckGLErrors();
+
+		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, dataType, pixelData); CheckGLErrors();
+
+		glBindTexture(GL_TEXTURE_2D, 0); CheckGLErrors();
+	}
+
 	Texture::~Texture()
 	{
 		if (PixelData != nullptr)

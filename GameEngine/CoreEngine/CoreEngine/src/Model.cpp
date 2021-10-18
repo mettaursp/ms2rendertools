@@ -154,6 +154,9 @@ namespace GraphicsEngine
 
 		if (transform == nullptr)
 			return Aabb();
+		
+		if (data == nullptr)
+			return Aabb().Transform(transform->GetWorldTransformation());
 
 		return Aabb(data->GetMinimumCorner(), data->GetMaximumCorner()).Transform(transform->GetWorldTransformation());
 	}
@@ -176,5 +179,39 @@ namespace GraphicsEngine
 			return transform->IsStatic;
 
 		return true;
+	}
+
+	void Model::CastRay(const Ray& ray, const CastResultsCallback& callback) const
+	{
+		std::shared_ptr<Engine::Transform> transform = GetComponent<Engine::Transform>();
+
+		if (transform == nullptr)
+			return;
+
+		std::shared_ptr<Engine::ModelAsset> asset = Asset.lock();
+
+		if (asset == nullptr)
+			return;
+
+		int meshID = asset->GetMeshID();
+
+		const MeshData* data = MeshLoader::GetMeshData(meshID);
+		const Matrix3& transformation = transform->GetWorldTransformationInverse();
+
+		auto resultsProcessorLambda = [this, &callback, &transform] (const SceneRayCastResults& results)
+		{
+			callback(SceneRayCastResults{
+				results.Distance,
+				Reflectivity,
+				transform->GetWorldTransformation() * results.Intersection,
+				transform->GetWorldNormalTransformation() * results.Normal,
+				Color,
+				GlowColor.A * Vector3(GlowColor).Scale(Vector3(1, 1, 1)),
+				MaterialProperties.lock(),
+				This.lock()->Cast<Object>()
+			});
+		};
+
+		data->CastRay(Ray(transformation * ray.Start, transformation * ray.Direction), std::ref(resultsProcessorLambda));
 	}
 }

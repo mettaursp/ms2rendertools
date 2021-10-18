@@ -72,6 +72,7 @@ namespace GraphicsEngine
 		void Load(int width, int height, GLint sampleType = GL_NEAREST, GLint wrapType = GL_REPEAT, GLenum dataType = GL_UNSIGNED_BYTE, GLint internalFormat = GL_RGBA, GLenum format = GL_RGBA, bool invertedY = false);
 		void Load(const std::string& fileName, GLint sampleType = GL_NEAREST, GLint wrapType = GL_REPEAT, GLenum dataType = GL_UNSIGNED_BYTE, GLint internalFormat = GL_RGBA, GLenum format = GL_RGBA, bool isDXT5 = false);
 		void Load(int width, int height, unsigned char* pixelData, GLint sampleType = GL_NEAREST, GLint wrapType = GL_REPEAT, GLenum dataType = GL_UNSIGNED_BYTE, GLint internalFormat = GL_RGBA, GLenum format = GL_RGBA, bool invertedY = false);
+		void Upload(int width, int height, void* pixelData, GLenum dataType = GL_UNSIGNED_BYTE, GLint internalFormat = GL_RGBA, GLenum format = GL_RGBA);
 		GLuint GetTextureID() const;
 		int GetWidth() const;
 		int GetHeight() const;
@@ -91,7 +92,7 @@ namespace GraphicsEngine
 
 		bool IsDXT5nm = false;
 		bool InvertedY = false;
-		GLuint TextureID;
+		GLuint TextureID = 0;
 		Dimensions Size;
 		unsigned char* PixelData = nullptr;
 		bool SoilTexture = false;

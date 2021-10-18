@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <exception>
 
 std::string ObjParser::Output(const std::string& filePath, int lineNumber, const std::string& error)
 {
@@ -37,7 +38,7 @@ void ObjParser::Parse(const std::string& filePath)
 	std::ifstream file(filePath, std::ios_base::in);
 
 	if (!file.is_open() || !file.good())
-		throw std::string("cannot open file: '") + filePath + "'";
+		throw std::string(std::system_error(errno, std::system_category(), "failed to open " + filePath).what());
 
 	unsigned int col = RGBA(0.5f, 1, 0.25f, 1);
 	RGBA rgb = RGBA(col);
@@ -81,9 +82,24 @@ void ObjParser::Parse(const std::string& filePath)
 		if (Token.size() > 0)
 			EvaluateToken();
 
-		for (FaceVector::iterator i = Faces.begin(); i != Faces.end(); ++i)
+		for (int index = 0; index < int(Faces.size()); ++index)
 		{
-			Vector3 normal = cross(Vertices[i->Vertices[0].Position], Vertices[i->Vertices[1].Position], Vertices[i->Vertices[2].Position]);
+			auto i = &Faces[index];
+
+			Vector3 normal = (Vertices[i->Vertices[1].Position] - Vertices[i->Vertices[0].Position]).Cross(Vertices[i->Vertices[2].Position] - Vertices[i->Vertices[0].Position]);//cross(Vertices[i->Vertices[0].Position], Vertices[i->Vertices[1].Position], Vertices[i->Vertices[2].Position]);
+
+			float length = normal.SquareLength();
+
+			if (length < 1e-15)
+			{
+				std::swap(Faces[index], Faces.back());
+				Faces.pop_back();
+				--index;
+
+				continue;
+			}
+
+			normal *= 1 / std::sqrtf(length);
 
 			for (int j = 0; j < 3; ++j)
 			{
@@ -215,6 +231,7 @@ void ObjParser::ReadVertex(const std::string& token, Vertex& vertex)
 	}
 
 	ReadIndex(numberToken, numberTokenCount, vertex);
+	++numberTokenCount;
 }
 
 bool ObjParser::ReadIndex(const std::string& numberToken, int numberTokenCount, Vertex& vertex)

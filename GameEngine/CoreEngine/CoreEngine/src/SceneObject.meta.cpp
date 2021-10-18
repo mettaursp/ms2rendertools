@@ -11,6 +11,9 @@ namespace GraphicsEngine
 		Archivable Class_Member(std::weak_ptr<Material>, MaterialProperties);
 
 		Document("");
+		Archivable Class_Member(std::weak_ptr<PhysicalMaterial>, PhysicalMaterialProperties);
+
+		Document("");
 		Archivable Class_Member(bool, Visible);
 	);
 }

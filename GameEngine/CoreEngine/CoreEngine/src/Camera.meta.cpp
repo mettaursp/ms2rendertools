@@ -221,5 +221,34 @@ namespace GraphicsEngine
 				Bind_Parameters(GetFieldOfView);
 			);
 		);
+		Bind_Function(GetRay,
+		
+			Document("");
+			Function_Overload
+			(
+				Document("");
+				Overload_Returns(Ray);
+			
+				Overload_Parameters
+				(
+					Document("");
+					Function_Parameter(int, x);
+
+					Document("");
+					Function_Parameter(int, y);
+
+					Document("");
+					Function_Parameter(int, resolutionX);
+
+					Document("");
+					Function_Parameter(int, resolutionY);
+
+					Document("");
+					Function_Parameter_Default(float, length, 1);
+				);
+			
+				Bind_Parameters(GetRay, x, y, resolutionX, resolutionY, length);
+			);
+		);
 	);
 }

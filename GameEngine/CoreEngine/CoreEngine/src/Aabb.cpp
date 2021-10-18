@@ -37,7 +37,7 @@ Aabb::Aabb(const Vector3& min, const Vector3& max) : Min(min), Max(max)
 	Max.W = 1;
 }
 
-void Aabb::Expand(const Vector3& point)
+Aabb& Aabb::Expand(const Vector3& point)
 {
 	Min.X = std::min(Min.X, point.X);
 	Min.Y = std::min(Min.Y, point.Y);
@@ -45,6 +45,8 @@ void Aabb::Expand(const Vector3& point)
 	Max.X = std::max(Max.X, point.X);
 	Max.Y = std::max(Max.Y, point.Y);
 	Max.Z = std::max(Max.Z, point.Z);
+
+	return *this;
 }
 
 bool Aabb::ContainsPoint(const Vector3& point) const
@@ -129,17 +131,17 @@ typename Enum::IntersectionType Aabb::Intersects(const Plane& plane, float epsil
 		return Enum::IntersectionType::Overlaps;*/
 }
 
-void Aabb::Compute(const MeshData::VertexVector& points)
-{
-	Min.Set(FLT_MAX, FLT_MAX, FLT_MAX);
-	Max.Set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
-	for (size_t i = 0; i < points.size(); ++i)
-	{
-		const Vector3& point = points[i].Position;
-		Min = MinVector(Min, point);
-		Max = MaxVector(Max, point);
-	}
-}
+//void Aabb::Compute(const MeshData::VertexVector& points)
+//{
+//	Min.Set(FLT_MAX, FLT_MAX, FLT_MAX);
+//	Max.Set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+//	for (size_t i = 0; i < points.size(); ++i)
+//	{
+//		const Vector3& point = points[i].Position;
+//		Min = MinVector(Min, point);
+//		Max = MaxVector(Max, point);
+//	}
+//}
 
 void Aabb::Compute(const std::vector<Vector3>& points)
 {

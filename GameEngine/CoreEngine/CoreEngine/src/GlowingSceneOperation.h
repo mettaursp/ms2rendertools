@@ -12,32 +12,6 @@ namespace GraphicsEngine
 	class GlowingSceneOperation : public RenderOperation
 	{
 	public:
-		struct LuminescenceModeEnum
-		{
-			enum LuminescenceMode
-			{
-				Photometric,
-				Digital,
-				DigitalAccurate
-			};
-		};
-
-		struct RangeFittingModeEnum
-		{
-			enum RangeFittingMode
-			{
-				Exposure,
-				Burnout
-			};
-		};
-
-		typedef LuminescenceModeEnum::LuminescenceMode LuminescenceMode;
-		typedef RangeFittingModeEnum::RangeFittingMode RangeFittingMode;
-
-		LuminescenceMode LuminescenceType = LuminescenceMode::DigitalAccurate;
-		RangeFittingMode RangeFittingType = RangeFittingMode::Burnout;
-		float Exposure = 1;
-		float BurnoutCutoff = 1.5f;
 		bool WaterEnabled = false;
 		bool Detatch = true;
 		bool DrawSkyBox = false;
@@ -65,14 +39,12 @@ namespace GraphicsEngine
 		std::shared_ptr<FrameBuffer> GetHorizontalPass() const;
 		std::shared_ptr<FrameBuffer> GetVerticalPass() const;
 		std::shared_ptr<Texture> GenerateNormalMap(const std::shared_ptr<Texture>& heightMap);
+		std::shared_ptr<class HDRColorCorrectionOperation> GetHDRColorCorrection() const;
 
 	private:
 		std::weak_ptr<FrameBuffer> SceneBuffer;
 		std::weak_ptr<FrameBuffer> LightingBuffer;
 		std::weak_ptr<FrameBuffer> AccumulationBuffer;
-		std::weak_ptr<FrameBuffer> LuminescenceBuffer;
-		std::weak_ptr<FrameBuffer> LuminescenceBackBuffer;
-		std::weak_ptr<FrameBuffer> LuminescenceCacheBuffer;
 		std::weak_ptr<FrameBuffer> HDRBuffer;
 		std::weak_ptr<FrameBuffer> WaterBuffer;
 		std::weak_ptr<FrameBuffer> NormalMapGenBuffer;
@@ -82,6 +54,7 @@ namespace GraphicsEngine
 		std::weak_ptr<DrawSceneOperation> SceneDraw;
 		std::weak_ptr<BlurOperation> Blur;
 		std::weak_ptr<ShadingOperation> Shader;
+		std::weak_ptr<class HDRColorCorrectionOperation> HDRColorCorrection;
 		LightBuffer Lights;
 
 		typedef std::pair < std::weak_ptr<Texture>, std::weak_ptr<Texture> > TexturePair;
@@ -97,14 +70,3 @@ namespace GraphicsEngine
 	};
 }
 
-namespace Enum
-{
-	typedef GraphicsEngine::GlowingSceneOperation::LuminescenceMode LuminescenceMode;
-	typedef GraphicsEngine::GlowingSceneOperation::RangeFittingMode RangeFittingMode;
-}
-
-namespace Engine
-{
-	Declare_Enum(LuminescenceMode);
-	Declare_Enum(RangeFittingMode);
-}

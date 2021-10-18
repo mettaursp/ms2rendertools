@@ -8,6 +8,7 @@ extern "C" {
 #include "Textures.h"
 #include "Constants.h"
 #include "Light.h"
+#include "HDRColorCorrectionOperation.h"
 
 #define WATER_MAT_SIDE_LENGTH 6
 
@@ -175,6 +176,11 @@ namespace GraphicsEngine
 
 		Blur = blur;
 
+		std::shared_ptr<HDRColorCorrectionOperation> colorCorrection = Engine::Create<HDRColorCorrectionOperation>();
+		colorCorrection->Resize(width, height);
+		colorCorrection->SetParent(This.lock());
+		HDRColorCorrection = colorCorrection;
+
 		sceneBuffer->DrawTo();
 		sceneBuffer->SetAttachmentCount(7);
 
@@ -206,21 +212,6 @@ namespace GraphicsEngine
 
 		blur->SetInput(sceneBuffer->GetTexture(6));
 
-		std::shared_ptr<FrameBuffer> luminescenceBuffer = FrameBuffer::Create(width, height, Textures::Create(width, height, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_FLOAT, GL_RG32F, GL_RG), true);// , false);
-		std::shared_ptr<FrameBuffer> luminescenceBackBuffer = FrameBuffer::Create(width, height, Textures::Create(width, height, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_FLOAT, GL_RG32F, GL_RG), true);//, false);
-		std::shared_ptr<FrameBuffer> luminescenceCacheBuffer = FrameBuffer::Create(width, height, Textures::Create(width, height, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_FLOAT, GL_RG32F, GL_RG), true);//, false);
-
-		luminescenceBuffer->Name = "LuminescencePrimaryBuffer";
-		luminescenceBackBuffer->Name = "LuminescenceSecondaryBuffer";
-		luminescenceCacheBuffer->Name = "LuminescenceCacheBuffer";
-
-		luminescenceBuffer->SetParent(This.lock());
-		luminescenceBackBuffer->SetParent(This.lock());
-		luminescenceCacheBuffer->SetParent(This.lock());
-
-		LuminescenceBuffer = luminescenceBuffer;
-		LuminescenceBackBuffer = luminescenceBackBuffer;
-		LuminescenceCacheBuffer = luminescenceCacheBuffer;
 
 		std::shared_ptr<FrameBuffer> hdrBuffer = FrameBuffer::Create(width, height, Textures::Create(width, height, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_FLOAT, GL_RGBA16F, GL_RGBA), true, false);
 
@@ -252,6 +243,11 @@ namespace GraphicsEngine
 		NormalMapQueue.back().second = normalMap;
 
 		return normalMap;
+	}
+
+	std::shared_ptr<class HDRColorCorrectionOperation> GlowingSceneOperation::GetHDRColorCorrection() const
+	{
+		return HDRColorCorrection.lock();
 	}
 
 	void GlowingSceneOperation::SetScene(const std::shared_ptr<Scene>& scene)
@@ -297,6 +293,11 @@ namespace GraphicsEngine
 		
 			Lights.PushLight(light);
 		}
+
+		auto hdrColorCorrect = HDRColorCorrection.lock();
+
+		hdrColorCorrect->Output = Output.lock();
+		hdrColorCorrect->Input = HDRBuffer.lock()->GetTexture();
 
     // ADDED
     Programs::WaterMatrix->Use();
@@ -505,58 +506,6 @@ namespace GraphicsEngine
 
 		Programs::BlurBlend->CoreMeshes.Square->Draw();
 
-		int width = hdrBuffer->GetWidth();
-		int height = hdrBuffer->GetHeight();
-		bool firstPass = true;
-
-		std::shared_ptr<FrameBuffer> current = LuminescenceBuffer.lock();
-		std::shared_ptr<FrameBuffer> back = LuminescenceBackBuffer.lock();
-
-		Programs::Luminescence->Use();
-
-		Programs::Luminescence->firstPass.Set(true);
-		Programs::Luminescence->transform.Set(Matrix3());
-		Programs::Luminescence->inputData.Set(hdrBuffer->GetTexture());
-
-		Programs::Luminescence->resolution.Set(Graphics::ActiveWindow->Resolution);
-
-		Programs::Luminescence->luminescenceMode.Set(LuminescenceType);
-
-		while (width > 1 || height > 1)
-		{
-			Programs::Luminescence->bounds.Set(Vector3(float(width), float(height)));
-
-			width += width & 1;
-			height += height & 1;
-
-			width >>= 1;
-			height >>= 1;
-
-			current->DrawTo(0, 0, width, height);
-
-			Graphics::ClearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); CheckGLErrors();
-
-			Programs::Luminescence->finalPass.Set(width == 1 && height == 1);
-
-			Programs::Luminescence->CoreMeshes.Square->Draw();
-
-			if (firstPass)
-			{
-				LuminescenceCacheBuffer.lock()->DrawTo();
-
-				Graphics::ClearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); CheckGLErrors();
-
-				Programs::Luminescence->CoreMeshes.Square->Draw();
-
-				firstPass = false;
-			}
-
-			std::swap(current, back);
-
-			Programs::Luminescence->firstPass.Set(false);
-			Programs::Luminescence->inputData.Set(back->GetTexture());
-		}
-
 		glEnable(GL_DEPTH_TEST); CheckGLErrors();
 
 		//float luminescence = -1;
@@ -565,25 +514,7 @@ namespace GraphicsEngine
 		//
 		//luminescence = expf(luminescence / (1920 * 1080));
 
-		if (!Output.expired())
-			Output.lock()->DrawTo();
-		else
-			FrameBuffer::Detatch();
-
-		Graphics::ClearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); CheckGLErrors();
-		
-		Programs::ToneMap->Use();
-
-		Programs::ToneMap->transform.Set(Matrix3());
-		Programs::ToneMap->inputData.Set(hdrBuffer->GetTexture());
-		Programs::ToneMap->luminescenceData.Set(back->GetTexture(), 1);
-		Programs::ToneMap->resolution.Set(Graphics::ActiveWindow->Resolution);
-		Programs::ToneMap->exposure.Set(Exposure);
-		Programs::ToneMap->burnoutCutoff.Set(BurnoutCutoff);
-		Programs::ToneMap->rangeFittingMode.Set(RangeFittingType);
-		Programs::ToneMap->luminescenceMode.Set(LuminescenceType);
-
-		Programs::ToneMap->CoreMeshes.Square->Draw();
+		GetHDRColorCorrection()->Render();
 
 		//if (!DebugViewLight.IsNull())
 		//{
@@ -611,11 +542,6 @@ namespace GraphicsEngine
 	std::shared_ptr<FrameBuffer> GlowingSceneOperation::GetSceneBuffer() const
 	{
 		return SceneBuffer.lock();
-	}
-
-	std::shared_ptr<FrameBuffer> GlowingSceneOperation::GetLuminescenceBuffer() const
-	{
-		return LuminescenceCacheBuffer.lock();
 	}
 
 	std::shared_ptr<FrameBuffer> GlowingSceneOperation::GetLightingBuffer() const

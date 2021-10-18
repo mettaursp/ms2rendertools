@@ -44,7 +44,7 @@ namespace GraphicsEngine
 					Function_Parameter_Default(bool, invertedY, false);
 				);
 
-				Bind_Parameters(Create, width, height, sampleType, wrapType, dataType, internalFormat, format, invertedY);
+				Static_Bind_Parameters(Create, width, height, sampleType, wrapType, dataType, internalFormat, format, invertedY);
 			);
 
 			Document("");

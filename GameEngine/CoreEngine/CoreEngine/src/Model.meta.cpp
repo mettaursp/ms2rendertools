@@ -11,6 +11,9 @@ namespace GraphicsEngine
 		Archivable Class_Member(std::weak_ptr<Engine::ModelAsset>, Asset);
 
 		Document("");
+		Archivable Class_Member(float, Reflectivity);
+
+		Document("");
 		Archivable Class_Member(bool, BlendTexture);
 
 		Document("");

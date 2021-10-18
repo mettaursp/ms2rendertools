@@ -4,6 +4,7 @@
 #include "Matrix3.h"
 #include "Object.h"
 #include "Frustum.h"
+#include "Ray.h"
 
 namespace GraphicsEngine
 {
@@ -31,6 +32,7 @@ namespace GraphicsEngine
 		float GetAspectRatio() const;
 		float GetFieldOfView() const;
 		const Frustum& GetFrustum() const;
+		Ray GetRay(int x, int y, int resolutionX, int resolutionY, float length = 1) const;
 
 	private:
 		Matrix3 PerspectiveProjection;
