@@ -118,7 +118,7 @@ void main()
 				if (lightDistance < maxRadius)
 					attenuationFactor = max(min(1 / (attenuation.x + lightDistance * attenuation.y + distanceSquared * attenuation.z), 1), 0);
 				else
-					attenuationFactor = max(0, (10 - 10 * 100 / (maxRadius * maxRadius) * (lightDistance - maxRadius) * (lightDistance - maxRadius)) / 255);
+					attenuationFactor = max(0, (10 - 10 * 100 / (maxRadius * maxRadius) * (lightDistance - maxRadius) * (lightDistance - maxRadius)) / 255 / lightBrightness);
 			}
 			
 			int falloff = int(lightType == 2) * spotlightFalloff + int(lightType != 2);
