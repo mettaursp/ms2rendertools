@@ -70,6 +70,8 @@ public:
 	Vector3  operator*(const Vector3& other) const;
 	Matrix3  operator*(float scalar) const;
 
+	Matrix3 FullMultiply(const Matrix3& other) const;
+
 	float* operator[](int row);
 	const float* operator[](int row) const;
 
@@ -99,7 +101,8 @@ private:
 	static bool Compare(float x, float y, float epsilon);
 
 	float Det(int y1, int y2, int x1, int x2) const;
-	float ComponentMultiplication(const Matrix3 &rhs, int x, int y) const;
+	float ComponentMultiplication(const Matrix3& rhs, int x, int y) const;
+	float ComponentMultiplicationNoAffine(const Matrix3& rhs, int x, int y) const;
 
 	Base_Class;
 

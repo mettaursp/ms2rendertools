@@ -20,8 +20,8 @@ const std::string& UniformBase::GetName() const
 
 void UniformBase::Validate()
 {
-	if (ShaderProgram::GetCurrentProgram() != Program)
-		throw "Attempt to set '" + Program->GetName() + "." + Name + "' while program '" + ShaderProgram::GetCurrentProgram()->GetName() + "' is active";
+	//if (ShaderProgram::GetCurrentProgram() != Program)
+	//	throw "Attempt to set '" + Program->GetName() + "." + Name + "' while program '" + ShaderProgram::GetCurrentProgram()->GetName() + "' is active";
 }
 
 namespace GLSL

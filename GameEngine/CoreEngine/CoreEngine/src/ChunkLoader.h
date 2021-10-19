@@ -16,7 +16,7 @@ namespace Engine
 		Enum::ChunkLoaderShape Shape = Enum::ChunkLoaderShape::Box;
 		std::weak_ptr<Terrain> Target;
 
-		void Initialize() {}
+		void Initialize();
 		void Update(float delta);
 
 		void SetRange(const Coordinates& range);

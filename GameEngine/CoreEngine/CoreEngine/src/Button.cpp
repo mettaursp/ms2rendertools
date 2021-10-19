@@ -6,6 +6,11 @@
 
 namespace GraphicsEngine
 {
+	void Button::Initialize()
+	{
+		SetTicks(true);
+	}
+
 	void Button::Update(float)
 	{
 		std::shared_ptr<ScreenCanvas> canvas = GetComponent<ScreenCanvas>();

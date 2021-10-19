@@ -205,7 +205,7 @@ namespace GraphicsEngine
 
 		if (node->IsLeaf)
 		{
-			std::shared_ptr<SceneObject> object = nullptr;
+			SceneObject* object = nullptr;
 
 			if (isDynamic)
 				object = scene->GetDynamicObject(node);
@@ -217,7 +217,7 @@ namespace GraphicsEngine
 				std::shared_ptr<Model> model = object->Cast<Model>();
 				std::shared_ptr<Engine::Transform> transform = model->GetComponent<Engine::Transform>();
 
-				if (!(model->Asset.expired() || model->MaterialProperties.expired()) && transform != nullptr)
+				if (!(model->Asset.expired() || model->GetMaterialRaw() == nullptr) && transform != nullptr)
 				{
 					objectIndex = int(Objects.size());
 

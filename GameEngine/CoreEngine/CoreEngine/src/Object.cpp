@@ -89,9 +89,9 @@ namespace Engine
 	{
 		for (int i = 0; i < GetChildren(); ++i)
 		{
-			if (Children[i] != nullptr)
+			if (Children[i] != nullptr && Children[i]->DoesTick())
 				Children[i]->UpdateBase(delta);
-			else
+			else if (Children[i] == nullptr)
 				throw "bad child detected";
 		}
 	}
@@ -253,6 +253,13 @@ namespace Engine
 
 		child->Parent = This;
 
+		if (child->DoesTick())
+		{
+			++TickingChildren;
+
+			UpdateTickingState();
+		}
+
 		Children.push_back(child);
 	}
 
@@ -263,6 +270,13 @@ namespace Engine
 
 	void Object::RemoveChild(const std::shared_ptr<Object>& child)
 	{
+		if (child->DoesTick())
+		{
+			--TickingChildren;
+
+			UpdateTickingState();
+		}
+
 		int index = 0;
 
 		while (index < int(Children.size()) && Children[index] != child)
@@ -291,6 +305,8 @@ namespace Engine
 			newParent->AddChild(This.lock());
 		else
 			Parent.reset();
+
+		ParentChanged(newParent);
 	}
 
 	std::shared_ptr<Object> Object::GetParent() const
@@ -343,6 +359,42 @@ namespace Engine
 		}
 
 		return false;
+	}
+
+	void Object::SetTicks(bool ticks)
+	{
+		Ticks = ticks;
+
+		UpdateTickingState();
+	}
+
+	bool Object::DoesObjectTick() const
+	{
+		return Ticks;
+	}
+
+	bool Object::DoesTick() const
+	{
+		return Ticks || TickingChildren > 0;
+	}
+
+	void Object::UpdateTickingState()
+	{
+		bool ticksNow = DoesTick();
+
+		std::shared_ptr<Object> parent = Parent.lock();
+
+		if (parent != nullptr && TickedBefore != ticksNow)
+		{
+			if (ticksNow)
+				++parent->TickingChildren;
+			else
+				--parent->TickingChildren;
+
+			parent->UpdateTickingState();
+		}
+
+		TickedBefore = ticksNow;
 	}
 
 	namespace LuaTypes

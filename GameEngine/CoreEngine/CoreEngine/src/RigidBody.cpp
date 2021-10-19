@@ -7,6 +7,11 @@ namespace Engine
 {
 	namespace Physics
 	{
+		void RigidBody::Initialize()
+		{
+			SetTicks(true);
+		}
+
 		void RigidBody::Update(float delta)
 		{
 			std::shared_ptr<Transform> transform = GetComponent<Transform>();
@@ -21,7 +26,7 @@ namespace Engine
 				for (int i = 0; i < int(ForceBuffer.size()); ++i)
 					acceleration += (1 / mass) * ForceBuffer[i];
 
-			transform->Move(transform->Transformation * transform->GetWorldTransformationInverse() * (delta * (Velocity + delta * acceleration)));
+			transform->Move(transform->GetTransformation() * transform->GetWorldTransformationInverse() * (delta * (Velocity + delta * acceleration)));
 			
 			Velocity += acceleration;
 
@@ -96,7 +101,7 @@ namespace Engine
 			if (transform == nullptr)
 				return;
 
-			transform->Move(transform->Transformation * transform->GetWorldTransformationInverse() * displacement);
+			transform->Move(transform->GetTransformation() * transform->GetWorldTransformationInverse() * displacement);
 		}
 
 		void RigidBody::AddMass(const std::shared_ptr<PointMass>& mass)

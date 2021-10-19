@@ -9,14 +9,125 @@ namespace Engine
 			"that needs to track location information."
 		);
 
+		Bind_Function(SetStatic,
+		
+			Document("");
+			Function_Overload
+			(
+				Returns_Nothing;
+					
+				Overload_Parameters
+				(
+					Document("");
+					Function_Parameter(bool, isTransformStatic);
+				);
+		
+				Bind_Parameters_No_Return(SetStatic, isTransformStatic);
+			);
+		);
+		
+		Bind_Function(IsTransformStatic,
+		
+			Document("");
+			Function_Overload
+			(
+				Document("");
+				Overload_Returns(bool);
+					
+				Overload_Parameters();
+		
+				Bind_Parameters(IsTransformStatic);
+			);
+		);
+		
 		Document("");
-		Archivable Class_Member(bool, IsStatic);
-	
-		Document("");
-		Archivable Class_Member(Matrix3, Transformation);
+		Register_Lua_Property(IsStatic,
+			Property_Getter(IsTransformStatic, bool);
+			
+			Property_Setters(
+				Bind_Setter(SetStatic, bool);
+			);
+		);
+
+		Bind_Function(SetTransformation,
+
+			Document("");
+			Function_Overload
+			(
+				Returns_Nothing;
+					
+				Overload_Parameters
+				(
+					Document("");
+					Function_Parameter(Matrix3, transformation);
+				);
+
+				Bind_Parameters_No_Return(SetTransformation, transformation);
+			);
+		);
+
+		Bind_Function(GetTransformation,
+
+			Document("");
+			Function_Overload
+			(
+				Document("");
+				Overload_Returns(Matrix3);
+					
+				Overload_Parameters();
+
+				Bind_Parameters(GetTransformation);
+			);
+		);
 
 		Document("");
-		Archivable Class_Member(bool, InheritTransformation);
+		Register_Lua_Property(Transformation,
+			Property_Getter(GetTransformation, Matrix3);
+			
+			Property_Setters(
+				Bind_Setter(SetTransformation, Matrix3);
+			);
+		);
+
+		Bind_Function(SetInheritsTransformation,
+
+			Document("");
+			Function_Overload
+			(
+				Returns_Nothing;
+					
+				Overload_Parameters
+				(
+					Document("");
+					Function_Parameter(bool, inherits);
+				);
+
+				Bind_Parameters_No_Return(SetInheritsTransformation, inherits);
+			);
+		);
+
+		Bind_Function(InheritsTransformation,
+
+			Document("");
+			Function_Overload
+			(
+				Document("");
+				Overload_Returns(bool);
+					
+				Overload_Parameters();
+
+				Bind_Parameters(InheritsTransformation);
+			);
+		);
+
+		Document("");
+		Register_Lua_Property(InheritTransformation,
+			Property_Getter(InheritsTransformation, bool);
+			
+			Property_Setters(
+				Bind_Setter(SetInheritsTransformation, bool);
+			);
+		);
 
 		Bind_Function(Update,
 			Document("Recalculates the world transformation based on the ancestor's transformation.");

@@ -4,6 +4,7 @@
 #include "Vector3.h"
 #include "Matrix3.h"
 #include "Quaternion.h"
+#include "TaskScheduler.h"
 
 namespace Engine
 {
@@ -12,16 +13,21 @@ namespace Engine
 	public:
 		virtual ~Transform() {}
 
-		bool IsStatic = true;
-		Matrix3 Transformation;
-		bool InheritTransformation = true;
-
 		void Initialize() {}
 
 		void Update(float delta);
 
 		bool HasMoved() const;
 		bool HasMoved();
+
+		void SetStatic(bool isStatic);
+		bool IsTransformStatic() const;
+
+		void SetTransformation(const Matrix3& matrix);
+		const Matrix3& GetTransformation();
+
+		void SetInheritsTransformation(bool inherits);
+		bool InheritsTransformation() const;
 
 		Vector3 GetPosition() const;
 		Vector3 GetPosition();
@@ -34,6 +40,8 @@ namespace Engine
 		const Matrix3& GetWorldTransformation();
 		const Matrix3& GetWorldTransformationInverse() const;
 		const Matrix3& GetWorldTransformationInverse();
+		const Matrix3& GetWorldRotation() const;
+		const Matrix3& GetWorldRotation();
 		Quaternion GetWorldOrientation() const;
 		Quaternion GetWorldOrientation();
 		const Matrix3& GetWorldNormalTransformation() const;
@@ -69,17 +77,22 @@ namespace Engine
 		void TransformByRelative(const Matrix3& transformation);
 		void TransformByRelative(const Quaternion& transformation, const Vector3& point = Vector3());
 
+		Event<Transform*> TransformMoved;
+
 	private:
+		Matrix3 Transformation;
 		Matrix3 WorldTransformation;
 		Matrix3 WorldTransformationInverse;
+		Matrix3 WorldRotation;
 		Matrix3 WorldNormalTransformation;
 
 		bool HasChanged();
 		void Recompute();
 
+		bool IsStaticTransformation = true;
+		bool InheritTransformation = true;
 		bool Moved = false;
 		bool HadParent = false;
-		Matrix3 OldTransform;
 		Matrix3 OldParentTransform;
 
 		Instantiable;

@@ -63,6 +63,8 @@ namespace GraphicsEngine
 		ShadowCamera = camera;
 
 		camera->SetParent(This.lock());
+
+		//SetTicks(true);
 	}
 
 	void GlowingSceneOperation::Configure(int width, int height, const std::shared_ptr<Scene>& scene, const std::shared_ptr<FrameBuffer>& output)
@@ -354,9 +356,13 @@ namespace GraphicsEngine
 
 		NormalMapQueue.clear();
 
+		std::shared_ptr<Camera> camera = currentScene->CurrentCamera.lock();
+
 		Programs::Phong->Use();
 
 		Programs::Phong->useOffsetMap.Set(false);
+		Programs::Phong->cameraTransform.Set(camera->GetTransformationInverse());
+		Programs::Phong->transform.Set(camera->GetProjection());
 
 		auto sceneBuffer = SceneBuffer.lock();
 
@@ -368,8 +374,6 @@ namespace GraphicsEngine
 		currentScene->Draw(false);
 
 		// ugly shit start
-
-		std::shared_ptr<Camera> camera = currentScene->CurrentCamera.lock();
 
 		Programs::DepthTrace->Use();
 
@@ -439,6 +443,8 @@ namespace GraphicsEngine
 		Programs::PhongForward->offsetMinCoord.Set(Vector3(-272, -256));
 		Programs::PhongForward->offsetMaxCoord.Set(Vector3(316, 300));
 		Programs::PhongForward->offsetMap.Set(WaterBuffer.lock()->GetTexture());
+		Programs::PhongForward->cameraTransform.Set(camera->GetTransformationInverse());
+		Programs::PhongForward->transform.Set(camera->GetProjection());
 
 		glEnable(GL_BLEND); CheckGLErrors();
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); CheckGLErrors();

@@ -133,9 +133,6 @@ namespace Engine
 		Register_Type(Ray);
 
 		Register_Class(MeshLoader);
-		Register_Class(GraphicsEngine::Material);
-		Register_Class(GraphicsEngine::PhysicalMaterial);
-		Register_Class(GraphicsEngine::Materials);
 		Register_Enum(SampleType);
 		Register_Enum(WrapType);
 		Register_Enum(InternalFormat);
@@ -152,6 +149,9 @@ namespace Engine
 		Register_Enum(LightType);
 		Register_Class(GraphicsEngine::Light);
 		Register_Type(SceneRayCastResults);
+		Register_Class(GraphicsEngine::Material);
+		Register_Class(GraphicsEngine::PhysicalMaterial);
+		Register_Class(GraphicsEngine::Materials);
 		Register_Class(GraphicsEngine::SceneObject);
 
 		Register_Enum(ChunkLoaderShape);

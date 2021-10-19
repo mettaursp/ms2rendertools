@@ -45,7 +45,18 @@ namespace GraphicsEngine
 
 				if (operation == nullptr)
 					operations.Release(i);
-				else if (operation->RenderAutomatically)
+				else// if (operation->RenderAutomatically)
+					operation->UpdateBase(0, true);
+			}
+		}
+
+		for (int i = 0; i < operations.Size(); ++i)
+		{
+			if (operations.NodeAllocated(i))
+			{
+				std::shared_ptr<RenderOperation> operation = operations.GetNode(i).GetData().lock();
+
+				if (operation->RenderAutomatically)
 					operation->Render();
 			}
 		}

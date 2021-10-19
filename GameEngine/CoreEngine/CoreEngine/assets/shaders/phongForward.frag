@@ -131,6 +131,11 @@ float getValue(vec3 color)
 	return max(max(color.r, color.g), color.b);
 }
 
+vec3 Invert(vec3 scale)
+{
+	return vec3(1 / scale.x, 1 / scale.y, 1 / scale.z);
+}
+
 void main()
 {
 	vec4 color = color;
@@ -138,11 +143,13 @@ void main()
 	vec3 tVector = inputData.tVector;
 	vec3 bVector = inputData.bVector;
 	
+	mat4 rotation = cameraTransform * objectRotation;
+	
 	if (singleCubeMapped)
 	{
 		float v = flipCubeMapV ? -1 : 1;
 		vec3 absBaseNormal = abs(inputData.baseNormal);
-		vec3 fragPos = 0.5f * (inputData.basePos + vec3(1, 1, 1)) * boxScale;
+		vec3 fragPos = 2 * mod(inputData.basePos * Invert(boxScale), vec3(1, 1, 1)) - vec3(1, 1, 1);//0.5f * (inputData.basePos + vec3(1, 1, 1)) * boxScale;
 		vec3 shifts = floor(fragPos);
 		fragPos = 2 * fract(fragPos) - vec3(1, 1, 1);
 		vec3 absFragPos = abs(fragPos);
@@ -175,8 +182,8 @@ void main()
 		int mapX = int(absBaseNormal.x >= absBaseNormal.y) & int(absBaseNormal.x > absBaseNormal.z);
 		int mapY = (1 ^ mapX) & int(absBaseNormal.y > absBaseNormal.z);
 		
-		tVector = dirX * objectRotation[2 * mapX].xyz;
-		bVector = dirY * objectRotation[1 + mapY].xyz;
+		tVector = dirX * rotation[2 * mapX].xyz;
+		bVector = dirY * rotation[1 + mapY].xyz;
 		
 		if (flipCubeMapV)
 			bVector *= -1;
@@ -218,7 +225,7 @@ void main()
 		
 		// calc normal
 		float d = 10.0 / 64; // Hard-coded bad stuff
-		normal = (objectRotation * vec4(
+		normal = (rotation * vec4(
 			//normalize(cross(vec3(d, offsetData.y, 0), vec3(0, offsetData.z, d)))
 			normalize(cross(vec3(0, offsetData.z, 1),vec3(1, offsetData.y, 0)))
 		, 0)).xyz;

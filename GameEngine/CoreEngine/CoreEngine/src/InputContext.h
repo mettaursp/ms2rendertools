@@ -27,7 +27,7 @@ namespace GraphicsEngine
 		std::shared_ptr<InputSubscriber> GetFocus(Enum::BoundDevice device) const;
 		void SetFocus(Enum::BoundDevice device, const std::shared_ptr<InputSubscriber>& subscriber);
 
-		void Initialize() {}
+		void Initialize();
 		void Update(float);
 
 	private:

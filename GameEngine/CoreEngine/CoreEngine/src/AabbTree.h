@@ -11,6 +11,13 @@
 class AabbTree
 {
 public:
+	class Node;
+
+	struct FastCallback
+	{
+		virtual void operator()(const Node* node) const {}
+	};
+
 	AabbTree();
 	~AabbTree();
 
@@ -65,6 +72,7 @@ public:
 	void PairQuery(const AabbTree& other, const PairCallback& callback) const;
 	void CastRay(const Ray& ray, const RayCallback& callback) const;
 	void CastFrustum(const Frustum& frustum, const Callback& callback) const;
+	void CastFrustumFast(const Frustum& frustum, const FastCallback& callback) const;
 	void CastAabb(const Aabb& box, const Callback& callback) const;
 	void VisitAll(const Callback& callback) const;
 
@@ -96,8 +104,10 @@ private:
 
 	void CastRay(const Ray& ray, const RayCallback& callback, const Node* node) const;
 	void CastFrustum(const Frustum& frustum, const Callback& callback, const Node* node) const;
+	void CastFrustumFast(const Frustum& frustum, const FastCallback& callback, const Node* node) const;
 	void CastAabb(const Aabb& box, const Callback& callback, const Node* node) const;
 	void PushAllChildren(const Callback& callback, const Node* node) const;
+	void PushAllChildrenFast(const FastCallback& callback, const Node* node) const;
 
 	void Query(const PairCallback& callback, const Node* node) const;
 	void Query(const PairCallback& callback, const Node* node1, const Node* node2) const;

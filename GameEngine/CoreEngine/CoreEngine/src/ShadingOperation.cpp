@@ -49,6 +49,8 @@ namespace GraphicsEngine
 		BottomMap = bottomMap;
 		FrontMap = frontMap;
 		BackMap = backMap;
+
+		//SetTicks(true);
 	}
 
 	void ShadingOperation::Update(float)
@@ -235,7 +237,7 @@ namespace GraphicsEngine
 				else if (light->Direction != Vector3(0, 1, 0))
 					rotation = Matrix3().RotateYaw(atan2f(light->Direction.X, -light->Direction.Z)) * Matrix3().RotatePitch(-acosf(light->Direction.Y));
 
-				transform = currentCamera->GetProjection() * Matrix3().Translate(light->Position) * Matrix3().Scale(-lightRadius, lightRadius, lightRadius) * rotation;
+				transform = currentCamera->GetProjection().FullMultiply(Matrix3().Translate(light->Position) * Matrix3().Scale(-lightRadius, lightRadius, lightRadius) * rotation);
 
 				Programs::PhongOutput->transform.Set(transform);
 
@@ -252,9 +254,9 @@ namespace GraphicsEngine
 			}
 			else
 			{
-				transform = currentCamera->GetProjectionMatrix() * Matrix3().Translate(
+				transform = currentCamera->GetProjectionMatrix().FullMultiply(Matrix3().Translate(
 					currentCamera->GetTransformationInverse() * light->Position
-				) * Matrix3().Scale(-lightRadius, lightRadius, lightRadius);
+				) * Matrix3().Scale(-lightRadius, lightRadius, lightRadius));
 
 				Programs::PhongOutput->transform.Set(transform);
 
@@ -278,7 +280,7 @@ namespace GraphicsEngine
 		glStencilFunc(GL_EQUAL, 1, 0xFF); CheckGLErrors();
 		glStencilOp(GL_ZERO, GL_ZERO, GL_REPLACE); CheckGLErrors();
 
-		Programs::PhongOutputStencil->transform.Set(transform * Matrix3().Scale(-1, 1, 1));
+		Programs::PhongOutputStencil->transform.Set(transform.FullMultiply(Matrix3().Scale(-1, 1, 1)));
 
 		glDepthFunc(GL_LEQUAL); CheckGLErrors();
 
@@ -320,7 +322,7 @@ namespace GraphicsEngine
 
 			Scene::Draw(watch, false, shadowCamera);
 
-			Programs::DepthTrace->transform.Set(shadowCamera->GetProjectionMatrix() * backPanelTransform);
+			Programs::DepthTrace->transform.Set(shadowCamera->GetProjectionMatrix().FullMultiply(backPanelTransform));
 			Programs::DepthTrace->objectTransform.Set(shadowCamera->GetTransformation() * backPanelTransform);
 
 			Programs::DepthTrace->CoreMeshes.Cube->Draw();
@@ -336,7 +338,7 @@ namespace GraphicsEngine
 
 			Scene::Draw(watch, false, shadowCamera);
 
-			Programs::DepthTrace->transform.Set(shadowCamera->GetProjectionMatrix() * backPanelTransform);
+			Programs::DepthTrace->transform.Set(shadowCamera->GetProjectionMatrix().FullMultiply(backPanelTransform));
 			Programs::DepthTrace->objectTransform.Set(shadowCamera->GetTransformation() * backPanelTransform);
 
 			Programs::DepthTrace->CoreMeshes.Cube->Draw();
@@ -352,7 +354,7 @@ namespace GraphicsEngine
 
 			Scene::Draw(watch, false, shadowCamera);
 
-			Programs::DepthTrace->transform.Set(shadowCamera->GetProjectionMatrix() * backPanelTransform);
+			Programs::DepthTrace->transform.Set(shadowCamera->GetProjectionMatrix().FullMultiply(backPanelTransform));
 			Programs::DepthTrace->objectTransform.Set(shadowCamera->GetTransformation() * backPanelTransform);
 
 			Programs::DepthTrace->CoreMeshes.Cube->Draw();
@@ -368,7 +370,7 @@ namespace GraphicsEngine
 
 			Scene::Draw(watch, false, shadowCamera);
 
-			Programs::DepthTrace->transform.Set(shadowCamera->GetProjectionMatrix() * backPanelTransform);
+			Programs::DepthTrace->transform.Set(shadowCamera->GetProjectionMatrix().FullMultiply(backPanelTransform));
 			Programs::DepthTrace->objectTransform.Set(shadowCamera->GetTransformation() * backPanelTransform);
 
 			Programs::DepthTrace->CoreMeshes.Cube->Draw();
@@ -383,7 +385,7 @@ namespace GraphicsEngine
 
 			Scene::Draw(watch, false, shadowCamera);
 
-			Programs::DepthTrace->transform.Set(shadowCamera->GetProjectionMatrix() * backPanelTransform);
+			Programs::DepthTrace->transform.Set(shadowCamera->GetProjectionMatrix().FullMultiply(backPanelTransform));
 			Programs::DepthTrace->objectTransform.Set(shadowCamera->GetTransformation() * backPanelTransform);
 
 			Programs::DepthTrace->CoreMeshes.Cube->Draw();
@@ -399,7 +401,7 @@ namespace GraphicsEngine
 
 			Scene::Draw(watch, false, shadowCamera);
 
-			Programs::DepthTrace->transform.Set(shadowCamera->GetProjectionMatrix() * backPanelTransform);
+			Programs::DepthTrace->transform.Set(shadowCamera->GetProjectionMatrix().FullMultiply(backPanelTransform));
 			Programs::DepthTrace->objectTransform.Set(shadowCamera->GetTransformation() * backPanelTransform);
 
 			Programs::DepthTrace->CoreMeshes.Cube->Draw();

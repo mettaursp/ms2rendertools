@@ -43,7 +43,7 @@ namespace Engine
 		public:
 			~PhysicsEnvironment();
 
-			void Initialize() {}
+			void Initialize();
 			void Update(float delta);
 
 			void AddObject(const std::shared_ptr<Collider2D>& collider);

@@ -218,9 +218,9 @@ namespace Engine
 			return;
 		
 		if (drawLiquid)
-			Programs::PhongForward->SetMaterial(MaterialProperties.lock());
+			Programs::PhongForward->SetMaterial(MaterialProperties.lock().get());
 		else
-			Programs::Phong->SetMaterial(MaterialProperties.lock());
+			Programs::Phong->SetMaterial(MaterialProperties.lock().get());
 
 		const Matrix3& transformation = transform->GetWorldTransformation();
 

@@ -7,7 +7,7 @@ namespace Engine
 {
 	void LuaScript::Initialize()
 	{
-
+		SetTicks(true);
 	}
 
 	void LuaScript::Update(float delta)
@@ -15,10 +15,12 @@ namespace Engine
 		if (AutoRuns && GetStatus() == Enum::ScriptStatus::Idle)
 			Run();
 
-		Enum::ScriptStatus status = GetStatus();
+		//Enum::ScriptStatus status = GetStatus();
+		//
+		//if (status != Enum::ScriptStatus::Idle)
+		//	Stop();
 
-		if (status != Enum::ScriptStatus::Idle)
-			Stop();
+		SetTicks(false);
 	}
 
 	LuaScript::~LuaScript()

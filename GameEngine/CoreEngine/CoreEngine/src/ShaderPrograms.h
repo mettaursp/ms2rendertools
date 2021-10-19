@@ -117,10 +117,10 @@ public:
 	void SetTexture(const std::shared_ptr<GraphicsEngine::Texture>& texture, int sampler = 0);
 	void SetNormalMap(const std::shared_ptr<GraphicsEngine::Texture>& texture, int sampler = 1);
 	void SetSpecularMap(const std::shared_ptr<GraphicsEngine::Texture>& texture, int sampler = 2);
-	void SetMaterial(const std::shared_ptr<GraphicsEngine::Material>& material);
+	void SetMaterial(GraphicsEngine::Material* material);
 
 private:
-	std::weak_ptr<GraphicsEngine::Material> CurrentMaterial;
+	GraphicsEngine::Material* CurrentMaterial = nullptr;
 };
 
 class PhongOutputProgram : public ShaderProgram
@@ -270,7 +270,10 @@ public:
 	void SetTexture(const std::shared_ptr<GraphicsEngine::Texture>& texture, int sampler = 0);
 	void SetNormalMap(const std::shared_ptr<GraphicsEngine::Texture>& texture, int sampler = 1);
 	void SetSpecularMap(const std::shared_ptr<GraphicsEngine::Texture>& texture, int sampler = 2);
-	void SetMaterial(const std::shared_ptr<GraphicsEngine::Material>& material);
+	void SetMaterial(GraphicsEngine::Material* material);
+
+private:
+	GraphicsEngine::Material* CurrentMaterial = nullptr;
 };
 
 class DepthTraceProgram : public ShaderProgram

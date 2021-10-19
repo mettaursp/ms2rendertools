@@ -132,7 +132,7 @@ std::shared_ptr<Engine::Transform> DebugDraw::NewObject(const Matrix3& transform
 	{
 		object = Engine::Create<Engine::Transform>();
 
-		object->IsStatic = false;
+		object->SetStatic(false);
 
 		Engine::Create<GraphicsEngine::Model>()->SetParent(object);
 	}
@@ -142,7 +142,7 @@ std::shared_ptr<Engine::Transform> DebugDraw::NewObject(const Matrix3& transform
 
 	object->SetParent(This.lock());
 
-	object->Transformation = transformation;
+	object->SetTransformation(transformation);
 
 	DebugScene.lock()->AddObject(object->Get<GraphicsEngine::Model>());
 
@@ -162,5 +162,5 @@ void DebugDraw::PlaceObject(const Matrix3& transformation, const RGBA& color, fl
 		model->GlowColor = 0x00000000;
 
 	model->Asset = asset;
-	model->MaterialProperties = MaterialProperties;
+	model->SetMaterial(MaterialProperties.lock());
 }

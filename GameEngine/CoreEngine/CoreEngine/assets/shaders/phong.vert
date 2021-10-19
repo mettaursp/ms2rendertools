@@ -8,7 +8,7 @@ in vec3 vertexBVector;
 
 uniform mat4 transform;
 uniform mat4 objectTransform;
-//uniform mat4 cameraTransform;
+uniform mat4 cameraTransform;
 
 // material
 uniform vec3 materialDiffuse;
@@ -48,13 +48,16 @@ out PhongVertexData
 
 void main()
 {
-	gl_Position = transform * vec4(vertexPosition, 1);
+	mat4 projection = transform * objectTransform;
 	
-	mat4 vectorTransform = transpose(inverse(objectTransform));
+	gl_Position = projection * vec4(vertexPosition, 1);
+	
+	mat4 camObjectTransform = cameraTransform * objectTransform;
+	mat4 vectorTransform = transpose(inverse(camObjectTransform));
 	
 	outputData.uv = uvScale * vertexUV + uvOffset;
 	outputData.basePos = vertexPosition.xyz;
-	outputData.position = (objectTransform * vec4(vertexPosition, 1)).xyz;
+	outputData.position = (camObjectTransform * vec4(vertexPosition, 1)).xyz;
 	outputData.baseNormal = vertexNormal.xyz;
 	outputData.normal = normalize((vectorTransform * vec4(vertexNormal, 0)).xyz);
 	outputData.tVector = normalize((vectorTransform * vec4(vertexTVector, 0)).xyz);
@@ -68,6 +71,6 @@ void main()
 		
 		//outputData.color = vec4(offsetData.x, uv.x, uv.y, 1);
 		
-		gl_Position = transform * vec4(vertexPosition + vec3(0, offsetAmplitude * offsetData.x, 0), 1);
+		gl_Position = projection * vec4(vertexPosition + vec3(0, offsetAmplitude * offsetData.x, 0), 1);
 	}
 }

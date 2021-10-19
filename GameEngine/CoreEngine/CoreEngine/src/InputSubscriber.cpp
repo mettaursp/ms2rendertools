@@ -27,6 +27,11 @@ namespace GraphicsEngine
 		return false;
 	}
 
+	void InputSubscription::Initialize()
+	{
+		SetTicks(true);
+	}
+
 	void InputSubscription::Update(float)
 	{
 		if (!ChangedThisFrame)
@@ -114,6 +119,11 @@ namespace GraphicsEngine
 		subscription->SetParent(subscriber);
 
 		return subscription;
+	}
+
+	void InputSubscriber::Initialize()
+	{
+		SetTicks(true);
 	}
 
 	void InputSubscriber::Update(float)

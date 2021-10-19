@@ -155,6 +155,12 @@ void AabbTree::CastFrustum(const Frustum& frustum, const Callback& callback) con
 		CastFrustum(frustum, callback, GetRoot());
 }
 
+void AabbTree::CastFrustumFast(const Frustum& frustum, const FastCallback& callback) const
+{
+	if (Root != -1)
+		CastFrustumFast(frustum, callback, GetRoot());
+}
+
 void AabbTree::CastAabb(const Aabb& box, const Callback& callback) const
 {
 	if (Root != -1)
@@ -487,6 +493,29 @@ void AabbTree::CastFrustum(const Frustum& frustum, const Callback& callback, con
 	}
 }
 
+void AabbTree::CastFrustumFast(const Frustum& frustum, const FastCallback& callback, const Node* node) const
+{
+	Enum::IntersectionType intersection = frustum.Intersects(node->Box);
+
+	if (intersection == Enum::IntersectionType::Inside)
+		PushAllChildrenFast(callback, node);
+	else if (intersection != Enum::IntersectionType::Outside)
+	{
+		if (node->IsLeaf)
+		{
+			callback(node);
+
+			return;
+		}
+
+		if (node->Left != -1)
+			CastFrustumFast(frustum, callback, node->GetLeft());
+
+		if (node->Right != -1)
+			CastFrustumFast(frustum, callback, node->GetRight());
+	}
+}
+
 void AabbTree::CastAabb(const Aabb& box, const Callback& callback, const Node* node) const
 {
 	if (node->Box.Intersects(box))
@@ -523,6 +552,20 @@ void AabbTree::PushAllChildren(const Callback& callback, const Node* node) const
 
 		if (node->Right != -1)
 			PushAllChildren(callback, node->GetRight());
+	}
+}
+
+void AabbTree::PushAllChildrenFast(const FastCallback& callback, const Node* node) const
+{
+	if (node->IsLeaf)
+		callback(node);
+	else
+	{
+		if (node->Left != -1)
+			PushAllChildrenFast(callback, node->GetLeft());
+
+		if (node->Right != -1)
+			PushAllChildrenFast(callback, node->GetRight());
 	}
 }
 

@@ -26,9 +26,9 @@ void PhongProgram::SetSpecularMap(const std::shared_ptr<GraphicsEngine::Texture>
 	specularMapEnabled.Set(texture != nullptr);
 }
 
-void PhongProgram::SetMaterial(const std::shared_ptr<GraphicsEngine::Material>& material)
+void PhongProgram::SetMaterial(GraphicsEngine::Material* material)
 {
-	if (CurrentMaterial.lock() != material && material != nullptr)
+	if (CurrentMaterial != material && material != nullptr)
 	{
 		CurrentMaterial = material;
 
@@ -37,6 +37,18 @@ void PhongProgram::SetMaterial(const std::shared_ptr<GraphicsEngine::Material>& 
 		materialSpecular.Set(material->Specular);
 		materialEmissive.Set(material->Emission);
 		materialShininess.Set(material->Shininess);
+
+		useOffsetMap.Set(material->UseOffsetMap);
+		SetTexture(material->DiffuseTexture.lock());
+		SetNormalMap(material->NormalMap.lock());
+		SetSpecularMap(material->SpecularMap.lock());
+		textureColor.Set(material->TextureColor);
+		blendTexture.Set(material->BlendTexture);
+		singleCubeMapped.Set(material->CubeMapped);
+		compressedNormalMap.Set(material->CompressedNormalMap);
+		boxScale.Set(material->BoxScale);
+		uvScale.Set(material->UVScale);
+		uvOffset.Set(material->UVOffset);
 	}
 }
 
@@ -78,13 +90,30 @@ void PhongForwardProgram::SetSpecularMap(const std::shared_ptr<GraphicsEngine::T
 	specularMapEnabled.Set(texture != nullptr);
 }
 
-void PhongForwardProgram::SetMaterial(const std::shared_ptr<GraphicsEngine::Material>& material)
+void PhongForwardProgram::SetMaterial(GraphicsEngine::Material* material)
 {
-	materialDiffuse.Set(material->Diffuse);
-	materialAmbient.Set(material->Ambient);
-	materialSpecular.Set(material->Specular);
-	materialEmissive.Set(material->Emission);
-	materialShininess.Set(material->Shininess);
+	if (CurrentMaterial != material && material != nullptr)
+	{
+		CurrentMaterial = material;
+
+		materialDiffuse.Set(material->Diffuse);
+		materialAmbient.Set(material->Ambient);
+		materialSpecular.Set(material->Specular);
+		materialEmissive.Set(material->Emission);
+		materialShininess.Set(material->Shininess);
+
+		useOffsetMap.Set(material->UseOffsetMap);
+		SetTexture(material->DiffuseTexture.lock());
+		SetNormalMap(material->NormalMap.lock());
+		SetSpecularMap(material->SpecularMap.lock());
+		textureColor.Set(material->TextureColor);
+		blendTexture.Set(material->BlendTexture);
+		singleCubeMapped.Set(material->CubeMapped);
+		compressedNormalMap.Set(material->CompressedNormalMap);
+		boxScale.Set(material->BoxScale);
+		uvScale.Set(material->UVScale);
+		uvOffset.Set(material->UVOffset);
+	}
 }
 
 void ShadowMapProgram::SetTexture(const std::shared_ptr<GraphicsEngine::Texture>& texture, int sampler)

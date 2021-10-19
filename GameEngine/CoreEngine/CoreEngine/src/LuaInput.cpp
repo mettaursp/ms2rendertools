@@ -60,6 +60,11 @@ namespace Engine
 		}
 	}
 
+	void InputBinding::Initialize()
+	{
+		SetTicks(true);
+	}
+
 	void InputBinding::Update(float)
 	{
 		for (int i = 0; i < int(Bindings.size()); ++i)

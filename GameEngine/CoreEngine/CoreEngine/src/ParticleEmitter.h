@@ -70,7 +70,7 @@ namespace GraphicsEngine
 		std::weak_ptr<Engine::ModelAsset> Asset;
 
 		void SetMaxParticles(int count);
-		void Initialize() { Particles.resize(MaxParticles); }
+		void Initialize() { Particles.resize(MaxParticles); SetTicks(true); }
 		void Update(float delta);
 		void Draw(const std::shared_ptr<Camera>& camera);
 		void FireParticles(int count, float delta = 0);

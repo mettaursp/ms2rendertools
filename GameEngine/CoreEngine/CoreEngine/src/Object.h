@@ -31,6 +31,8 @@ namespace Engine
 		void Initialize();
 		void Update(float delta);
 
+		virtual void ParentChanged(std::shared_ptr<Object> newParent) {}
+
 		int GetTypeID() const;
 		const std::string& GetTypeName() const;
 		bool IsA(const std::string& className, bool inherited = true) const;
@@ -77,6 +79,10 @@ namespace Engine
 		bool IsAncestorOf(const std::shared_ptr<Object>& object) const;
 		bool IsDescendantOf(const std::shared_ptr<Object>& object) const;
 
+		void SetTicks(bool ticks);
+		bool DoesTick() const;
+		bool DoesObjectTick() const;
+
 		template <typename T>
 		std::shared_ptr<T> Get(bool inherited = true);
 
@@ -111,11 +117,15 @@ namespace Engine
 
 		int ObjectID = -1;
 		int OriginalID = -1;
+		bool Ticks = false;
+		int TickingChildren = 0;
+		bool TickedBefore = false;
 
 		std::weak_ptr<Object> Parent;
 		ObjectVector Children;
 
 		std::shared_ptr<Object> GetComponent(MetaData* data, bool inherited) const;
+		void UpdateTickingState();
 
 		Instantiable;
 

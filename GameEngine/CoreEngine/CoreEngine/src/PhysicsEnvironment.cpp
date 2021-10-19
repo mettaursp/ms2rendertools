@@ -46,6 +46,11 @@ namespace Engine
 			Colliders.clear();
 		}
 
+		void PhysicsEnvironment::Initialize()
+		{
+			SetTicks(true);
+		}
+
 		void PhysicsEnvironment::Update(float delta)
 		{
 			for (int i = 0; i < int(Colliders.size()); ++i)

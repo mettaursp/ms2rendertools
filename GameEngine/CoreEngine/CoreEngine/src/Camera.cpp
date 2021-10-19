@@ -12,7 +12,7 @@ namespace GraphicsEngine
 	{
 		Transformation = newTransformation;
 		InverseTransformation.Invert(Transformation);
-		Projection = PerspectiveProjection * InverseTransformation;
+		Projection = PerspectiveProjection.FullMultiply(InverseTransformation);
 
 		CalculateFrustum();
 	}
@@ -72,7 +72,7 @@ namespace GraphicsEngine
 	void Camera::CalculateProjectionMatrix()
 	{
 		PerspectiveProjection = Matrix3().Projection(ProjectionPlane, NearPlane, FarPlane, Width, Height);
-		Projection = PerspectiveProjection * InverseTransformation;
+		Projection = PerspectiveProjection.FullMultiply(InverseTransformation);
 	}
 
 	const Matrix3& Camera::GetTransformation() const

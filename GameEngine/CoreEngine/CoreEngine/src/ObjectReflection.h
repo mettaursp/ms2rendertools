@@ -258,7 +258,7 @@ public:\
 	\
 	virtual void InitializeBase();\
 	\
-	virtual void UpdateBase(float delta);\
+	virtual void UpdateBase(float delta, bool forceTick = false);\
 	\
 	virtual bool RestrictsSiblings() const\
 	{\
@@ -317,9 +317,10 @@ void className::InitializeBase()\
 	className::Initialize();\
 }\
 \
-void className::UpdateBase(float delta)\
+void className::UpdateBase(float delta, bool forceTick)\
 {\
-	className::Update(delta);\
+	/*if (DoesObjectTick())*/\
+		className::Update(delta);\
 }\
 \
 void className::ObjectData::Initialize()\
@@ -362,10 +363,12 @@ void className::InitializeBase()\
 	className::Initialize();\
 }\
 \
-void className::UpdateBase(float delta)\
+void className::UpdateBase(float delta, bool forceTick)\
 {\
-	baseName::UpdateBase(delta);\
-	className::Update(delta);\
+	baseName::UpdateBase(delta, forceTick);\
+	\
+	if (forceTick || DoesObjectTick())\
+		className::Update(delta);\
 }\
 \
 void className::ObjectData::Initialize()\

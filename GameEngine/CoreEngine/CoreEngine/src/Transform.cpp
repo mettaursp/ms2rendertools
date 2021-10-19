@@ -6,7 +6,13 @@ namespace Engine
 	{
 		Recompute();
 
+		if (Moved)
+			TransformMoved.Fire(this);
+
 		Moved = false;
+
+		if (IsStaticTransformation)
+			SetTicks(false);
 	}
 
 	void Transform::Recompute()
@@ -30,18 +36,19 @@ namespace Engine
 
 		WorldTransformationInverse.Invert(WorldTransformation);
 		WorldNormalTransformation = WorldTransformation.Inverted().Transpose();
-
-		OldTransform = Transformation;
+		WorldRotation = Matrix3().ExtractRotation(WorldTransformation);
 
 		if (HadParent)
 			OldParentTransform = inherited->GetWorldTransformation();
+
+		SetTicks(true);
 	}
 
 	bool Transform::HasMoved() const
 	{
 		if (Moved)
 			return true;
-		else
+		else if (InheritTransformation)
 		{
 			std::shared_ptr<Transform> parent = GetComponent<Transform>();
 
@@ -49,36 +56,76 @@ namespace Engine
 				return true;
 		}
 
-		return Transformation != OldTransform;
+		return InheritTransformation && HadParent;
 	}
 
 	bool Transform::HasMoved()
 	{
 		if (Moved)
 			return true;
-		else
+		else if (InheritTransformation)
 		{
 			std::shared_ptr<Transform> parent = GetComponent<Transform>();
 
 			if (parent != nullptr && parent->HasMoved())
 			{
 				Moved = true;
+				HadParent = true;
 
 				return true;
 			}
 		}
 
-		Moved = Transformation != OldTransform;
+		Moved = InheritTransformation && HadParent;
+		HadParent = false;
 
 		return Moved;
 	}
 
+	void Transform::SetStatic(bool isStatic)
+	{
+		IsStaticTransformation = isStatic;
+
+		SetTicks(isStatic);
+	}
+
+	bool Transform::IsTransformStatic() const
+	{
+		return IsStaticTransformation;
+	}
+
+	void Transform::SetTransformation(const Matrix3& matrix)
+	{
+		Transformation = matrix;
+
+		Moved = true;
+
+		Recompute();
+	}
+
+	const Matrix3& Transform::GetTransformation()
+	{
+		return Transformation;
+	}
+
+	void Transform::SetInheritsTransformation(bool inherits)
+	{
+		InheritTransformation = inherits;
+
+		Recompute();
+	}
+
+	bool Transform::InheritsTransformation() const
+	{
+		return InheritTransformation;
+	}
+
 	bool Transform::HasChanged()
 	{
-		std::shared_ptr<Transform> parent = GetComponent<Transform>();
-
 		if (InheritTransformation)
 		{
+			std::shared_ptr<Transform> parent = GetComponent<Transform>();
+
 			bool hasParent = parent != nullptr;
 
 			if (hasParent != HadParent)
@@ -87,7 +134,7 @@ namespace Engine
 				return true;
 		}
 
-		return Transformation != OldTransform;
+		return Moved;
 	}
 
 	Vector3 Transform::GetPosition() const
@@ -97,7 +144,8 @@ namespace Engine
 
 	Vector3 Transform::GetPosition()
 	{
-		Recompute();
+		if (Moved || InheritTransformation)
+			Recompute();
 
 		return Transformation.Translation();
 	}
@@ -119,7 +167,8 @@ namespace Engine
 
 	Vector3 Transform::GetWorldPosition()
 	{
-		Recompute();
+		if (Moved || InheritTransformation)
+			Recompute();
 		
 		return WorldTransformation.Translation();
 	}
@@ -131,7 +180,8 @@ namespace Engine
 
 	const Matrix3& Transform::GetWorldTransformation()
 	{
-		Recompute();
+		if (Moved || InheritTransformation)
+			Recompute();
 		
 		return WorldTransformation;
 	}
@@ -143,9 +193,23 @@ namespace Engine
 
 	const Matrix3& Transform::GetWorldTransformationInverse()
 	{
-		Recompute();
+		if (Moved || InheritTransformation)
+			Recompute();
 
 		return WorldTransformationInverse;
+	}
+
+	const Matrix3& Transform::GetWorldRotation() const
+	{
+		return WorldRotation;
+	}
+
+	const Matrix3& Transform::GetWorldRotation()
+	{
+		if (Moved || InheritTransformation)
+			Recompute();
+
+		return WorldRotation;
 	}
 
 	Quaternion Transform::GetWorldOrientation() const
@@ -155,7 +219,8 @@ namespace Engine
 
 	Quaternion Transform::GetWorldOrientation()
 	{
-		Recompute();
+		if (Moved || InheritTransformation)
+			Recompute();
 
 		return Quaternion(WorldTransformation);
 	}
@@ -167,7 +232,8 @@ namespace Engine
 
 	const Matrix3& Transform::GetWorldNormalTransformation()
 	{
-		Recompute();
+		if (Moved || InheritTransformation)
+			Recompute();
 
 		return WorldNormalTransformation;
 	}
@@ -179,7 +245,8 @@ namespace Engine
 
 	Quaternion Transform::GetOrientation()
 	{
-		Recompute();
+		if (Moved || InheritTransformation)
+			Recompute();
 
 		return Quaternion(Transformation);
 	}
@@ -214,7 +281,8 @@ namespace Engine
 
 	Vector3 Transform::GetEulerAngles()
 	{
-		Recompute();
+		if (Moved || InheritTransformation)
+			Recompute();
 
 		return Vector3();
 	}
@@ -254,7 +322,8 @@ namespace Engine
 
 	Vector3 Transform::GetEulerAnglesYaw()
 	{
-		Recompute();
+		if (Moved || InheritTransformation)
+			Recompute();
 
 		return Vector3();
 	}
@@ -294,7 +363,8 @@ namespace Engine
 
 	Vector3 Transform::GetScale()
 	{
-		Recompute();
+		if (Moved || InheritTransformation)
+			Recompute();
 
 		return Vector3(Transformation.RightVector().Length(), Transformation.UpVector().Length(), Transformation.FrontVector().Length());
 	}

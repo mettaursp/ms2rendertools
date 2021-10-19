@@ -8,6 +8,11 @@
 
 namespace Engine
 {
+	void ChunkLoader::Initialize()
+	{
+		SetTicks(true);
+	}
+
 	void ChunkLoader::Update(float delta)
 	{
 		Coordinates position = GetChunkCoordinates();

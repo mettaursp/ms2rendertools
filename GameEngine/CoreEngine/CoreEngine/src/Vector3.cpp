@@ -34,7 +34,13 @@ Vector3& Vector3::Set(float x, float y, float z, float w)
 // normalizes the vector
 Vector3& Vector3::Normalize()
 {
-	float length = 1 / this->Length();
+	float length = this->Length();
+
+	if (std::abs(length) < 1e-9f)
+		return *this;
+
+	length = 1 / length;
+
 	X *= length;
 	Y *= length;
 	Z *= length;

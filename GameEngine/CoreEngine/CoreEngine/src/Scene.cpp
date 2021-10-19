@@ -10,9 +10,98 @@
 #include "Material.h"
 #include "Terrain.h"
 #include "LightBuffer.h"
+#include "Transform.h"
 
 namespace GraphicsEngine
 {
+	SceneObject::~SceneObject()
+	{
+		while (Scenes.size() != 0)
+		{
+			auto scene = Scenes.back().Scene.lock();
+
+			if (scene != nullptr)
+				scene->RemoveObjectRaw(this);
+		}
+	}
+
+	void SceneObject::ParentChanged(std::shared_ptr<Object> newParent)
+	{
+		std::shared_ptr<Engine::Transform> transform;
+
+		if (newParent->IsA<Engine::Transform>())
+			transform = newParent->Cast<Engine::Transform>();
+		else
+			transform = GetComponent<Engine::Transform>();
+
+		TransformChangedConnection = transform->TransformMoved.ConnectWithObject([this](Engine::Transform*) {
+			UpdateScenes();
+
+			return true;
+		}, This.lock());
+
+		UpdateScenes();
+	}
+
+	void SceneObject::UpdateScenes()
+	{
+		bool isStatic = IsStatic();
+
+		for (int i = 0; i < int(Scenes.size()); ++i)
+		{
+			auto scene = Scenes[i].Scene.lock();
+
+			if (scene != nullptr)
+				scene->Update(Scenes[i].Reference, isStatic);
+		}
+	}
+
+	void SceneObject::AddedToScene(std::shared_ptr<Scene>& scene, int reference)
+	{
+		Scenes.push_back({ reference, scene });
+
+		UpdateScenes();
+	}
+
+	void SceneObject::RemovedFromScene(std::shared_ptr<Scene>& scene)
+	{
+		for (int i = 0; i < int(Scenes.size()); ++i)
+		{
+			if (Scenes[i].Scene.expired())
+			{
+				std::swap(Scenes[i], Scenes.back());
+				Scenes.pop_back();
+
+				--i;
+
+				continue;
+			}
+
+			if (Scenes[i].Scene.lock() == scene)
+			{
+				std::swap(Scenes[i], Scenes.back());
+				Scenes.pop_back();
+
+				return;
+			}
+		}
+	}
+	void SceneObject::SetMaterial(const std::shared_ptr<Material>& material)
+	{
+		MaterialProperties = material;
+		MaterialPropertiesObject = material.get();
+	}
+
+	std::shared_ptr<Material> SceneObject::GetMaterial() const
+	{
+		return MaterialProperties.lock();
+	}
+
+	Material* SceneObject::GetMaterialRaw() const
+	{
+		return MaterialPropertiesObject;
+	}
+
 	void Scene::RefreshWatches()
 	{
 		UpdatedLights.Clear();
@@ -60,10 +149,8 @@ namespace GraphicsEngine
 			SceneObjectReference* object = objectNode->GetData<SceneObjectReference>();
 			int lightIndex = int(lightNode->ClientData);
 
-			auto reference = object->Reference.lock();
-
-			if (!reference->IsTransparent())
-				Lights[lightIndex].Watch.Insert(object, reference->GetBoundingBox());
+			if (!object->Reference->IsTransparent())
+				Lights[lightIndex].Watch.Insert(object, object->Reference->GetBoundingBox());
 		});
 
 		DynamicObjects.PairQuery(UpdatedLights, [this] (const AabbTree::Node* objectNode, const AabbTree::Node* lightNode)
@@ -71,10 +158,8 @@ namespace GraphicsEngine
 			SceneObjectReference* object = objectNode->GetData<SceneObjectReference>();
 			int lightIndex = int(lightNode->ClientData);
 
-			auto reference = object->Reference.lock();
-
-			if (!reference->IsTransparent())
-				Lights[lightIndex].Watch.Insert(object, reference->GetBoundingBox());
+			if (!object->Reference->IsTransparent())
+				Lights[lightIndex].Watch.Insert(object, object->Reference->GetBoundingBox());
 		});
 	}
 
@@ -106,7 +191,7 @@ namespace GraphicsEngine
 		{
 			SceneObjectReference* objectReference = node->GetData<SceneObjectReference>();
 
-			objectReference->Reference.lock()->CastRay(ray, [&hits, &callback] (const SceneRayCastResults& results)
+			objectReference->Reference->CastRay(ray, [&hits, &callback] (const SceneRayCastResults& results)
 			{
 				hits.push(results);
 			});
@@ -166,18 +251,18 @@ namespace GraphicsEngine
 		return 0;
 	}
 
-	std::shared_ptr<SceneObject> Scene::GetStaticObject(const AabbTree::Node* node) const
+	SceneObject* Scene::GetStaticObject(const AabbTree::Node* node) const
 	{
 		SceneObjectReference* objectReference = node->GetData<SceneObjectReference>();
 
-		return objectReference->Reference.lock();
+		return objectReference->Reference;
 	}
 
-	std::shared_ptr<SceneObject> Scene::GetDynamicObject(const AabbTree::Node* node) const
+	SceneObject* Scene::GetDynamicObject(const AabbTree::Node* node) const
 	{
 		SceneObjectReference* objectReference = node->GetData<SceneObjectReference>();
 
-		return objectReference->Reference.lock();
+		return objectReference->Reference;
 	}
 
 	void Scene::ClearStaticObjects()
@@ -190,60 +275,25 @@ namespace GraphicsEngine
 		StaticObjectReferences.clear();
 	}
 
+	void Scene::Initialize()
+	{
+		//SetTicks(true);
+	}
+
 	void Scene::Update(float)
 	{
-		Updating = true;
-
-		{
-			UpdateVector.clear();
-
-			StaticObjects.VisitAll([this] (const AabbTree::Node* node)
-			{
-				SceneObjectReference* object = node->GetData<SceneObjectReference>();
-
-				if (object->Reference.lock()->HasMoved())
-					Update(object->ID);
-			});
-
-			const AabbTree& objects = StaticObjects;
-
-			for (int i = 0; i < int(UpdateVector.size()); ++i)
-				StaticObjects.Update(
-					UpdateVector[i],
-					objects.GetNode(UpdateVector[i])->GetData<SceneObjectReference>()->Reference.lock()->GetBoundingBox()
-				);
-		}
-
-		{
-			UpdateVector.clear();
-
-			DynamicObjects.VisitAll([this] (const AabbTree::Node* node)
-			{
-				SceneObjectReference* object = node->GetData<SceneObjectReference>();
-
-				if (object->Reference.lock()->HasMoved())
-					Update(object->ID);
-			});
-
-			const AabbTree& objects = DynamicObjects;
-
-			for (int i = 0; i < int(UpdateVector.size()); ++i)
-				DynamicObjects.Update(
-					UpdateVector[i],
-					objects.GetNode(UpdateVector[i])->GetData<SceneObjectReference>()->Reference.lock()->GetBoundingBox()
-				);
-		}
-
-		Updating = false;
 	}
 
 	void Scene::AddObject(const std::shared_ptr<SceneObject>& object)
 	{
+		int id = -1;
+
 		if (object->IsStatic())
 		{
 			SceneObjectReference* handle = StaticObjectHandles.Create<SceneObjectReference>(This.lock(), object);
 
-			handle->ID = StaticObjects.Insert(handle, object->GetBoundingBox());
+			id = StaticObjects.Insert(handle, object->GetBoundingBox());
+			handle->ID = id;
 
 			StaticObjectReferences.push_back(handle);
 		}
@@ -251,10 +301,14 @@ namespace GraphicsEngine
 		{
 			SceneObjectReference* handle = StaticObjectHandles.Create<SceneObjectReference>(This.lock(), object);
 
-			handle->ID = DynamicObjects.Insert(handle, object->GetBoundingBox());
+			id = DynamicObjects.Insert(handle, object->GetBoundingBox());
+			handle->ID = id;
 
 			DynamicObjectReferences.push_back(handle);
 		}
+
+		auto scene = This.lock()->Cast<Scene>();
+		object->AddedToScene(scene, id);
 	}
 
 	void Scene::AddLight(const std::shared_ptr<Light>& light)
@@ -273,11 +327,16 @@ namespace GraphicsEngine
 
 	void Scene::RemoveObject(const std::shared_ptr<SceneObject>& object)
 	{
+		RemoveObjectRaw(object.get());
+	}
+
+	void Scene::RemoveObjectRaw(SceneObject* object)
+	{
 		if (object->IsStatic())
 		{
 			int i = 0;
 
-			for (i = 0; i < int(StaticObjectReferences.size()) && StaticObjectReferences[i]->Reference.lock() != object; ++i);
+			for (i = 0; i < int(StaticObjectReferences.size()) && StaticObjectReferences[i]->Reference != object; ++i);
 
 			if (i < int(StaticObjectReferences.size()))
 			{
@@ -294,7 +353,7 @@ namespace GraphicsEngine
 		{
 			int i = 0;
 
-			for (i = 0; i < int(DynamicObjectReferences.size()) && DynamicObjectReferences[i]->Reference.lock() != object; ++i);
+			for (i = 0; i < int(DynamicObjectReferences.size()) && DynamicObjectReferences[i]->Reference != object; ++i);
 
 			if (i < int(DynamicObjectReferences.size()))
 			{
@@ -307,6 +366,9 @@ namespace GraphicsEngine
 				DynamicObjectReferences.pop_back();
 			}
 		}
+
+		auto scene = This.lock()->Cast<Scene>();
+		object->RemovedFromScene(scene);
 	}
 
 	void Scene::RemoveLight(const std::shared_ptr<Light>& light)
@@ -362,12 +424,12 @@ namespace GraphicsEngine
 		{
 			std::shared_ptr<SceneObject> object = Objects[i].lock();
 
-			if (object->Visible && object->IsTransparent() == drawTransparent && !object->MaterialProperties.expired())
+			if (object->Visible && object->IsTransparent() == drawTransparent && object->GetMaterialRaw() != nullptr)
 			{
 				if (drawTransparent)
-					Programs::PhongForward->SetMaterial(object->MaterialProperties.lock());
+					Programs::PhongForward->SetMaterial(object->GetMaterialRaw());
 				else
-					Programs::Phong->SetMaterial(object->MaterialProperties.lock());
+					Programs::Phong->SetMaterial(object->GetMaterialRaw());
 
 				object->Draw(camera);
 			}
@@ -377,27 +439,29 @@ namespace GraphicsEngine
 		Draw(DynamicObjects, drawTransparent, camera);
 	}
 
+	void Scene::StackInfo::operator()(const AabbTree::Node* node) const
+	{
+		SceneObjectReference* thingamajig = node->GetData<SceneObjectReference>();
+
+		if (thingamajig->Reference->Visible & (thingamajig->Reference->IsTransparent() == DrawTransparent) & (thingamajig->Reference->GetMaterialRaw() != nullptr))
+		{
+			++Drawn;
+
+			if (DrawTransparent && ShaderProgram::GetCurrentProgram() == Programs::PhongForward)
+				Programs::PhongForward->SetMaterial(thingamajig->Reference->GetMaterialRaw());
+			else if (ShaderProgram::GetCurrentProgram() == Programs::Phong)
+				Programs::Phong->SetMaterial(thingamajig->Reference->GetMaterialRaw());
+
+			thingamajig->Reference->Draw(TargetCamera);
+		}
+	}
+
 	void Scene::Draw(const AabbTree& tree, bool drawTransparent, const std::shared_ptr<Camera>& targetCamera)
 	{
 		int drawn = 0;
-		tree.CastFrustum(targetCamera->GetFrustum(), [drawTransparent, &targetCamera, &drawn] (const AabbTree::Node* node)
-		{
-			SceneObjectReference* thingamajig = node->GetData<SceneObjectReference>();
+		StackInfo FrustumCallbackInfo{ drawTransparent, targetCamera, drawn };
 
-			auto reference = thingamajig->Reference.lock();
-
-			if (reference->Visible && reference->IsTransparent() == drawTransparent && !reference->MaterialProperties.expired())
-			{
-				++drawn;
-
-				if (drawTransparent && ShaderProgram::GetCurrentProgram() == Programs::PhongForward)
-					Programs::PhongForward->SetMaterial(reference->MaterialProperties.lock());
-				else if (ShaderProgram::GetCurrentProgram() == Programs::Phong)
-					Programs::Phong->SetMaterial(reference->MaterialProperties.lock());
-
-				reference->Draw(targetCamera);
-			}
-		});
+		tree.CastFrustumFast(targetCamera->GetFrustum(), FrustumCallbackInfo);
 
 		drawn += 0;
 	}
@@ -416,6 +480,14 @@ namespace GraphicsEngine
 			throw "Attempt to perform unauthorized swap";
 
 		UpdateVector.push_back(object);
+	}
+
+	void Scene::Update(int object, bool isStatic)
+	{
+		AabbTree& tree = isStatic ? StaticObjects : DynamicObjects;
+		const AabbTree& constTree = tree;
+
+		tree.Update(object, constTree.GetNode(object)->GetData<SceneObjectReference>()->Reference->GetBoundingBox());
 	}
 
 	std::shared_ptr<Camera>& Scene::Target()

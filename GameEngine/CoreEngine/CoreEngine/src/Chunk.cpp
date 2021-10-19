@@ -26,6 +26,7 @@ namespace Engine
 
 	void Chunk::Initialize()
 	{
+		SetTicks(true);
 	}
 
 	void Chunk::Update(float)
@@ -45,12 +46,12 @@ namespace Engine
 		std::shared_ptr<Transform> transform = Engine::Create<Transform>();
 
 		transform->SetParent(This.lock());
-		transform->Transformation = Matrix3(float(chunk.X) * 16, float(chunk.Y) * 16, float(chunk.Z) * 16);
+		transform->SetTransformation(Matrix3(float(chunk.X) * 16, float(chunk.Y) * 16, float(chunk.Z) * 16));
 
 		std::shared_ptr<GraphicsEngine::Model> model = Engine::Create<GraphicsEngine::Model>();
 
 		model->SetParent(transform);
-		model->MaterialProperties = MaterialProperties;
+		model->SetMaterial(MaterialProperties.lock());
 
 		std::shared_ptr<ModelAsset> chunkMesh = MeshLoader::NewAsset(terrain->Cast<Terrain>()->GetChunkPath(chunk));
 

@@ -398,6 +398,11 @@ function UpdateMaterials()
 	for name, properties in pairs(robloxMaterials) do
 		local material = robloxMaterialContainer[name]
 		
+		material.CubeMapped = true
+		material.BlendTexture = name == "Glass"
+		material.FlipCubeMapV = true
+		material.CompressedNormalMap = true
+		
 		for i,v in pairs(properties) do
 			material[i] = v
 		end
@@ -478,11 +483,11 @@ if true then
 				end
 
 				local size = Vector3(tonumber(current.size[1]), tonumber(current.size[2]), tonumber(current.size[3]))
-				local boxScale = size
-
-				if current.shape == "Cylinder" or current.shape == "Sphere" then
-					boxScale = Vector3(current.shape == "Sphere" and math.ceil(boxScale.X) or boxScale.X, math.ceil(boxScale.Y), math.ceil(boxScale.Z))
-				end
+				--local boxScale = size
+				--
+				--if current.shape == "Cylinder" or current.shape == "Sphere" then
+				--	boxScale = Vector3(current.shape == "Sphere" and math.ceil(boxScale.X) or boxScale.X, math.ceil(boxScale.Y), math.ceil(boxScale.Z))
+				--end
 				
 				local sizeOffset = Vector3()
 				
@@ -498,8 +503,9 @@ if true then
 					Vector3(tonumber(current.front[1]), tonumber(current.front[2]), tonumber(current.front[3]))
 				) * Matrix3.NewScale(size * 0.5 + sizeOffset)
 				--transform.IsStatic = false
+				transform.InheritTransformation = false
 
-				transform:Update(0)
+				--transform:Update(0)
 
 				local model = GameObject("Model")
 
@@ -510,7 +516,7 @@ if true then
 				model.Color = color
 				model.Reflectivity = current.reflectivity
 				model.GlowColor = (current.material == "Neon") and color or (current.material == "ForceField" and RGBA(color.R*.5,color.G*.5,color.B*.5,color.A*.5) or RGBA(0, 0, 0, 0))
-				model.TextureColor = color
+				--model.TextureColor = color
 
 				--[[local materialTextures = Engine.Textures.Roblox:GetByName(current.material)
 
@@ -520,11 +526,11 @@ if true then
 					model.SpecularMap = materialTextures:GetByName("Specular")
 				end]]
 
-				model.BoxScale = boxScale
-				model.CubeMapped = true
-				model.BlendTexture = current.material == "Glass"
-				model.FlipCubeMapV = true
-				model.CompressedNormalMap = true
+				--model.BoxScale = boxScale
+				--model.CubeMapped = true
+				--model.BlendTexture = current.material == "Glass"
+				--model.FlipCubeMapV = true
+				--model.CompressedNormalMap = true
 				model.MaterialProperties = material
 				model.PhysicalMaterialProperties = robloxMaterialContainer[current.material]
 				model.Asset = loadedMeshes[current.shape]
@@ -685,6 +691,8 @@ coroutine.wrap(function()
 	
 	while true do
 		local delta = wait()
+		
+		--print(math.floor(10/delta)/10, delta)
 		
 		time = time + delta
 		

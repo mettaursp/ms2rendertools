@@ -1,5 +1,7 @@
 #pragma once
 
+#include <queue>
+
 #include "Object.h"
 #include "AabbTree.h"
 #include "PageAllocator.h"
@@ -18,19 +20,21 @@ namespace GraphicsEngine
 	class Light;
 	class Material;
 	class PhysicalMaterial;
+	class Scene;
 
 	class SceneObject : public Engine::Object
 	{
 	public:
 		typedef std::function<void(const SceneRayCastResults& results)> CastResultsCallback;
 
-		virtual ~SceneObject() {}
+		virtual ~SceneObject();
 
 		void Initialize() {}
 		void Update(float) {}
 
+		void ParentChanged(std::shared_ptr<Object> newParent);
+
 		bool Visible = true;
-		std::weak_ptr<Material> MaterialProperties;
 		std::weak_ptr<PhysicalMaterial> PhysicalMaterialProperties;
 
 		virtual Aabb GetBoundingBox() const { return Aabb(); }
@@ -39,6 +43,30 @@ namespace GraphicsEngine
 		virtual void Draw(const std::shared_ptr<Camera>& camera) {}
 		virtual bool IsTransparent() const { return false; }
 		virtual void CastRay(const Ray& ray, const CastResultsCallback& callback) const {}
+		virtual int GetMeshId() const { return -1; }
+
+		void AddedToScene(std::shared_ptr<Scene>& scene, int reference);
+		void RemovedFromScene(std::shared_ptr<Scene>& scene);
+
+		void SetMaterial(const std::shared_ptr<Material>& material);
+		std::shared_ptr<Material> GetMaterial() const;
+		Material* GetMaterialRaw() const;
+
+	private:
+		struct SceneReference
+		{
+			int Reference = -1;
+			std::weak_ptr<Scene> Scene;
+		};
+
+		typedef std::vector<SceneReference> SceneVector;
+
+		int TransformChangedConnection = -1;
+		SceneVector Scenes;
+		std::weak_ptr<Material> MaterialProperties;
+		Material* MaterialPropertiesObject = nullptr;
+
+		void UpdateScenes();
 
 		Instantiable;
 
@@ -60,7 +88,7 @@ namespace GraphicsEngine
 
 		virtual ~Scene() {}
 
-		void Initialize() {}
+		void Initialize();
 		void Update(float);
 
 		std::weak_ptr<Camera> CurrentCamera;
@@ -80,18 +108,19 @@ namespace GraphicsEngine
 		void CastRay(const Ray& ray, const CastResultsCallback& callback) const;
 		int CastRay(lua_State* lua);
 
-		int GetObjectID(const AabbTree::Node* node) const { return node->GetData<SceneObjectReference>()->Reference.lock()->GetObjectID(); }
+		int GetObjectID(const AabbTree::Node* node) const { return node->GetData<SceneObjectReference>()->Reference->GetObjectID(); }
 		const AabbTree& GetStaticObjects() const { return StaticObjects; }
 		const AabbTree& GetDynamicObjects() const { return DynamicObjects; }
 		int GetStaticObjectCount() const { return int(StaticObjectReferences.size()); }
 		int GetDynamicbjectCount() const { return int(DynamicObjectReferences.size()); }
-		std::shared_ptr<SceneObject> GetStaticObject(const AabbTree::Node* node) const;
-		std::shared_ptr<SceneObject> GetDynamicObject(const AabbTree::Node* node) const;
+		SceneObject* GetStaticObject(const AabbTree::Node* node) const;
+		SceneObject* GetDynamicObject(const AabbTree::Node* node) const;
 		void ClearStaticObjects();
 		void AddObject(const std::shared_ptr<SceneObject>& object);
 		void AddLight(const std::shared_ptr<Light>& light);
 		void AddTerrain(const std::shared_ptr<Engine::Terrain>& terrain);
 		void RemoveObject(const std::shared_ptr<SceneObject>& object);
+		void RemoveObjectRaw(SceneObject* object);
 		void RemoveLight(const std::shared_ptr<Light>& light);
 		void RemoveTerrain(const std::shared_ptr<Engine::Terrain>& terrain);
 		int GetLights() const;
@@ -102,18 +131,19 @@ namespace GraphicsEngine
 		void DrawTerrain(bool drawLiquid, const std::shared_ptr<Camera>& targetCamera = nullptr);
 		void Draw(bool drawTransparent = false, const std::shared_ptr<Camera>& targetCamera = nullptr) const;
 		void Update(int object);
+		void Update(int object, bool isStatic);
 
 		static void Draw(const AabbTree& tree, bool drawTransparent = false, const std::shared_ptr<Camera>& targetCamera = Target());
 
 	private:
 		struct SceneObjectReference
 		{
-			std::weak_ptr<SceneObject> Reference;
+			SceneObject* Reference;
 			int ID = -1;
 
 			SceneObjectReference(const std::shared_ptr<Object>& parent, const std::shared_ptr<SceneObject>& object)
 			{
-				Reference = object;
+				Reference = object.get();
 			}
 		};
 
@@ -124,6 +154,17 @@ namespace GraphicsEngine
 			Aabb LastBox;
 		};
 
+		struct StackInfo : public AabbTree::FastCallback
+		{
+			bool DrawTransparent;
+			const std::shared_ptr<Camera>& TargetCamera;
+			int& Drawn;
+
+			StackInfo(bool drawTransparent, const std::shared_ptr<Camera>& targetCamera, int& drawn) : DrawTransparent(drawTransparent), TargetCamera(targetCamera), Drawn(drawn) {}
+
+			void operator()(const AabbTree::Node* node) const;
+		};
+
 		typedef std::vector<LightReference> LightVector;
 		typedef std::vector<int> KeyVector;
 
@@ -131,6 +172,27 @@ namespace GraphicsEngine
 		typedef std::vector<SceneObjectReference*> ObjectReferenceVector;
 		typedef std::vector<std::weak_ptr<SceneObject>> ObjectVector;
 		typedef std::vector<std::weak_ptr<Engine::Terrain>> TerrainVector;
+
+		struct RenderQueueItem
+		{
+			bool IsTransparent = false;
+			int MeshId = -1;
+			Material* MaterialProperties = nullptr;
+			SceneObject* Item = nullptr;
+
+			bool operator<(const RenderQueueItem& other) const
+			{
+				if (IsTransparent != other.IsTransparent)
+					return IsTransparent;
+
+				if (MaterialProperties != other.MaterialProperties)
+					return MaterialProperties < other.MaterialProperties;
+
+				return MeshId < other.MeshId;
+			}
+		};
+
+		typedef std::priority_queue<RenderQueueItem> RenderQueue;
 
 		AabbTree UpdatedLights;
 		AabbTree DynamicUpdatedLights;
@@ -143,6 +205,7 @@ namespace GraphicsEngine
 		ObjectVector Objects;
 		LightVector Lights;
 		TerrainVector Terrains;
+		RenderQueue ObjectRenderQueue;
 
 		bool Updating = false;
 		KeyVector UpdateVector;

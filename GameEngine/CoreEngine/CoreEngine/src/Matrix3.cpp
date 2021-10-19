@@ -422,8 +422,7 @@ float Matrix3::ComponentMultiplication(const Matrix3 &other, int y, int x) const
 	return Data[y][0] * other.Data[0][x] + Data[y][1] * other.Data[1][x] + Data[y][2] * other.Data[2][x] + Data[y][3] * other.Data[3][x];
 }
 
-//overloaded multiplication operator
-Matrix3 Matrix3::operator*(const Matrix3 &other) const
+Matrix3 Matrix3::FullMultiply(const Matrix3& other) const
 {
 	Matrix3 results;
 
@@ -450,6 +449,42 @@ Matrix3 Matrix3::operator*(const Matrix3 &other) const
 	results.Data[3][1] = ComponentMultiplication(other, 3, 1);
 	results.Data[3][2] = ComponentMultiplication(other, 3, 2);
 	results.Data[3][3] = ComponentMultiplication(other, 3, 3);
+
+	return results;
+}
+
+float Matrix3::ComponentMultiplicationNoAffine(const Matrix3& other, int y, int x) const
+{
+	return Data[y][0] * other.Data[0][x] + Data[y][1] * other.Data[1][x] + Data[y][2] * other.Data[2][x];
+}
+
+//overloaded multiplication operator
+Matrix3 Matrix3::operator*(const Matrix3 &other) const
+{
+	Matrix3 results;
+
+	//if (Data[3][0] != 0 || Data[3][1] != 0 || Data[3][2] != 0)
+	//	results[3][3] = 1;
+	//
+	//if (other.Data[3][0] != 0 || other.Data[3][1] != 0 || other.Data[3][2] != 0)
+	//	results[3][3] = 1;
+
+	results.Data[0][0] = ComponentMultiplicationNoAffine(other, 0, 0);
+	results.Data[0][1] = ComponentMultiplicationNoAffine(other, 0, 1);
+	results.Data[0][2] = ComponentMultiplicationNoAffine(other, 0, 2);
+	results.Data[0][3] = ComponentMultiplicationNoAffine(other, 0, 3) + Data[0][3];
+
+	// multiply second row
+	results.Data[1][0] = ComponentMultiplicationNoAffine(other, 1, 0);
+	results.Data[1][1] = ComponentMultiplicationNoAffine(other, 1, 1);
+	results.Data[1][2] = ComponentMultiplicationNoAffine(other, 1, 2);
+	results.Data[1][3] = ComponentMultiplicationNoAffine(other, 1, 3) + Data[1][3];
+
+	// multiply third row
+	results.Data[2][0] = ComponentMultiplicationNoAffine(other, 2, 0);
+	results.Data[2][1] = ComponentMultiplicationNoAffine(other, 2, 1);
+	results.Data[2][2] = ComponentMultiplicationNoAffine(other, 2, 2);
+	results.Data[2][3] = ComponentMultiplicationNoAffine(other, 2, 3) + Data[2][3];
 
 	return results;
 }

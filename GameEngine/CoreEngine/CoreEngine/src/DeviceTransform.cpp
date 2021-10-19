@@ -14,6 +14,7 @@ namespace GraphicsEngine
 
 	void DeviceTransform::Initialize()
 	{
+		SetTicks(true);
 	}
 
 	void DeviceTransform::Update(float)

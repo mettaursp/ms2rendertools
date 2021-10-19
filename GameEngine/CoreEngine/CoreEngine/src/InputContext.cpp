@@ -18,6 +18,11 @@ namespace GraphicsEngine
 		Focuses[device] = subscriber;
 	}
 
+	void InputContext::Initialize()
+	{
+		SetTicks(true);
+	}
+
 	void InputContext::Update(float)
 	{
 		if (!Enabled && Device.expired())
