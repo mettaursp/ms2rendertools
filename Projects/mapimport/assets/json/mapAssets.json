@@ -1,0 +1,95 @@
+{
+  "meshes": {
+    "Sphere": "assets/models/smoothSphere.obj",
+    "SphereHalf": "assets/models/smoothSphereHalf.obj",
+    "Cylinder": "assets/models/cylinder.obj",
+    "Wedge": "assets/models/wedge.obj",
+    "Truss": "assets/models/truss.obj",
+    "TrussAlt": "assets/models/trussalt.obj",
+    "TrussAlt2": "assets/models/trussalt2.obj",
+    "TrussBridge": "assets/models/trussbridge.obj",
+    "CornerWedge": "assets/models/cornerwedge.obj",
+    "BevelCube": "assets/models/BevelCube.obj"
+  },
+	"textures" : {
+		"terrainHeight" : "assets/heightMaps/terrain.dds",
+		"choiceFrame" : "assets/textures/ui/choiceFrame.png",
+		"choiceInternalFrame" : "assets/textures/ui/choiceInternalFrame.png",
+		"slider" : "assets/textures/ui/slider.png",
+		"topLeft" : "assets/textures/ui/topLeftCorner.png",
+		"topRight" : "assets/textures/ui/topRightCorner.png",
+		"bottomLeft" : "assets/textures/ui/bottomLeftCorner.png",
+		"bottomRight" : "assets/textures/ui/bottomRightCorner.png",
+		"checkBox" : "assets/textures/ui/checkBox.png",
+		"checkBoxHover" : "assets/textures/ui/checkBoxHover.png",
+		"checkBoxClick" : "assets/textures/ui/checkBoxClick.png",
+		"checkedBox" : "assets/textures/ui/checkedBox.png",
+		"checkedBoxHover" : "assets/textures/ui/checkedBoxHover.png",
+		"checkedBoxClick" : "assets/textures/ui/checkedBoxClick.png",
+		"radio" : "assets/textures/ui/radio.png",
+		"radioHover" : "assets/textures/ui/radioHover.png",
+		"radioClick" : "assets/textures/ui/radioClick.png",
+		"radioSelect" : "assets/textures/ui/radioSelect.png",
+		"radioSelectHover" : "assets/textures/ui/radioSelectHover.png",
+		"radioSelectClick" : "assets/textures/ui/radioSelectClick.png",
+		"upArrow" : "assets/textures/ui/upArrow.png",
+    "downArrow": "assets/textures/ui/downArrow.png",
+	},
+    "soundDefinitions" : {
+      "grungeRock": {
+        "path": "assets/audio/music/Grunge_Rock.wav",
+        "volume": 1.0,
+        "minDistance": 0,
+        "maxDistance": 0,
+        "is3D": true,
+        "isLooping": true,
+        "isStreaming": true
+      },
+      "heavyIndustrialMetal": {
+        "path": "assets/audio/music/Heavy_Industrial_Metal.wav",
+        "volume": 1.0,
+        "minDistance": 0,
+        "maxDistance": 0,
+        "is3D": true,
+        "isLooping": true,
+        "isStreaming": true
+      },
+      "xAgent": {
+        "path": "assets/audio/music/X-Agent_Loop.wav",
+        "volume": 1.0,
+        "minDistance": 0,
+        "maxDistance": 0,
+        "is3D": true,
+        "isLooping": true,
+        "isStreaming": false
+      },
+      "ambience": {
+        "path": "assets/audio/music/ambience.wav",
+        "volume": 1.0,
+        "minDistance": 0,
+        "maxDistance": 0,
+        "is3D": true,
+        "isLooping": true,
+        "isStreaming": true
+      },
+      "adventurousMus": {
+        "path": "assets/audio/music/mus115_music.mp3",
+        "volume": 1.0,
+        "minDistance": 0,
+        "maxDistance": 0,
+        "is3D": true,
+        "isLooping": true,
+        "isStreaming": false
+      },
+      "adventurousLoop": {
+        "path": "assets/audio/music/mus115_loop.wav",
+        "volume": 1.0,
+        "minDistance": 0,
+        "maxDistance": 0,
+        "is3D": true,
+        "isLooping": true,
+        "isStreaming": false
+      }
+    }
+    
+}

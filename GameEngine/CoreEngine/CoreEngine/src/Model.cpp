@@ -66,10 +66,10 @@ namespace GraphicsEngine
 		//Matrix3 rotated = cameraMatrix * rotation;
 		//Programs::Phong->transform.Set(camera->GetProjection().FullMultiply(TransformObject->GetWorldTransformation()));
 		Programs::Phong->objectTransform.Set(TransformObject->GetWorldTransformation());
-		Programs::Phong->objectRotation.Set(TransformObject->GetWorldRotation());
+		//Programs::Phong->objectRotation.Set(TransformObject->GetWorldRotation());
 
 		Programs::Phong->color.Set(Color);
-		Programs::Phong->glowColor.Set(GlowColor);
+		//Programs::Phong->glowColor.Set(GlowColor);
 
 		mesh->Draw();
 	}
@@ -81,10 +81,10 @@ namespace GraphicsEngine
 		//Matrix3 rotated = cameraMatrix * rotation;
 		//Programs::PhongForward->transform.Set(camera->GetProjection().FullMultiply(TransformObject->GetWorldTransformation()));
 		Programs::PhongForward->objectTransform.Set(TransformObject->GetWorldTransformation());
-		Programs::PhongForward->objectRotation.Set(TransformObject->GetWorldRotation());
+		//Programs::PhongForward->objectRotation.Set(TransformObject->GetWorldRotation());
 
 		Programs::PhongForward->color.Set(Color);
-		Programs::PhongForward->glowColor.Set(GlowColor);
+		//Programs::PhongForward->glowColor.Set(GlowColor);
 
 		mesh->Draw();
 	}

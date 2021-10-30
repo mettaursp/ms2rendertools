@@ -370,8 +370,11 @@ namespace GraphicsEngine
 		Graphics::SetClearColor(RGBA(0, 0, 0, 1));
 		Graphics::ClearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); CheckGLErrors();
 
+		currentScene->BuildRenderQueue(camera);
+
 		currentScene->DrawTerrain(false);
-		currentScene->Draw(false);
+		//currentScene->Draw(false);
+		currentScene->DrawQueued(false);
 
 		// ugly shit start
 
@@ -470,7 +473,8 @@ namespace GraphicsEngine
 			Programs::PhongForward->globalAmbient.Set(globalLight->Ambient);
 		}
 
-		currentScene->Draw(true);
+		//currentScene->Draw(true);
+		currentScene->DrawQueued(true);
 
 		Blur.lock()->Render();
 

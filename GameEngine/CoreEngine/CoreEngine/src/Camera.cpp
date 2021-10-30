@@ -8,8 +8,18 @@ extern "C" {
 
 namespace GraphicsEngine
 {
+	void Camera::Update(float)
+	{
+		HasMoved = false;
+
+		SetTicks(false);
+	}
+
 	void Camera::SetTransformation(const Matrix3& newTransformation)
 	{
+		if (newTransformation != Transformation)
+			MarkMoved();
+
 		Transformation = newTransformation;
 		InverseTransformation.Invert(Transformation);
 		Projection = PerspectiveProjection.FullMultiply(InverseTransformation);
@@ -39,8 +49,8 @@ namespace GraphicsEngine
 			FieldOfView = 1e-5f;
 
 		CalculateProjectionMatrix();
-
 		CalculateFrustum();
+		MarkMoved();
 	}
 
 	void Camera::SetProperties(float newWidth, float newHeight, float newProjectionPlane, float near, float far)
@@ -65,8 +75,8 @@ namespace GraphicsEngine
 			ProjectionPlane = far;
 
 		CalculateProjectionMatrix();
-
 		CalculateFrustum();
+		MarkMoved();
 	}
 
 	void Camera::CalculateProjectionMatrix()
@@ -166,5 +176,17 @@ namespace GraphicsEngine
 			Transformation.Translation(),
 			Transformation * direction * length
 		);
+	}
+
+	bool Camera::Moved() const
+	{
+		return HasMoved;
+	}
+
+	void Camera::MarkMoved()
+	{
+		HasMoved = true;
+
+		SetTicks(true);
 	}
 }

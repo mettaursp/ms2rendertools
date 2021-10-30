@@ -439,13 +439,122 @@ namespace GraphicsEngine
 		Draw(DynamicObjects, drawTransparent, camera);
 	}
 
+	void Compare(SceneObject* left, SceneObject* right)
+	{
+
+	}
+
+	void Scene::BuildRenderQueue(const std::shared_ptr<Camera>& targetCamera)
+	{
+		//if (targetCamera.get() == LastCamera && !targetCamera->Moved()) return;
+		//
+		//LastCamera = targetCamera.get();
+
+		if (int(QueuedObjects.size()) < Material::GetMaterialCount())
+			QueuedObjects.resize(Material::GetMaterialCount());
+
+		for (int i = 0; i < Material::GetMaterialCount(); ++i)
+		{
+			QueuedObjects[i].TransparentObjectsStart = 0;
+			QueuedObjects[i].QueuedObjects.clear();
+		}
+
+		//QueuedObjects.clear();
+		//TransparentObjectsStart = 0;
+
+		auto queueObject = [this](const AabbTree::Node* node)
+		{
+			SceneObjectReference* thingamajig = node->GetData<SceneObjectReference>();
+			
+			if (thingamajig->Reference->Visible && thingamajig->Reference->GetMaterialRaw() != nullptr)
+			{
+				MaterialQueue& queue = QueuedObjects[thingamajig->Reference->GetMaterialRaw()->GetMaterialId()];
+
+				queue.QueuedObjects.push_back(thingamajig->Reference);
+
+				if (!thingamajig->Reference->IsTransparent())
+				{
+					if (queue.TransparentObjectsStart + 1 < queue.QueuedObjects.size())
+						std::swap(queue.QueuedObjects[queue.TransparentObjectsStart], queue.QueuedObjects.back());
+
+					++queue.TransparentObjectsStart;
+
+					std::push_heap(queue.QueuedObjects.begin(), queue.QueuedObjects.begin() + queue.TransparentObjectsStart);
+				}
+			}
+		};
+
+		StaticObjects.CastFrustum(targetCamera->GetFrustum(), queueObject);
+		DynamicObjects.CastFrustum(targetCamera->GetFrustum(), queueObject);
+	}
+
+	void Scene::DrawQueued(bool drawTransparent)
+	{
+		if (drawTransparent)
+		{
+			for (int j = 0; j < Material::GetMaterialCount(); ++j)
+			{
+				Material* material = Material::GetMaterialFromId(j);
+
+				if (material == nullptr) continue;
+
+				MaterialQueue& queue = QueuedObjects[j];
+
+				Programs::PhongForward->SetMaterial(material);
+
+				for (int i = queue.TransparentObjectsStart; i < int(queue.QueuedObjects.size()); ++i)
+				{
+
+					queue.QueuedObjects[i]->Draw(nullptr);
+				}
+			}
+		}
+		else
+		{
+			//for (int i = 0; i < TransparentObjectsStart; ++i)
+			//{
+			//	Programs::Phong->SetMaterial(QueuedObjects[i]->GetMaterialRaw());
+			//
+			//	QueuedObjects[i]->Draw(nullptr);
+			//}
+			for (int j = 0; j < Material::GetMaterialCount(); ++j)
+			{
+				Material* material = Material::GetMaterialFromId(j);
+
+				if (material == nullptr) continue;
+
+				MaterialQueue& queue = QueuedObjects[j];
+
+				Programs::Phong->SetMaterial(material);
+
+				for (int i = 0; i < queue.TransparentObjectsStart; ++i)
+				{
+
+					queue.QueuedObjects[i]->Draw(nullptr);
+				}
+			}
+		}
+		//int start = drawTransparent ? TransparentObjectsStart : 0;
+		//int end = drawTransparent ? int(QueuedObjects.size()) : TransparentObjectsStart;
+		//
+		//for (int i = start; i < end; ++i)
+		//{
+		//	if (drawTransparent)
+		//		Programs::PhongForward->SetMaterial(QueuedObjects[i]->GetMaterialRaw());
+		//	else
+		//		Programs::Phong->SetMaterial(QueuedObjects[i]->GetMaterialRaw());
+		//
+		//	QueuedObjects[i]->Draw(nullptr);
+		//}
+	}
+
 	void Scene::StackInfo::operator()(const AabbTree::Node* node) const
 	{
 		SceneObjectReference* thingamajig = node->GetData<SceneObjectReference>();
 
 		if (thingamajig->Reference->Visible & (thingamajig->Reference->IsTransparent() == DrawTransparent) & (thingamajig->Reference->GetMaterialRaw() != nullptr))
 		{
-			++Drawn;
+			//++Drawn;
 
 			if (DrawTransparent && ShaderProgram::GetCurrentProgram() == Programs::PhongForward)
 				Programs::PhongForward->SetMaterial(thingamajig->Reference->GetMaterialRaw());

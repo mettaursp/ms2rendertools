@@ -2,6 +2,7 @@
 
 #include "RGBA.h"
 #include "Object.h"
+#include "IdentifierHeap.h"
 
 namespace GraphicsEngine
 {
@@ -10,6 +11,10 @@ namespace GraphicsEngine
 	class Material : public Engine::Object
 	{
 	public:
+		~Material();
+
+		void Initialize();
+
 		RGBA Diffuse = RGBA(0.5f, 0.5f, 0.5f, 1);
 		RGBA Specular = RGBA(0.5f, 0.5f, 0.5f, 1);
 		RGBA Ambient = RGBA(0.1f, 0.1f, 0.1f, 1);
@@ -37,7 +42,14 @@ namespace GraphicsEngine
 		std::weak_ptr<Texture> CubeMapBack;
 		std::weak_ptr<Texture> DiffuseTexture;
 
-		void Initialize() {}
+		int GetMaterialId() const { return MaterialId; }
+		static int GetMaterialCount() { return MaterialRegistry.Size(); }
+		static Material* GetMaterialFromId(int id);
+
+	private:
+		static IDHeap<Material*> MaterialRegistry;
+
+		int MaterialId = -1;
 
 		Instantiable;
 

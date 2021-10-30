@@ -41,6 +41,8 @@ struct SceneRayCastResults
 	Reflected_Type(SceneRayCastResults);
 };
 
+typedef std::function<void(const SceneRayCastResults& results)> CastResultsCallback;
+
 namespace Engine
 {
 	Define_Value_Type(SceneRayCastResults);

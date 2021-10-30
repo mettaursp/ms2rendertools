@@ -14,7 +14,7 @@ namespace GraphicsEngine
 		virtual ~Camera() {}
 
 		void Initialize() {}
-		void Update(float) {}
+		void Update(float);
 
 		Vector3 LightDirection;
 
@@ -33,6 +33,7 @@ namespace GraphicsEngine
 		float GetFieldOfView() const;
 		const Frustum& GetFrustum() const;
 		Ray GetRay(int x, int y, int resolutionX, int resolutionY, float length = 1) const;
+		bool Moved() const;
 
 	private:
 		Matrix3 PerspectiveProjection;
@@ -40,11 +41,13 @@ namespace GraphicsEngine
 		Matrix3 InverseTransformation;
 		Matrix3 Projection;
 		Frustum CameraFrustum;
+		bool HasMoved = false;
 
 		float Width = 0, Height = 0, ProjectionPlane = 0, NearPlane = 0, FarPlane = 0, AspectRatio = 0, FieldOfView = 0;
 
 		void CalculateProjectionMatrix();
 		void CalculateFrustum();
+		void MarkMoved();
 
 		Instantiable;
 

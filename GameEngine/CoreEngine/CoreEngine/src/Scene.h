@@ -42,6 +42,7 @@ namespace GraphicsEngine
 		virtual bool IsStatic() const { return false; }
 		virtual void Draw(const std::shared_ptr<Camera>& camera) {}
 		virtual bool IsTransparent() const { return false; }
+		virtual bool UseDepthBuffer() const { return true; }
 		virtual void CastRay(const Ray& ray, const CastResultsCallback& callback) const {}
 		virtual int GetMeshId() const { return -1; }
 
@@ -128,6 +129,8 @@ namespace GraphicsEngine
 		int GetObjects() const;
 		std::shared_ptr<SceneObject> GetObject(int i) const;
 
+		void BuildRenderQueue(const std::shared_ptr<Camera>& targetCamera);
+		void DrawQueued(bool drawTransparent = false);
 		void DrawTerrain(bool drawLiquid, const std::shared_ptr<Camera>& targetCamera = nullptr);
 		void Draw(bool drawTransparent = false, const std::shared_ptr<Camera>& targetCamera = nullptr) const;
 		void Update(int object);
@@ -192,6 +195,12 @@ namespace GraphicsEngine
 			}
 		};
 
+		struct MaterialQueue
+		{
+			size_t TransparentObjectsStart = -1;
+			std::vector<SceneObject*> QueuedObjects;
+		};
+
 		typedef std::priority_queue<RenderQueueItem> RenderQueue;
 
 		AabbTree UpdatedLights;
@@ -206,6 +215,11 @@ namespace GraphicsEngine
 		LightVector Lights;
 		TerrainVector Terrains;
 		RenderQueue ObjectRenderQueue;
+		std::vector<MaterialQueue> QueuedObjects;
+
+		size_t TransparentObjectsStart = -1;
+
+		Camera* LastCamera = nullptr;
 
 		bool Updating = false;
 		KeyVector UpdateVector;
