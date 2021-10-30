@@ -18,8 +18,12 @@ mono_crash.*
 
 # Build results
 [Dd]ebug/
+!*/GameEngine/Debug/
+!*/GameEngine/Debug/**
 [Dd]ebugPublic/
 [Rr]elease/
+!/GameEngine/Release/
+!/GameEngine/Release/**
 [Rr]eleases/
 x64/
 x86/
