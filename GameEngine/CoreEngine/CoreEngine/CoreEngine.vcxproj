@@ -157,6 +157,7 @@
     <ClCompile Include="src\AcceleratedKDTree.cpp" />
     <ClCompile Include="src\Appearance.cpp" />
     <ClCompile Include="src\Appearance.meta.cpp" />
+    <ClCompile Include="src\ArrowMesh.cpp" />
     <ClCompile Include="src\BasicMeshes.cpp" />
     <ClCompile Include="src\BlurOperation.cpp" />
     <ClCompile Include="src\BlurOperation.meta.cpp" />
@@ -305,6 +306,7 @@
     <ClCompile Include="src\RGBA.meta.cpp" />
     <ClCompile Include="src\RigidBody.cpp" />
     <ClCompile Include="src\RigidBody.meta.cpp" />
+    <ClCompile Include="src\RingMesh.cpp" />
     <ClCompile Include="src\Rope.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\Scene.meta.cpp" />
@@ -313,6 +315,11 @@
     <ClCompile Include="src\SceneRayCastResults.meta.cpp" />
     <ClCompile Include="src\ScreenCanvas.cpp" />
     <ClCompile Include="src\ScreenCanvas.meta.cpp" />
+    <ClCompile Include="src\Selection.cpp" />
+    <ClCompile Include="src\Selection.meta.cpp" />
+    <ClCompile Include="src\SelectionHandlesOperation.cpp" />
+    <ClCompile Include="src\SelectionHandlesOperation.meta.cpp" />
+    <ClCompile Include="src\Selector.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\ShaderLoader.cpp" />
     <ClCompile Include="src\ShaderProgram.cpp" />
@@ -323,6 +330,7 @@
     <ClCompile Include="src\Simulation.meta.cpp" />
     <ClCompile Include="src\Socket.cpp" />
     <ClCompile Include="src\Socket.meta.cpp" />
+    <ClCompile Include="src\SphereMesh.cpp" />
     <ClCompile Include="src\TaskScheduler.cpp" />
     <ClCompile Include="src\Terrain.cpp" />
     <ClCompile Include="src\Terrain.meta.cpp" />
@@ -382,6 +390,9 @@
     <ClInclude Include="src\RayAcceleration.h" />
     <ClInclude Include="src\RayTracer.h" />
     <ClInclude Include="src\SceneRayCastResults.h" />
+    <ClInclude Include="src\Selection.h" />
+    <ClInclude Include="src\SelectionHandlesOperation.h" />
+    <ClInclude Include="src\Selector.h" />
     <ClInclude Include="src\Socket.h" />
     <ClInclude Include="src\Terrain2DCollider.h" />
     <ClInclude Include="src\TerrainCollider2D.h" />

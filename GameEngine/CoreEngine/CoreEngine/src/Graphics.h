@@ -78,6 +78,9 @@ private:
 	MeshData BoundingVolumeData;
 	MeshData HalfBoundingVolumeData;
 	MeshData ConeData;
+	MeshData ArrowData;
+	MeshData SphereData;
+	MeshData RingData;
 
 	std::shared_ptr<Engine::ModelAsset> CoreSquare;
 	std::shared_ptr<Engine::ModelAsset> CoreCube;
@@ -85,6 +88,9 @@ private:
 	std::shared_ptr<Engine::ModelAsset> CoreBoundingVolume;
 	std::shared_ptr<Engine::ModelAsset> CoreHalfBoundingVolume;
 	std::shared_ptr<Engine::ModelAsset> CoreCone;
+	std::shared_ptr<Engine::ModelAsset> CoreArrow;
+	std::shared_ptr<Engine::ModelAsset> CoreSphere;
+	std::shared_ptr<Engine::ModelAsset> CoreRing;
 
 	std::shared_ptr<Engine::ModelAsset> LoadCore(const std::string& name, const MeshData& data, const std::shared_ptr<Engine::Object>& parent);
 };

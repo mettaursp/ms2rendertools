@@ -327,5 +327,6 @@ void InputHandler::ResetDeltas()
 	{
 		Inputs[i].Delta.Set();
 		Inputs[i].StateChanged = false;
+		Inputs[i].Refresh.Fire(&Inputs[i]);
 	}
 }

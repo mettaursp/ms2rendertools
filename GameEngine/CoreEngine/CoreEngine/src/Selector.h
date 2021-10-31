@@ -8,8 +8,6 @@ namespace Engine
 
 	namespace Editor
 	{
-		class SelectionHandlesOperation;
-
 		class Selector : public Object
 		{
 		public:
@@ -19,8 +17,6 @@ namespace Engine
 			std::weak_ptr<InputObject> MousePosition;
 			std::weak_ptr<InputObject> SelectButton;
 			std::weak_ptr<InputObject> RequiredModifierKey;
-
-			std::weak_ptr<SelectionHandlesOperation> SelectionHandles;
 		};
 	}
 }

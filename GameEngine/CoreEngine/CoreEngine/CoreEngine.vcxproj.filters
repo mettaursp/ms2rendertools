@@ -82,9 +82,6 @@
     <Filter Include="Source Files\Source\Graphics\Objects\Scene">
       <UniqueIdentifier>{b5c10b77-bcfe-4c87-8c3f-cad443b51e1a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Source\Graphics\Objects\Operations">
-      <UniqueIdentifier>{60c77602-ab99-4bf3-b816-5055c33098bf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Source\Graphics\Objects\Assets">
       <UniqueIdentifier>{494161de-dd3c-4fd0-af13-f1f627f21cff}</UniqueIdentifier>
     </Filter>
@@ -151,6 +148,18 @@
     <Filter Include="Source Files\Source\Physics\Enums">
       <UniqueIdentifier>{405c0ee7-0216-4814-9df6-72dc1c450c5c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Source\Editor">
+      <UniqueIdentifier>{af6f777f-e565-4496-be3d-2535e4413b3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source\Editor\Objects">
+      <UniqueIdentifier>{140c8314-d024-40ab-b9c3-650197ee4aeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source\Editor\Objects\RenderOperations">
+      <UniqueIdentifier>{20b2e69c-a0ec-4bac-83a5-76c4e325f843}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source\Graphics\Objects\RenderOperations">
+      <UniqueIdentifier>{60c77602-ab99-4bf3-b816-5055c33098bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -163,16 +172,16 @@
       <Filter>Source Files\Source\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\BlurOperation.cpp">
-      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+      <Filter>Source Files\Source\Graphics\Objects\RenderOperations</Filter>
     </ClCompile>
     <ClCompile Include="src\DrawSceneOperation.cpp">
-      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+      <Filter>Source Files\Source\Graphics\Objects\RenderOperations</Filter>
     </ClCompile>
     <ClCompile Include="src\GlowingSceneOperation.cpp">
-      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+      <Filter>Source Files\Source\Graphics\Objects\RenderOperations</Filter>
     </ClCompile>
     <ClCompile Include="src\ShadingOperation.cpp">
-      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+      <Filter>Source Files\Source\Graphics\Objects\RenderOperations</Filter>
     </ClCompile>
     <ClCompile Include="src\ShaderLoader.cpp">
       <Filter>Source Files\Source\Graphics\Data</Filter>
@@ -343,22 +352,22 @@
       <Filter>Source Files\Source\Graphics\Objects\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\BlurOperation.meta.cpp">
-      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+      <Filter>Source Files\Source\Graphics\Objects\RenderOperations</Filter>
     </ClCompile>
     <ClCompile Include="src\RenderOperation.meta.cpp">
-      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+      <Filter>Source Files\Source\Graphics\Objects\RenderOperations</Filter>
     </ClCompile>
     <ClCompile Include="src\BlurPassOperation.cpp">
-      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+      <Filter>Source Files\Source\Graphics\Objects\RenderOperations</Filter>
     </ClCompile>
     <ClCompile Include="src\DrawSceneOperation.meta.cpp">
-      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+      <Filter>Source Files\Source\Graphics\Objects\RenderOperations</Filter>
     </ClCompile>
     <ClCompile Include="src\GlowingSceneOperation.meta.cpp">
-      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+      <Filter>Source Files\Source\Graphics\Objects\RenderOperations</Filter>
     </ClCompile>
     <ClCompile Include="src\ShadingOperation.meta.cpp">
-      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+      <Filter>Source Files\Source\Graphics\Objects\RenderOperations</Filter>
     </ClCompile>
     <ClCompile Include="src\LuaInput.cpp">
       <Filter>Source Files\Source\Engine\Input</Filter>
@@ -469,7 +478,7 @@
       <Filter>Source Files\Source\Graphics\Objects\Assets</Filter>
     </ClCompile>
     <ClCompile Include="src\RenderOperation.cpp">
-      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+      <Filter>Source Files\Source\Graphics\Objects\RenderOperations</Filter>
     </ClCompile>
     <ClCompile Include="src\CubeMap.meta.cpp">
       <Filter>Source Files\Source\Graphics\Objects</Filter>
@@ -529,10 +538,10 @@
       <Filter>Source Files\Source\Graphics\Objects\Screen</Filter>
     </ClCompile>
     <ClCompile Include="src\InterfaceDrawOperation.cpp">
-      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+      <Filter>Source Files\Source\Graphics\Objects\RenderOperations</Filter>
     </ClCompile>
     <ClCompile Include="src\InterfaceDrawOperation.meta.cpp">
-      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+      <Filter>Source Files\Source\Graphics\Objects\RenderOperations</Filter>
     </ClCompile>
     <ClCompile Include="src\CanvasStencil.cpp">
       <Filter>Source Files\Source\Graphics\Objects\Screen</Filter>
@@ -730,10 +739,10 @@
       <Filter>Source Files\Source\Networking\Types</Filter>
     </ClCompile>
     <ClCompile Include="src\HDRColorCorrectionOperation.cpp">
-      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+      <Filter>Source Files\Source\Graphics\Objects\RenderOperations</Filter>
     </ClCompile>
     <ClCompile Include="src\HDRColorCorrectionOperation.meta.cpp">
-      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+      <Filter>Source Files\Source\Graphics\Objects\RenderOperations</Filter>
     </ClCompile>
     <ClCompile Include="src\PhysicalMaterial.cpp">
       <Filter>Source Files\Source\Graphics\Objects\Assets</Filter>
@@ -768,6 +777,30 @@
     <ClCompile Include="src\TerrainColliderAxisEnum.meta.cpp">
       <Filter>Source Files\Source\Physics\Enums</Filter>
     </ClCompile>
+    <ClCompile Include="src\Selector.cpp">
+      <Filter>Source Files\Source\Editor\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Selection.cpp">
+      <Filter>Source Files\Source\Editor\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SelectionHandlesOperation.cpp">
+      <Filter>Source Files\Source\Editor\Objects\RenderOperations</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SelectionHandlesOperation.meta.cpp">
+      <Filter>Source Files\Source\Editor\Objects\RenderOperations</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Selection.meta.cpp">
+      <Filter>Source Files\Source\Editor\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ArrowMesh.cpp">
+      <Filter>Source Files\Source\Graphics\Meshes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SphereMesh.cpp">
+      <Filter>Source Files\Source\Graphics\Meshes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RingMesh.cpp">
+      <Filter>Source Files\Source\Graphics\Meshes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Graphics.h">
@@ -777,19 +810,19 @@
       <Filter>Source Files\Source\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\BlurOperation.h">
-      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+      <Filter>Source Files\Source\Graphics\Objects\RenderOperations</Filter>
     </ClInclude>
     <ClInclude Include="src\DrawSceneOperation.h">
-      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+      <Filter>Source Files\Source\Graphics\Objects\RenderOperations</Filter>
     </ClInclude>
     <ClInclude Include="src\GlowingSceneOperation.h">
-      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+      <Filter>Source Files\Source\Graphics\Objects\RenderOperations</Filter>
     </ClInclude>
     <ClInclude Include="src\RenderOperation.h">
-      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+      <Filter>Source Files\Source\Graphics\Objects\RenderOperations</Filter>
     </ClInclude>
     <ClInclude Include="src\ShadingOperation.h">
-      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+      <Filter>Source Files\Source\Graphics\Objects\RenderOperations</Filter>
     </ClInclude>
     <ClInclude Include="src\ShaderLoader.h">
       <Filter>Source Files\Source\Graphics\Data</Filter>
@@ -1029,7 +1062,7 @@
       <Filter>Source Files\Source\Graphics\Objects\Screen</Filter>
     </ClInclude>
     <ClInclude Include="src\InterfaceDrawOperation.h">
-      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+      <Filter>Source Files\Source\Graphics\Objects\RenderOperations</Filter>
     </ClInclude>
     <ClInclude Include="src\CanvasStencil.h">
       <Filter>Source Files\Source\Graphics\Objects\Screen</Filter>
@@ -1152,7 +1185,7 @@
       <Filter>Source Files\Source\Networking\Types</Filter>
     </ClInclude>
     <ClInclude Include="src\HDRColorCorrectionOperation.h">
-      <Filter>Source Files\Source\Graphics\Objects\Operations</Filter>
+      <Filter>Source Files\Source\Graphics\Objects\RenderOperations</Filter>
     </ClInclude>
     <ClInclude Include="src\PhysicalMaterial.h">
       <Filter>Source Files\Source\Graphics\Objects\Assets</Filter>
@@ -1174,6 +1207,15 @@
     </ClInclude>
     <ClInclude Include="src\TerrainColliderAxisEnum.h">
       <Filter>Source Files\Source\Physics\Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Selector.h">
+      <Filter>Source Files\Source\Editor\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Selection.h">
+      <Filter>Source Files\Source\Editor\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SelectionHandlesOperation.h">
+      <Filter>Source Files\Source\Editor\Objects\RenderOperations</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -26,7 +26,7 @@ struct SceneRayCastResults
 	std::shared_ptr<const GraphicsEngine::Material> MaterialProperties;
 	std::shared_ptr<Engine::Object> Hit;
 
-	bool operator<(const SceneRayCastResults& other)
+	bool operator<(const SceneRayCastResults& other) const
 	{
 		if (Distance == -1)
 			return true;

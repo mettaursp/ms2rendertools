@@ -475,6 +475,7 @@ void MeshData::CastRay(const Ray& ray, const CastResultsCallback& callback) cons
 MeshData& MeshData::operator=(const MeshData& other)
 {
 	Mode = other.Mode;
+	DrawMode = other.DrawMode;
 	VertexBuffer = other.VertexBuffer;
 	IndexBuffer = other.IndexBuffer;
 	DrawMode = other.DrawMode;

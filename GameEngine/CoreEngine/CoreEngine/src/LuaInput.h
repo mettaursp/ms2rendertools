@@ -22,6 +22,8 @@ namespace Engine
 		bool SetState(bool state, bool suppressChanged = false);
 		bool SetPosition(const Vector3& position, bool suppressChanged = false);
 
+		void ResetChangedFlag();
+
 	private:
 		bool State = false;
 		bool StateChanged = false;
@@ -47,6 +49,8 @@ namespace Engine
 		virtual Enum::InputType GetType() const { return Enum::InputType::None; }
 		virtual Enum::InputCode GetCode() const { return Enum::InputCode::None; }
 		virtual Enum::BoundDevice GetDevice() const { return Enum::BoundDevice::Any; }
+
+		void ResetChangedFlags();
 
 		Event<const std::shared_ptr<InputObject>&> Began;
 		Event<const std::shared_ptr<InputObject>&> Changed;

@@ -83,6 +83,9 @@
 #include "ChunkStatusEnum.h"
 #include "VertexModeEnum.h"
 
+#include "SelectionHandlesOperation.h"
+#include "Selection.h"
+
 #define Register_Type(typeName) typeName::TypeData::Initialize();
 #define Register_Class(typeName) typeName::ObjectData::Initialize();
 
@@ -226,6 +229,11 @@ namespace Engine
 		Register_Class(GraphicsEngine::CubicBezierUpdater);
 		Register_Class(DebugDraw);
 		Register_Class(GraphicsEngine::RayTracer);
+
+		Register_Enum(SelectionHandleType);
+
+		Register_Class(Editor::Selection);
+		Register_Class(Editor::SelectionHandlesOperation);
 
 		const ReflectionData::DataVector& types = ReflectionData::GetTypes();
 

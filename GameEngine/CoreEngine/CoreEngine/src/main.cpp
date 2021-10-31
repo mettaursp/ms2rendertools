@@ -60,10 +60,7 @@ int main(int argc, char* argv[])
 		gameWindow->Configure(&window);
 		gameWindow->SetParent(Engine::Root());
 
-		std::shared_ptr<Engine::UserInput> userInput = Engine::Create<Engine::UserInput>();
-		 
-		userInput->Configure(window.Input);
-		userInput->SetParent(gameWindow);
+		Engine::Root()->SetPrimaryWindow(gameWindow);
 
 		Engine::VoxelTriangulation::Initialize();
 

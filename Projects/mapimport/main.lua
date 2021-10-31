@@ -411,6 +411,22 @@ end
 
 lightOrbModel.PhysicalMaterialProperties = robloxMaterialContainer.Glass
 
+local selection = GameObject("Selection")
+
+local selectionOperation = GameObject("SelectionHandlesOperation")
+
+selectionOperation.ActiveSelection = selection
+selectionOperation.TargetScene = scene
+selectionOperation.CurrentCamera = camera
+selectionOperation.RenderAutomatically = true
+selectionOperation.Resolution = Vector3(resolution.Width, resolution.Height)
+
+selection.Parent = selectionOperation
+selectionOperation.Parent = level
+
+print(selection)
+print(selectionHandlesOperation)
+
 math.randomseed(os.time())
 
 if true then

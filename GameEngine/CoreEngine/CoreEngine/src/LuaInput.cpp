@@ -4,7 +4,7 @@ namespace Engine
 {
 	bool InputData::SetState(bool state, bool suppressChanged)
 	{
-		StateChanged = !suppressChanged && state != State;
+		StateChanged |= !suppressChanged && state != State;
 		State = state;
 
 		if (StateChanged)
@@ -23,6 +23,18 @@ namespace Engine
 		StateChanged = !suppressChanged && Delta != Vector3();
 
 		return StateChanged;
+	}
+
+	void InputData::ResetChangedFlag()
+	{
+		StateChanged = false;
+		Delta = Vector3();
+	}
+
+	void InputObject::ResetChangedFlags()
+	{
+		for (int i = 0; i < Enum::BoundDevice::Count; ++i)
+			Inputs[i].ResetChangedFlag();
 	}
 
 	void InputObject::SetState(bool state, Enum::BoundDevice device, bool suppressChanged, const std::shared_ptr<InputObject>& input)
@@ -250,8 +262,8 @@ namespace Engine
 			if (GetType() == Enum::InputType::Button)
 			{
 
-				SetState(data->GetState(), GetDevice(), true);
-				SetState(data->GetState(), Enum::BoundDevice::Any);
+				//SetState(data->GetState(), GetDevice(), true);
+				//SetState(data->GetState(), Enum::BoundDevice::Any);
 			}
 			else
 			{
@@ -267,6 +279,13 @@ namespace Engine
 			SetState(false, GetDevice(), true);
 			SetState(false, Enum::BoundDevice::Any);
 		
+			return true;
+		}, This.lock());
+
+		Input->Refresh.ConnectWithObject([this](::InputObject*) -> bool
+		{
+			ResetChangedFlags();
+
 			return true;
 		}, This.lock());
 

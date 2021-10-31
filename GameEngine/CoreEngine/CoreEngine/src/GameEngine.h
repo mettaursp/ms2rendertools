@@ -9,6 +9,11 @@
 #undef CreateWindow
 #endif
 
+namespace GraphicsEngine
+{
+	class GameWindow;
+}
+
 namespace Engine
 {
 	struct ProcessArguments
@@ -35,8 +40,6 @@ namespace Engine
 		Reflected_Type(ProcessArguments);
 	};
 
-	class GameWindow;
-
 	Define_Value_Type(ProcessArguments);
 
 	class GameEngine : public Object
@@ -47,6 +50,8 @@ namespace Engine
 		void Initialize() {}
 		void Update(float delta) {}
 
+		std::shared_ptr<GraphicsEngine::GameWindow> GetPrimaryWindow() const;
+		void SetPrimaryWindow(const std::shared_ptr<GraphicsEngine::GameWindow>& primaryWindow);
 		int GetArguments() const;
 		std::string GetArgument(int index) const;
 		bool HasArgumentFlag(const std::string& name) const;
@@ -54,7 +59,7 @@ namespace Engine
 
 		int SpawnProcess(const std::string& scriptPath, const ProcessArguments& arguments = ProcessArguments()) const { return -1; }
 
-		std::shared_ptr<GameWindow> CreateWindow(const std::string& name, const std::string& title) const { return nullptr; }
+		std::shared_ptr<GraphicsEngine::GameWindow> CreateWindow(const std::string& name, const std::string& title) const { return nullptr; }
 		void CreateConsole(const std::string& name, const std::string& title) const { return; }
 
 		void Configure(int argc, const char* const* argv);
@@ -63,6 +68,7 @@ namespace Engine
 		static const int StartArgument = 1;
 
 		ProcessArguments Arguments;
+		std::weak_ptr<GraphicsEngine::GameWindow> PrimaryWindow;
 
 		Instantiable;
 

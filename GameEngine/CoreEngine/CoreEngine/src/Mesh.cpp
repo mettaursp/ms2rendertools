@@ -56,6 +56,7 @@ void Mesh::Load(const MeshData* data, const ShaderProgram* program)
 {
 	program = program;
 	Indices = data->IndexBuffer.size();
+	DrawMode = data->DrawMode;
 
 	glGenVertexArrays(1, &MeshID); CheckGLErrors();
 	glBindVertexArray(MeshID); CheckGLErrors();

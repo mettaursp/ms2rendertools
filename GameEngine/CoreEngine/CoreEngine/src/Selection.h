@@ -5,6 +5,11 @@
 #include "Object.h"
 #include "TaskScheduler.h"
 
+namespace GraphicsEngine
+{
+	class SceneObject;
+}
+
 namespace Engine
 {
 	namespace Editor
@@ -15,19 +20,22 @@ namespace Engine
 			void Initialize() {}
 			void Update(float) {}
 
-			void AddObject(const std::shared_ptr<Object>& object);
-			void RemoveObject(const std::shared_ptr<Object>& object);
+			void AddObject(const std::shared_ptr<GraphicsEngine::SceneObject>& object);
+			void RemoveObject(const std::shared_ptr<GraphicsEngine::SceneObject>& object);
+			bool IsObjectSelected(const std::shared_ptr<GraphicsEngine::SceneObject>& object);
+			void ToggleObjectSelection(const std::shared_ptr<GraphicsEngine::SceneObject>& object);
 			void Clear();
 			int GetObjectCount() const;
+			const std::shared_ptr<GraphicsEngine::SceneObject>& GetObject(int index);
 
 			Event<Selection*> SelectionChanged;
 
 		private:
-			typedef std::vector<std::shared_ptr<Object>> ObjectVector;
+			typedef std::vector<std::shared_ptr<GraphicsEngine::SceneObject>> ObjectVector;
 
 			ObjectVector SelectedObjects;
 
-			int FindIndex(const std::shared_ptr<Object>& object);
+			int FindIndex(const std::shared_ptr<GraphicsEngine::SceneObject>& object);
 
 			Instantiable;
 

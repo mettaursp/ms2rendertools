@@ -185,7 +185,7 @@ namespace GraphicsEngine
 
 	void Scene::CastRay(const Ray& ray, const CastResultsCallback& callback) const
 	{
-		std::queue<SceneRayCastResults> hits;
+		std::priority_queue<SceneRayCastResults> hits;
 
 		auto resultsProcessorLambda = [&hits, &ray, &callback] (const AabbTree::Node* node, float t)
 		{
@@ -203,7 +203,7 @@ namespace GraphicsEngine
 
 		while (!hits.empty())
 		{
-			callback(hits.front());
+			callback(hits.top());
 		
 			hits.pop();
 		}
@@ -527,7 +527,7 @@ namespace GraphicsEngine
 
 				Programs::Phong->SetMaterial(material);
 
-				for (int i = 0; i < queue.TransparentObjectsStart; ++i)
+				for (int i = 0; i < int(queue.TransparentObjectsStart); ++i)
 				{
 
 					queue.QueuedObjects[i]->Draw(nullptr);

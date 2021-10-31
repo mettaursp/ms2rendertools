@@ -54,6 +54,16 @@ namespace Engine
 		ArgumentFlags[name] = value;
 	}
 
+	std::shared_ptr<GraphicsEngine::GameWindow> GameEngine::GetPrimaryWindow() const
+	{
+		return PrimaryWindow.lock();
+	}
+
+	void GameEngine::SetPrimaryWindow(const std::shared_ptr<GraphicsEngine::GameWindow>& primaryWindow)
+	{
+		PrimaryWindow = primaryWindow;
+	}
+
 	int GameEngine::GetArguments() const
 	{
 		return Arguments.GetArguments();

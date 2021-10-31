@@ -17,6 +17,7 @@ public:
 	Event<InputObject*> Began;
 	Event<InputObject*> Changed;
 	Event<InputObject*> Ended;
+	Event<InputObject*> Refresh;
 
 	bool GetState() const;
 	Enum::InputState GetStateEnum(Enum::InputCode code) const;

@@ -40,9 +40,12 @@ public:
 		const Mesh* BoundingVolume = nullptr;
 		const Mesh* HalfBoundingVolume = nullptr;
 		const Mesh* Cone = nullptr;
+		const Mesh* Arrow = nullptr;
+		const Mesh* Sphere = nullptr;
+		const Mesh* Ring = nullptr;
 
 		Primitives() {}
-		Primitives(const Mesh* square, const Mesh* cube, const Mesh* wireCube, const Mesh* boundingVolume, const Mesh* halfBoundingVolume, const Mesh* cone) : Square(square), Cube(cube), WireCube(cube), BoundingVolume(boundingVolume), HalfBoundingVolume(halfBoundingVolume), Cone(cone) {}
+		Primitives(const Mesh* square, const Mesh* cube, const Mesh* wireCube, const Mesh* boundingVolume, const Mesh* halfBoundingVolume, const Mesh* cone, const Mesh* arrow, const Mesh* sphere, const Mesh* ring) : Square(square), Cube(cube), WireCube(wireCube), BoundingVolume(boundingVolume), HalfBoundingVolume(halfBoundingVolume), Cone(cone), Arrow(arrow), Sphere(sphere), Ring(ring) {}
 	};
 
 	Primitives CoreMeshes;

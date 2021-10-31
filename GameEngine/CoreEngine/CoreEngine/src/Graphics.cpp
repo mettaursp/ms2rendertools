@@ -60,7 +60,10 @@ namespace
 			program.Meshes->GetMesh(GetCoreID("CoreWireCube")),
 			program.Meshes->GetMesh(GetCoreID("CoreBoundingVolume")),
 			program.Meshes->GetMesh(GetCoreID("CoreHalfBoundingVolume")),
-			program.Meshes->GetMesh(GetCoreID("CoreCone"))
+			program.Meshes->GetMesh(GetCoreID("CoreCone")),
+			program.Meshes->GetMesh(GetCoreID("CoreArrow")),
+			program.Meshes->GetMesh(GetCoreID("CoreSphere")),
+			program.Meshes->GetMesh(GetCoreID("CoreRing"))
 		);
 
 		return &program;
@@ -143,6 +146,9 @@ void Graphics::LoadAssets()
 		BoundingVolumeData = CoreMeshes::BoundingVolume();
 		HalfBoundingVolumeData = CoreMeshes::HalfBoundingVolume();
 		ConeData = CoreMeshes::Cone();
+		ArrowData = CoreMeshes::Arrow();
+		SphereData = CoreMeshes::Sphere();
+		RingData = CoreMeshes::Ring();
 
 		std::shared_ptr<Engine::Object> coreMeshes = Engine::Create<Engine::Object>();
 
@@ -155,6 +161,9 @@ void Graphics::LoadAssets()
 		CoreBoundingVolume = LoadCore("CoreBoundingVolume", BoundingVolumeData, coreMeshes);
 		CoreHalfBoundingVolume = LoadCore("CoreHalfBoundingVolume", HalfBoundingVolumeData, coreMeshes);
 		CoreCone = LoadCore("CoreCone", ConeData, coreMeshes);
+		CoreArrow = LoadCore("CoreArrow", ArrowData, coreMeshes);
+		CoreSphere = LoadCore("CoreSphere", SphereData, coreMeshes);
+		CoreRing = LoadCore("CoreRing", RingData, coreMeshes);
 	}
 }
 

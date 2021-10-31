@@ -628,6 +628,20 @@ coroutine.wrap(function()
 	end
 end)()
 
+local selection = GameObject("Selection")
+
+local selectionOperation = GameObject("SelectionHandlesOperation")
+
+selectionOperation.ActiveSelection = selection
+selectionOperation.TargetScene = scene
+selectionOperation.CurrentCamera = camera
+selectionOperation.HandleType = Enum.SelectionHandleType.Move
+selectionOperation.RenderAutomatically = true
+selectionOperation.Resolution = Vector3(resolution.Width, resolution.Height)
+
+selection.Parent = selectionOperation
+selectionOperation.Parent = level
+
 coroutine.wrap(function()
 	print(pcall(function()
 	local userInput = Engine.GameWindow.UserInput

@@ -1,10 +1,24 @@
 #include "GameWindow.h"
 
+#include "LuaInput.h"
+
 namespace GraphicsEngine
 {
+	std::shared_ptr<Engine::UserInput> GameWindow::GetInput() const
+	{
+		return WindowInput.lock();
+	}
+
 	void GameWindow::Configure(Window* window)
 	{
 		ActiveWindow = window;
+
+		std::shared_ptr<Engine::UserInput> userInput = Engine::Create<Engine::UserInput>();
+
+		userInput->Configure(window->Input);
+		userInput->SetParent(This.lock());
+
+		WindowInput = userInput;
 	}
 
 	int GameWindow::GetRefreshRate()

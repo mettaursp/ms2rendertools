@@ -38,6 +38,8 @@ namespace GraphicsEngine
 		std::weak_ptr<PhysicalMaterial> PhysicalMaterialProperties;
 
 		virtual Aabb GetBoundingBox() const { return Aabb(); }
+		virtual Aabb GetLocalBoundingBox() const { return Aabb(); }
+		virtual Matrix3 GetTransformation() const { return Matrix3(); }
 		virtual bool HasMoved() const { return false; }
 		virtual bool IsStatic() const { return false; }
 		virtual void Draw(const std::shared_ptr<Camera>& camera) {}

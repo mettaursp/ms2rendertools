@@ -10,4 +10,7 @@ namespace CoreMeshes
 	const MeshData& BoundingVolume();
 	const MeshData& HalfBoundingVolume();
 	const MeshData& Cone();
+	const MeshData& Arrow();
+	const MeshData& Sphere();
+	const MeshData& Ring();
 }

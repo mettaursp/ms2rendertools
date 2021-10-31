@@ -5,7 +5,7 @@ namespace Engine
 	namespace Editor
 	{
 
-		void Selection::AddObject(const std::shared_ptr<Object>& object)
+		void Selection::AddObject(const std::shared_ptr<GraphicsEngine::SceneObject>& object)
 		{
 			if (object == nullptr) return;
 
@@ -17,13 +17,13 @@ namespace Engine
 			}
 		}
 
-		void Selection::RemoveObject(const std::shared_ptr<Object>& object)
+		void Selection::RemoveObject(const std::shared_ptr<GraphicsEngine::SceneObject>& object)
 		{
 			if (object == nullptr) return;
 
 			int index = FindIndex(object);
 
-			if (index == -1)
+			if (index != -1)
 			{
 				std::swap(SelectedObjects[index], SelectedObjects.back());
 
@@ -31,6 +31,31 @@ namespace Engine
 
 				SelectionChanged.Fire(this);
 			}
+		}
+
+		bool Selection::IsObjectSelected(const std::shared_ptr<GraphicsEngine::SceneObject>& object)
+		{
+			if (object == nullptr) return false;
+
+			return FindIndex(object) != -1;
+		}
+
+		void Selection::ToggleObjectSelection(const std::shared_ptr<GraphicsEngine::SceneObject>& object)
+		{
+			if (object == nullptr) return;
+
+			int index = FindIndex(object);
+
+			if (index == -1)
+				SelectedObjects.push_back(object);
+			else
+			{
+				std::swap(SelectedObjects[index], SelectedObjects.back());
+
+				SelectedObjects.pop_back();
+			}
+
+			SelectionChanged.Fire(this);
 		}
 
 		void Selection::Clear()
@@ -43,7 +68,15 @@ namespace Engine
 			return int(SelectedObjects.size());
 		}
 
-		int Selection::FindIndex(const std::shared_ptr<Object>& object)
+		const std::shared_ptr<GraphicsEngine::SceneObject>& Selection::GetObject(int index)
+		{
+			if (index < 0 || index >= SelectedObjects.size())
+				return nullptr;
+
+			return SelectedObjects[index];
+		}
+
+		int Selection::FindIndex(const std::shared_ptr<GraphicsEngine::SceneObject>& object)
 		{
 			for (int i = 0; i < GetObjectCount(); ++i)
 				if (SelectedObjects[i] == object)

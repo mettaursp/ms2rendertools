@@ -153,6 +153,36 @@ namespace GraphicsEngine
 		return Aabb(data->GetMinimumCorner(), data->GetMaximumCorner()).Transform(transform->GetWorldTransformation());
 	}
 
+	Aabb Model::GetLocalBoundingBox() const
+	{
+		Engine::ModelAsset* asset = AssetObject;
+
+		if (asset == nullptr)
+			asset = Asset.lock().get();
+
+		if (asset == nullptr)
+			return Aabb();
+
+		const MeshData* data = MeshLoader::GetMeshData(asset->GetMeshID());
+
+		//std::shared_ptr<Engine::Transform> transform = GetComponent<Engine::Transform>();
+
+		return Aabb(data->GetMinimumCorner(), data->GetMaximumCorner());
+	}
+
+	Matrix3 Model::GetTransformation() const
+	{
+		Engine::Transform* transform = TransformObject;
+
+		if (transform == nullptr)
+			transform = GetComponent<Engine::Transform>().get();
+
+		if (transform == nullptr)
+			return Matrix3();
+
+		return transform->GetWorldTransformation();
+	}
+
 	bool Model::HasMoved() const
 	{
 		//std::shared_ptr<Engine::Transform> transform = GetComponent<Engine::Transform>();
