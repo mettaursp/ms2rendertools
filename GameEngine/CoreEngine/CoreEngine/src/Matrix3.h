@@ -34,6 +34,7 @@ public:
 	Matrix3& SetUp(const Vector3& vector);
 	Matrix3& SetFront(const Vector3& vector);
 	Matrix3& SetTranslation(const Vector3& vector);
+	Matrix3& SetTransformedTranslation(const Vector3& vector);
 	Matrix3& Translate(float x, float y, float z);
 	Matrix3& Translate(const Vector3& vector);
 	Matrix3& Scale(float x, float y, float z);

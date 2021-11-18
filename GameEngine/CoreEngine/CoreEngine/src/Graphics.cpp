@@ -126,6 +126,18 @@ void Graphics::SetBlendMode(GLenum sMode, GLenum dMode)
 	glBlendFunc(sMode, dMode); CheckGLErrors();
 }
 
+const std::shared_ptr<Engine::ModelAsset>& Graphics::GetCoreMesh(const std::string& name)
+{
+	static const std::shared_ptr<Engine::ModelAsset> null = nullptr;
+
+	const auto& asset = System->CoreMeshAssets.find(name);
+
+	if (asset != System->CoreMeshAssets.end())
+		return asset->second;
+
+	return null;
+}
+
 std::shared_ptr<Engine::ModelAsset> Graphics::LoadCore(const std::string& name, const MeshData& data, const std::shared_ptr<Engine::Object>& parent)
 {
 	std::shared_ptr<Engine::ModelAsset> model = MeshLoader::NewAsset(name, data);
@@ -133,6 +145,8 @@ std::shared_ptr<Engine::ModelAsset> Graphics::LoadCore(const std::string& name, 
 	model->SetParent(parent);
 
 	MeshLoader::SetCore(model->GetMeshID());
+
+	CoreMeshAssets[name] = model;
 
 	return model;
 }

@@ -70,8 +70,10 @@ namespace Engine
 
 		const std::shared_ptr<GraphicsEngine::SceneObject>& Selection::GetObject(int index)
 		{
-			if (index < 0 || index >= SelectedObjects.size())
-				return nullptr;
+			static const std::shared_ptr<GraphicsEngine::SceneObject> null;
+
+			if (index < 0 || index >= int(SelectedObjects.size()))
+				return null;
 
 			return SelectedObjects[index];
 		}

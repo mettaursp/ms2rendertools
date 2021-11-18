@@ -801,6 +801,9 @@
     <ClCompile Include="src\RingMesh.cpp">
       <Filter>Source Files\Source\Graphics\Meshes</Filter>
     </ClCompile>
+    <ClCompile Include="src\Reference.cpp">
+      <Filter>Source Files\Source\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Graphics.h">
@@ -1216,6 +1219,9 @@
     </ClInclude>
     <ClInclude Include="src\SelectionHandlesOperation.h">
       <Filter>Source Files\Source\Editor\Objects\RenderOperations</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Reference.h">
+      <Filter>Source Files\Source\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

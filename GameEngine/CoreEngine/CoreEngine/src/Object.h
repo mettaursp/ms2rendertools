@@ -101,6 +101,10 @@ namespace Engine
 		template <typename T>
 		bool HasA(bool inherited = true);
 
+		const unsigned long long& GetCreationOrderId() const { return CreationOrderId; }
+
+		static bool IsAlive(int objectID, unsigned long long creationOrderId);
+
 	protected:
 		static void RegisterFactoryFunction(const std::string& typeName, const FactoryCallback& factory)
 		{
@@ -108,15 +112,24 @@ namespace Engine
 		}
 
 	private:
+		struct ObjectHandleData
+		{
+			Object* Data = nullptr;
+			std::weak_ptr<Object> SmartPointer;
+			unsigned long long CreationOrderId = 0;
+		};
+
 		typedef std::map<std::string, FactoryCallback> FactoryCallbackMap;
-		typedef IDHeap<std::weak_ptr<Object>> ObjectHandleHeap;
+		typedef IDHeap<ObjectHandleData> ObjectHandleHeap;
 		typedef std::vector<std::shared_ptr<Object>> ObjectVector;
 
+		static unsigned long long ObjectsCreated;
 		static ObjectHandleHeap ObjectIDs;
 		static FactoryCallbackMap FactoryFunctions;
 
 		int ObjectID = -1;
 		int OriginalID = -1;
+		unsigned long long CreationOrderId = 0;
 		bool Ticks = false;
 		int TickingChildren = 0;
 		bool TickedBefore = false;
@@ -220,7 +233,7 @@ namespace Engine
 	std::shared_ptr<T> Object::GetObjectFromID(int id)
 	{
 		if (id != -1)
-			return ObjectIDs.GetNode(id).GetData().lock()->Cast<T>();
+			return ObjectIDs.GetNode(id).GetData().SmartPointer.lock()->Cast<T>();
 
 		return nullptr;
 	}

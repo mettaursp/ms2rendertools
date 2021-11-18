@@ -118,6 +118,15 @@ Matrix3& Matrix3::SetTranslation(const Vector3& vector)
 	return *this;
 }
 
+Matrix3& Matrix3::SetTransformedTranslation(const Vector3& vector)
+{
+	Data[0][3] = vector.X * Data[0][0] + vector.Y * Data[0][1] + vector.Z * Data[0][2];
+	Data[1][3] = vector.X * Data[1][0] + vector.Y * Data[1][1] + vector.Z * Data[1][2];
+	Data[2][3] = vector.X * Data[2][0] + vector.Y * Data[2][1] + vector.Z * Data[2][2];
+
+	return *this;
+}
+
 Matrix3& Matrix3::Translate(float x, float y, float z)
 {
 	Identity();

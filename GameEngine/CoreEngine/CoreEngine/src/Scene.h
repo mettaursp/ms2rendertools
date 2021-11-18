@@ -8,6 +8,7 @@
 #include "Ray.h"
 #include "SceneRayCastResults.h"
 #include "RGBA.h"
+#include "Reference.h"
 
 namespace Engine
 {
@@ -40,6 +41,7 @@ namespace GraphicsEngine
 		virtual Aabb GetBoundingBox() const { return Aabb(); }
 		virtual Aabb GetLocalBoundingBox() const { return Aabb(); }
 		virtual Matrix3 GetTransformation() const { return Matrix3(); }
+		virtual Matrix3 GetInverseTransformation() const { return Matrix3(); }
 		virtual bool HasMoved() const { return false; }
 		virtual bool IsStatic() const { return false; }
 		virtual void Draw(const std::shared_ptr<Camera>& camera) {}
@@ -67,7 +69,7 @@ namespace GraphicsEngine
 		int TransformChangedConnection = -1;
 		SceneVector Scenes;
 		std::weak_ptr<Material> MaterialProperties;
-		Material* MaterialPropertiesObject = nullptr;
+		Reference<Material> MaterialPropertiesObject;
 
 		void UpdateScenes();
 

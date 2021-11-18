@@ -183,6 +183,19 @@ namespace GraphicsEngine
 		return transform->GetWorldTransformation();
 	}
 
+	Matrix3 Model::GetInverseTransformation() const
+	{
+		Engine::Transform* transform = TransformObject;
+
+		if (transform == nullptr)
+			transform = GetComponent<Engine::Transform>().get();
+
+		if (transform == nullptr)
+			return Matrix3();
+
+		return transform->GetWorldTransformationInverse();
+	}
+
 	bool Model::HasMoved() const
 	{
 		//std::shared_ptr<Engine::Transform> transform = GetComponent<Engine::Transform>();

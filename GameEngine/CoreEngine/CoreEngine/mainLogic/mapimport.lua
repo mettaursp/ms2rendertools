@@ -398,10 +398,10 @@ function UpdateMaterials()
 	for name, properties in pairs(robloxMaterials) do
 		local material = robloxMaterialContainer[name]
 		
-		material.CubeMapped = true
-		material.BlendTexture = name == "Glass"
-		material.FlipCubeMapV = true
-		material.CompressedNormalMap = true
+		--material.CubeMapped = true
+		--material.BlendTexture = name == "Glass"
+		--material.FlipCubeMapV = true
+		--material.CompressedNormalMap = true
 		
 		for i,v in pairs(properties) do
 			material[i] = v

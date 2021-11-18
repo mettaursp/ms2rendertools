@@ -3,6 +3,7 @@
 #include "Enum.h"
 #include "Lua.h"
 #include "CoreTypes.h"
+#include "Reference.h"
 
 namespace Engine
 {
@@ -23,6 +24,7 @@ namespace Engine
 		public:
 			static int GetObjectID(const void*);
 			static void PushObject(lua_State* lua, const std::shared_ptr<Engine::Object>& object);
+			static void PushObject(lua_State* lua, const Reference<Engine::Object>& object);
 
 			template <typename T>
 			class Converter;
@@ -87,6 +89,35 @@ namespace Engine
 				};
 			};
 
+			template <typename T>
+			class Converter<Reference<T>>
+			{
+			public:
+				Converter(int argumentNumber, int& arguments, bool isStatic, const std::weak_ptr<T>& defaultValue = std::weak_ptr<T>()) : ArgumentNumber(argumentNumber), Arguments(arguments), IsStatic(isStatic), DefaultValue(defaultValue) {}
+
+				lua_State** LuaState = nullptr;
+				const char* FuncName = "";
+				int ArgumentNumber = 0;
+				int& Arguments = ArgumentNumber;
+				bool HasDefaultValue = false;
+				bool IsStatic = false;
+				Reference<T> DefaultValue = Reference<T>();
+
+				operator Reference<T>() const
+				{
+					int index = ArgumentNumber + (IsStatic ? 1 : 2);
+
+					if (lua_isuserdata(*LuaState, index))
+						return Object::GetObjectFromID(GetObjectID(lua_topointer(*LuaState, index)))->Cast<T>();
+					else if (HasDefaultValue && (lua_gettop(*LuaState) < index || !lua_isnil(*LuaState, index)))
+						return DefaultValue;
+					else
+						Lua::BadArgumentError(*LuaState, ArgumentNumber + 1, "Object", Lua::GetType(*LuaState, index));
+
+					return nullptr;
+				};
+			};
+
 			class ReturnValue
 			{
 			public:
@@ -95,6 +126,14 @@ namespace Engine
 				lua_State** LuaState = nullptr;
 
 				void operator()(const std::shared_ptr<Engine::Object>& object)
+				{
+					if (object == nullptr)
+						lua_pushnil(*LuaState);
+					else
+						PushObject(*LuaState, object);
+				}
+
+				void operator()(const Reference<Engine::Object>& object)
 				{
 					if (object == nullptr)
 						lua_pushnil(*LuaState);
@@ -245,6 +284,19 @@ namespace Engine
 			return typeName;
 		}
 		static const std::string GetTypeName() { return RegisterTypeName(""); };
+	};
+
+	template <typename T>
+	class CoreTypes<Reference<T>>
+	{
+	public:
+		typedef LuaTypes::Lua_object LuaType;
+
+		static const std::string& RegisterTypeName(const std::string& name)
+		{
+			return CoreTypes<std::shared_ptr<T>>::RegisterTypeName(name);
+		}
+		static const std::string GetTypeName() { return CoreTypes<std::shared_ptr<T>>::GetTypeName(); };
 	};
 
 	template <typename T>

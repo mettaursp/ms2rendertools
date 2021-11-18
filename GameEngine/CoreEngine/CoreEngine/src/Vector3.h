@@ -27,7 +27,9 @@ public:
 	float SquareLength() const;
 	Vector3& Scale(const Vector3& other);
 	Vector3& Scale(float x, float y, float z);
+	Vector3& InvertLength();
 
+	Vector3 InvertedLength();
 	Vector3 Negate() const { return -*this; }
 
 	Vector3 operator-() const;

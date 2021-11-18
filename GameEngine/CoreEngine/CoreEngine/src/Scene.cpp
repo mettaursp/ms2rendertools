@@ -466,9 +466,13 @@ namespace GraphicsEngine
 		{
 			SceneObjectReference* thingamajig = node->GetData<SceneObjectReference>();
 			
-			if (thingamajig->Reference->Visible && thingamajig->Reference->GetMaterialRaw() != nullptr)
+			if (thingamajig->Reference->Visible)
 			{
-				MaterialQueue& queue = QueuedObjects[thingamajig->Reference->GetMaterialRaw()->GetMaterialId()];
+				Material* material = thingamajig->Reference->GetMaterialRaw();
+
+				if (material == nullptr) return;
+
+				MaterialQueue& queue = QueuedObjects[material->GetMaterialId()];
 
 				queue.QueuedObjects.push_back(thingamajig->Reference);
 

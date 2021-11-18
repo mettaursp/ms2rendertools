@@ -98,6 +98,22 @@ Vector3& Vector3::Scale(float x, float y, float z)
 	return *this;
 }
 
+Vector3& Vector3::InvertLength()
+{
+	float scale = 1.f / SquareLength();
+
+	X *= scale;
+	Y *= scale;
+	Z *= scale;
+
+	return *this;
+}
+
+Vector3 Vector3::InvertedLength()
+{
+	return Vector3(*this).InvertLength();
+}
+
 // negation
 Vector3 Vector3::operator-() const
 {

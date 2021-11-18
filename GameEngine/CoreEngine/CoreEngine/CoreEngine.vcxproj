@@ -299,6 +299,7 @@
     <ClCompile Include="src\RayAcceleration.cpp" />
     <ClCompile Include="src\RayTracer.cpp" />
     <ClCompile Include="src\RayTracer.meta.cpp" />
+    <ClCompile Include="src\Reference.cpp" />
     <ClCompile Include="src\ReflectionData.cpp" />
     <ClCompile Include="src\RenderOperation.cpp" />
     <ClCompile Include="src\RenderOperation.meta.cpp" />
@@ -389,6 +390,7 @@
     <ClInclude Include="src\PhysicalMaterial.h" />
     <ClInclude Include="src\RayAcceleration.h" />
     <ClInclude Include="src\RayTracer.h" />
+    <ClInclude Include="src\Reference.h" />
     <ClInclude Include="src\SceneRayCastResults.h" />
     <ClInclude Include="src\Selection.h" />
     <ClInclude Include="src\SelectionHandlesOperation.h" />

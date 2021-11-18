@@ -30,6 +30,7 @@ public:
 	static void SetClearColor(const RGBA& color);
 	static void ClearScreen(GLbitfield mask);
 	static void SetBlendMode(GLenum sMode, GLenum dMode);
+	static const std::shared_ptr<Engine::ModelAsset>& GetCoreMesh(const std::string& name);
 
 private:
 	ShaderLoader ShaderProgramLoader;
@@ -68,6 +69,10 @@ public:
 	static void CheckErrors(const char* file, int line, const char* func);
 
 private:
+	typedef std::map<std::string, std::shared_ptr<Engine::ModelAsset>> MeshMap;
+
+	MeshMap CoreMeshAssets;
+
 	ShaderCleaner ShaderProgramCleaner = ShaderCleaner(&ShaderProgramLoader);
 
 	Graphics(); // no touchy

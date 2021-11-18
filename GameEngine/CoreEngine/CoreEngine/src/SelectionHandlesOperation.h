@@ -29,6 +29,10 @@ namespace Enum
 	typedef SelectionHandleTypeEnum::SelectionHandleType SelectionHandleType;
 }
 
+class Mesh;
+class MeshData;
+class Ray;
+
 namespace Engine
 {
 	class InputObject;
@@ -44,7 +48,11 @@ namespace Engine
 
 				AxisX,
 				AxisY,
-				AxisZ
+				AxisZ,
+
+				AxisNegativeX,
+				AxisNegativeY,
+				AxisNegativeZ
 			};
 		};
 
@@ -72,6 +80,20 @@ namespace Engine
 			RGBA HandleColorY = RGBA(0.2f, 1, 0.2f);
 			RGBA HandleColorZ = RGBA(0.2f, 0.2f, 1);
 
+			RGBA HoverHandleColorX = RGBA(1, 0.75f, 0.75f);
+			RGBA HoverHandleColorY = RGBA(0.75f, 1, 0.75f);
+			RGBA HoverHandleColorZ = RGBA(0.75f, 0.75f, 1);
+
+			float ArrowHandleMinSize = 0.15f;
+			float ArrowHandleScaling = 0.15f;
+			float ArrowHandleMinOffset = 0.1f;
+			float ArrowHandleScaledOffset = 0.1f;
+
+			float SphereHandleMinSize = 0.1f;
+			float SphereHandleScaling = 0.1f;
+			float SphereHandleMinOffset = 0.2f;
+			float SphereHandleScaledOffset = 0.2f;
+
 			std::weak_ptr<Selection> ActiveSelection;
 			std::weak_ptr<GraphicsEngine::Scene> TargetScene;
 			std::weak_ptr<GraphicsEngine::Camera> CurrentCamera;
@@ -80,6 +102,15 @@ namespace Engine
 			std::weak_ptr<InputObject> SelectButton = GetInput(Enum::InputCode::MouseLeft);
 			std::weak_ptr<InputObject> RequiredModifierKey;
 			std::weak_ptr<InputObject> MultiSelectModifierKey = GetInput(Enum::InputCode::LeftControl);
+
+			std::weak_ptr<InputObject> MoveToolKey = GetInput(Enum::InputCode::T);
+			std::weak_ptr<InputObject> ResizeToolKey = GetInput(Enum::InputCode::G);
+			std::weak_ptr<InputObject> RotateToolKey = GetInput(Enum::InputCode::R);
+			std::weak_ptr<InputObject> ToggleEnabledKey = GetInput(Enum::InputCode::End);
+			std::weak_ptr<InputObject> SelectToolKey = GetInput(Enum::InputCode::F);
+
+			std::weak_ptr<InputObject> ToggleLocalSpaceKey = GetInput(Enum::InputCode::L);
+			std::weak_ptr<InputObject> ToggleGroupSelectKey = GetInput(Enum::InputCode::O);
 
 			void Render();
 
@@ -92,11 +123,35 @@ namespace Engine
 		private:
 			typedef SelectedAxisEnum::SelectedAxis SelectedAxis;
 
-			Selection* ActiveSelectionRaw = nullptr;
+			struct ObjectHandleHit
+			{
+				bool HitHandle = false;
+				float ClosestDistance = std::numeric_limits<float>::max();
+				GraphicsEngine::SceneObject* Object = nullptr;
+				SelectedAxis Axis = SelectedAxis::None;
+				Matrix3 Transformation;
+				const Mesh* RenderMesh = nullptr;
+			};
 
+			struct HandleMesh
+			{
+				const MeshData* Data = nullptr;
+				const Mesh* RenderMesh = nullptr;
+			};
+
+			int SelectedObjects = 0;
+			Selection* ActiveSelectionRaw = nullptr;
+			const HandleMesh RingMesh = GetCoreMesh("CoreRing");
+			const HandleMesh ArrowMesh = GetCoreMesh("CoreArrow");
+			const HandleMesh SphereMesh = GetCoreMesh("CoreSphere");
+
+			const RGBA& GetColor(SelectedAxis axis) const;
+			const RGBA& GetHoverColor(SelectedAxis axis) const;
+			HandleMesh GetCoreMesh(const std::string& name) const;
 			void ProcessInput();
-			Aabb DrawSelection(const std::shared_ptr<GraphicsEngine::Camera>& camera, const std::shared_ptr<GraphicsEngine::SceneObject>& object, bool isHovered);
-			void DrawSelection(const std::shared_ptr<GraphicsEngine::Camera>& camera, const Aabb& box, const Matrix3& transformation, bool drawHandles, bool isHovered);
+			Aabb DrawSelection(ObjectHandleHit& closestHit, const Ray& ray, const std::shared_ptr<GraphicsEngine::Camera>& camera, const std::shared_ptr<GraphicsEngine::SceneObject>& object, bool isHovered);
+			bool DrawSelection(ObjectHandleHit& closestHit, const Ray& ray, const std::shared_ptr<GraphicsEngine::Camera>& camera, const Aabb& box, const Matrix3& transformation, const Matrix3& transformationInverse, bool drawHandles, bool isHovered);
+			bool DrawAxisHandle(const HandleMesh& mesh, const Ray& ray, const Matrix3& transformation, const Matrix3& inverseTransformation, ObjectHandleHit& closestHit, SelectedAxis axis);
 			void ProcessObjectInput(const std::shared_ptr<GraphicsEngine::SceneObject>& object, const Vector3& intersection);
 			void ProcessObjectInput(const std::shared_ptr<GraphicsEngine::SceneObject>& object, const Vector3& intersection, SelectedAxis axis);
 

@@ -6,13 +6,20 @@
 
 namespace Engine
 {
+	unsigned long long Object::ObjectsCreated = 0;
 	Object::FactoryCallbackMap Object::FactoryFunctions;
 	Object::ObjectHandleHeap Object::ObjectIDs = ObjectHandleHeap();
 
 	void Object::Initialize()
 	{
-		ObjectID = ObjectIDs.RequestID(This);
+		ObjectID = ObjectIDs.RequestID(ObjectHandleData{ this, This, ++ObjectsCreated });
 		OriginalID = ObjectID;
+		CreationOrderId = ObjectsCreated;
+	}
+
+	bool Object::IsAlive(int objectId, unsigned long long creationOrderId)
+	{
+		return ObjectIDs.NodeAllocated(objectId) && ObjectIDs.GetNode(objectId).GetData().CreationOrderId == creationOrderId;
 	}
 
 	int Object::GetTypeID() const
@@ -429,6 +436,11 @@ namespace Engine
 			}
 			else
 				lua_replace(lua, -2);
+		}
+
+		void Lua_object::PushObject(lua_State* lua, const Reference<Engine::Object>& object)
+		{
+			PushObject(lua, object->Cast<Engine::Object>());
 		}
 	}
 }
