@@ -398,10 +398,10 @@ function UpdateMaterials()
 	for name, properties in pairs(robloxMaterials) do
 		local material = robloxMaterialContainer[name]
 		
-		material.CubeMapped = true
-		material.BlendTexture = name == "Glass"
-		material.FlipCubeMapV = true
-		material.CompressedNormalMap = true
+		--material.CubeMapped = true
+		--material.BlendTexture = name == "Glass"
+		--material.FlipCubeMapV = true
+		--material.CompressedNormalMap = true
 		
 		for i,v in pairs(properties) do
 			material[i] = v
@@ -410,22 +410,6 @@ function UpdateMaterials()
 end
 
 lightOrbModel.PhysicalMaterialProperties = robloxMaterialContainer.Glass
-
-local selection = GameObject("Selection")
-
-local selectionOperation = GameObject("SelectionHandlesOperation")
-
-selectionOperation.ActiveSelection = selection
-selectionOperation.TargetScene = scene
-selectionOperation.CurrentCamera = camera
-selectionOperation.RenderAutomatically = true
-selectionOperation.Resolution = Vector3(resolution.Width, resolution.Height)
-
-selection.Parent = selectionOperation
-selectionOperation.Parent = level
-
-print(selection)
-print(selectionHandlesOperation)
 
 math.randomseed(os.time())
 
@@ -644,6 +628,20 @@ coroutine.wrap(function()
 	end
 end)()
 
+local selection = GameObject("Selection")
+
+local selectionOperation = GameObject("SelectionHandlesOperation")
+
+selectionOperation.ActiveSelection = selection
+selectionOperation.TargetScene = scene
+selectionOperation.CurrentCamera = camera
+selectionOperation.HandleType = Enum.SelectionHandleType.Move
+selectionOperation.RenderAutomatically = true
+selectionOperation.Resolution = Vector3(resolution.Width, resolution.Height)
+
+selection.Parent = selectionOperation
+selectionOperation.Parent = level
+
 coroutine.wrap(function()
 	print(pcall(function()
 	local userInput = Engine.GameWindow.UserInput
@@ -729,7 +727,7 @@ coroutine.wrap(function()
 			--return true
 		end)
 		
-		if hit ~= lastHit then
+		--[[if hit ~= lastHit then
 			if lastHit then
 				lastHit.MaterialProperties = lastHitMaterial
 			end
@@ -742,7 +740,7 @@ coroutine.wrap(function()
 			end
 			
 			lastHit = hit
-		end
+		end]]
 		
 		rayTracedCanvas.Visible = keyN:GetState() or rayTraceMode
 		rayTraceDebounce = rayTraceDebounce and not keyN:GetState()

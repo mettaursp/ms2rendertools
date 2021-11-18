@@ -5,7 +5,7 @@
 #include "Window.h"
 #include "MeshData.h"
 
-#define CHECK_GL_ERRORS 0
+#define CHECK_GL_ERRORS 1
 
 #if CHECK_GL_ERRORS
 #define CheckGLErrors() Graphics::CheckErrors(__FILE__, __LINE__, "")
