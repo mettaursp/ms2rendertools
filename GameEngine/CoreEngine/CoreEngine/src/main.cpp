@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
 			if (argc > 1)
 				path = argv[1];
 			else
-				path = "./game.lua";
+				path = "./main.lua";
 
 			std::shared_ptr<Engine::LuaSource> source = Engine::Create<Engine::LuaSource>();
 			source->Name = "GameScriptSource";

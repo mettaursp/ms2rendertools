@@ -33,9 +33,21 @@ namespace Engine
 			
 			Document("");
 			Archivable Class_Member(Vector3, Resolution);
-			
+
 			Document("");
 			Archivable Class_Member(float, SelectionRayDistance);
+
+			Document("");
+			Archivable Class_Member(bool, SnapsToGrid);
+
+			Document("");
+			Archivable Class_Member(float, MinimumObjectSize);
+
+			Document("");
+			Archivable Class_Member(float, GridLength);
+			
+			Document("");
+			Archivable Class_Member(float, SnappingAngle);
 			
 			Document("");
 			Archivable Class_Member(bool, IsLocalSpace);
@@ -60,6 +72,39 @@ namespace Engine
 			
 			Document("");
 			Archivable Class_Member(RGBA, HandleColorZ);
+
+			Document("");
+			Archivable Class_Member(RGBA, HoverHandleColorX);
+
+			Document("");
+			Archivable Class_Member(RGBA, HoverHandleColorY);
+
+			Document("");
+			Archivable Class_Member(RGBA, HoverHandleColorZ);
+
+			Document("");
+			Archivable Class_Member(float, ArrowHandleMinSize);
+
+			Document("");
+			Archivable Class_Member(float, ArrowHandleScaling);
+
+			Document("");
+			Archivable Class_Member(float, ArrowHandleMinOffset);
+
+			Document("");
+			Archivable Class_Member(float, ArrowHandleScaledOffset);
+
+			Document("");
+			Archivable Class_Member(float, SphereHandleMinSize);
+
+			Document("");
+			Archivable Class_Member(float, SphereHandleScaling);
+
+			Document("");
+			Archivable Class_Member(float, SphereHandleMinOffset);
+
+			Document("");
+			Archivable Class_Member(float, SphereHandleScaledOffset);
 			
 			Document("");
 			Archivable Class_Member(std::weak_ptr<Selection>, ActiveSelection);
@@ -75,9 +120,42 @@ namespace Engine
 			
 			Document("");
 			Archivable Class_Member(std::weak_ptr<InputObject>, SelectButton);
+
+			Document("");
+			Archivable Class_Member(std::weak_ptr<InputObject>, DragButton);
+
+			Document("");
+			Archivable Class_Member(std::weak_ptr<InputObject>, ResetButton);
 			
 			Document("");
 			Archivable Class_Member(std::weak_ptr<InputObject>, RequiredModifierKey);
+
+			Document("");
+			Archivable Class_Member(std::weak_ptr<InputObject>, RequiredDragModifierKey);
+
+			Document("");
+			Archivable Class_Member(std::weak_ptr<InputObject>, MultiSelectModifierKey);
+
+			Document("");
+			Archivable Class_Member(std::weak_ptr<InputObject>, MoveToolKey);
+
+			Document("");
+			Archivable Class_Member(std::weak_ptr<InputObject>, ResizeToolKey);
+
+			Document("");
+			Archivable Class_Member(std::weak_ptr<InputObject>, RotateToolKey);
+
+			Document("");
+			Archivable Class_Member(std::weak_ptr<InputObject>, ToggleEnabledKey);
+
+			Document("");
+			Archivable Class_Member(std::weak_ptr<InputObject>, SelectToolKey);
+
+			Document("");
+			Archivable Class_Member(std::weak_ptr<InputObject>, ToggleLocalSpaceKey);
+
+			Document("");
+			Archivable Class_Member(std::weak_ptr<InputObject>, ToggleGroupSelectKey);
 		);
 	}
 }

@@ -6,6 +6,7 @@
 #include "Aabb.h"
 #include "Matrix3.h"
 #include "InputEnums.h"
+#include "Constants.h"
 
 namespace GraphicsEngine
 {
@@ -36,6 +37,7 @@ class Ray;
 namespace Engine
 {
 	class InputObject;
+	class Transform;
 
 	namespace Editor
 	{
@@ -70,6 +72,11 @@ namespace Engine
 			Vector3 Resolution;
 			float SelectionRayDistance = 10000;
 
+			bool SnapsToGrid = false;
+			float MinimumObjectSize = 0.01f;
+			float GridLength = 1;
+			float SnappingAngle = PI / 4.f;
+
 			bool IsLocalSpace = false;
 			bool ObjectsShareHandles = true;
 			Enum::SelectionHandleType HandleType = Enum::SelectionHandleType::Move;
@@ -100,7 +107,10 @@ namespace Engine
 
 			std::weak_ptr<InputObject> MousePosition = GetInput(Enum::InputCode::MousePosition);
 			std::weak_ptr<InputObject> SelectButton = GetInput(Enum::InputCode::MouseLeft);
+			std::weak_ptr<InputObject> DragButton = GetInput(Enum::InputCode::MouseLeft);
+			std::weak_ptr<InputObject> ResetButton = GetInput(Enum::InputCode::MouseRight);
 			std::weak_ptr<InputObject> RequiredModifierKey;
+			std::weak_ptr<InputObject> RequiredDragModifierKey;
 			std::weak_ptr<InputObject> MultiSelectModifierKey = GetInput(Enum::InputCode::LeftControl);
 
 			std::weak_ptr<InputObject> MoveToolKey = GetInput(Enum::InputCode::T);
@@ -139,14 +149,37 @@ namespace Engine
 				const Mesh* RenderMesh = nullptr;
 			};
 
+			struct MovingObjectData
+			{
+				std::shared_ptr<GraphicsEngine::SceneObject> Object;
+				std::shared_ptr<Transform> ObjectTransform;
+				Matrix3 InitialTransformation;
+				Matrix3 ParentInverseTransformation;
+				Matrix3 ParentTransformation;
+			};
+
+			typedef std::vector<MovingObjectData> MovingObjectVector;
+
 			int SelectedObjects = 0;
 			Selection* ActiveSelectionRaw = nullptr;
 			const HandleMesh RingMesh = GetCoreMesh("CoreRing");
 			const HandleMesh ArrowMesh = GetCoreMesh("CoreArrow");
 			const HandleMesh SphereMesh = GetCoreMesh("CoreSphere");
 
-			const RGBA& GetColor(SelectedAxis axis) const;
-			const RGBA& GetHoverColor(SelectedAxis axis) const;
+			bool IsMovingObject = false;
+			bool MovingInLocalSpace = false;
+			SelectedAxis CurrentMovementHandle = SelectedAxis::None;
+			Vector3 InitialCursorPoint;
+			Vector3 HandlePosition;
+			Vector3 HandleAxis;
+			Aabb MovingBox;
+			MovingObjectVector MovingObjects;
+
+			RGBA GetColor(SelectedAxis axis) const;
+			RGBA GetHoverColor(SelectedAxis axis) const;
+			Vector3 GetMouseHandlePoint(const std::shared_ptr<GraphicsEngine::Camera>& camera, const Ray& mouseRay) const;
+			float GetMouseHandleValue(const std::shared_ptr<GraphicsEngine::Camera>& camera, const Vector3& mousePoint) const;
+			void UpdateObject(int index, float handleValue);
 			HandleMesh GetCoreMesh(const std::string& name) const;
 			void ProcessInput();
 			Aabb DrawSelection(ObjectHandleHit& closestHit, const Ray& ray, const std::shared_ptr<GraphicsEngine::Camera>& camera, const std::shared_ptr<GraphicsEngine::SceneObject>& object, bool isHovered);

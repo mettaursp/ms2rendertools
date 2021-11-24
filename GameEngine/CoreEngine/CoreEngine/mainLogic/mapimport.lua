@@ -706,7 +706,7 @@ coroutine.wrap(function()
 	while true do
 		local delta = wait()
 		
-		print(math.floor(10/delta)/10, delta)
+		--print(math.floor(10/delta)/10, delta)
 		
 		time = time + delta
 		
@@ -818,7 +818,7 @@ coroutine.wrap(function()
 		end
 		
 		
-		if keyShift:GetState() then
+		if keyShift:GetState() and false then
 			testLight.Position = camera:GetTransformation():Translation()
 			testLight.Direction = -camera:GetTransformation():FrontVector()
 			lightOrb:SetPosition(testLight.Position)
