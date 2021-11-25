@@ -5,6 +5,7 @@
 #include "ObjParser.h"
 #include "PlyParser.h"
 #include "ModelAsset.h"
+#include "EngineException.h"
 
 typename MeshLoader::LoaderVector MeshLoader::MeshLoaders = LoaderVector();
 typename MeshLoader::MeshHeap MeshLoader::MeshContainer = MeshHeap();
@@ -34,7 +35,7 @@ const Mesh* MeshLoader::GetMesh(int id)
 
 		error << "Attempt to use out of bounds mesh ID: " << id;
 
-		throw error.str();
+		throw EngineException(error.str());
 	}
 
 	if (int(Meshes.size()) <= id || Meshes[id] == nullptr)
@@ -91,14 +92,14 @@ std::shared_ptr<Engine::ModelAsset> MeshLoader::NewAsset(const std::string& name
 void MeshLoader::ReleaseAsset(const std::shared_ptr<Engine::ModelAsset>& asset)
 {
 	if (asset == nullptr)
-		throw "Attempt to release null mesh asset.";
+		throw GameException("Attempt to release null mesh asset.");
 	else if (!IsMeshAllocated(asset->MeshID))
-		throw "Attempt to load unallocated mesh";
+		throw GameException("Attempt to load unallocated mesh");
 
 	MeshInfo& info = MeshContainer.GetNode(asset->MeshID).GetData();
 
 	if (info.IsCore)
-		throw "Attempt to release core mesh";
+		throw GameException("Attempt to release core mesh");
 
 	UnloadAsset(asset);
 
@@ -113,7 +114,7 @@ void MeshLoader::ReleaseAsset(const std::shared_ptr<Engine::ModelAsset>& asset)
 void MeshLoader::ReleaseAsset(Engine::ModelAsset& asset)
 {
 	if (!asset.IsDying())
-		throw "Attempt to release a live mesh";
+		throw GameException("Attempt to release a live mesh");
 
 	MeshInfo& info = MeshContainer.GetNode(asset.MeshID).GetData();
 
@@ -130,14 +131,14 @@ void MeshLoader::ReleaseAsset(Engine::ModelAsset& asset)
 void MeshLoader::LoadAsset(std::shared_ptr<Engine::ModelAsset> asset, Enum::VertexMode mode)
 {
 	if (asset == nullptr)
-		throw "Attempt to load null mesh asset.";
+		throw GameException("Attempt to load null mesh asset.");
 	else if (!IsMeshAllocated(asset->MeshID))
-		throw "Attempt to load unallocated mesh";
+		throw GameException("Attempt to load unallocated mesh");
 
 	MeshInfo& info = MeshContainer.GetNode(asset->MeshID).GetData();
 
 	if (info.LoadedFile == "")
-		throw "Attempt to load non-file mesh without a path";
+		throw GameException("Attempt to load non-file mesh without a path");
 
 	LoadAsset(asset, info.LoadedFile, mode);
 }
@@ -145,9 +146,9 @@ void MeshLoader::LoadAsset(std::shared_ptr<Engine::ModelAsset> asset, Enum::Vert
 void MeshLoader::LoadAsset(std::shared_ptr<Engine::ModelAsset> asset, const MeshData& data, Enum::VertexMode mode)
 {
 	if (asset == nullptr)
-		throw "Attempt to load null mesh asset.";
+		throw GameException("Attempt to load null mesh asset.");
 	else if (!IsMeshAllocated(asset->MeshID))
-		throw "Attempt to load unallocated mesh";
+		throw GameException("Attempt to load unallocated mesh");
 
 	UnloadAsset(asset);
 
@@ -219,14 +220,14 @@ MeshLoader::MeshHolder::AssetVector& MeshLoader::Assets()
 void MeshLoader::UnloadAsset(std::shared_ptr<Engine::ModelAsset> asset)
 {
 	if (asset == nullptr)
-		throw "Attempt to unload null mesh asset.";
+		throw GameException("Attempt to unload null mesh asset.");
 	else if (!IsMeshAllocated(asset->MeshID))
-		throw "Attempt to unload unallocated mesh";
+		throw GameException("Attempt to unload unallocated mesh");
 
 	MeshInfo& info = MeshContainer.GetNode(asset->MeshID).GetData();
 
 	if (info.IsCore)
-		throw "Attempt to release core mesh";
+		throw GameException("Attempt to release core mesh");
 	
 	UnloadAsset(asset->MeshID);
 }

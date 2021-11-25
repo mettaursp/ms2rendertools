@@ -12,6 +12,7 @@ extern "C" {
 #include "GameEngine.h"
 #include "CoreMeshes.h"
 #include "ModelAsset.h"
+#include "EngineException.h"
 
 Window* Graphics::ActiveWindow = nullptr;
 Graphics* Graphics::System = nullptr;
@@ -73,7 +74,7 @@ namespace
 void Graphics::Initialize()
 {
 	if (System != nullptr)
-		throw std::string("Graphics system already initialized");
+		throw EngineException("Graphics system already initialized");
 
 	Graphics::ActiveWindow = new Window();
 	System = new Graphics();
@@ -235,5 +236,5 @@ void Graphics::CheckErrors(const char* file, int line, const char* func)
 	} while (error != GL_NO_ERROR);
 
 	if (errorsFound)
-		throw "OpenGL Errors found";
+		throw EngineException("OpenGL Errors found");
 }

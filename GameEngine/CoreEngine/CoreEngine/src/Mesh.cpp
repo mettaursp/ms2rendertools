@@ -3,6 +3,7 @@
 #include "ShaderProgram.h"
 #include "Graphics.h"
 #include "MeshData.h"
+#include "EngineException.h"
 
 const Mesh* Mesh::BoundMesh = nullptr;
 
@@ -83,5 +84,5 @@ const std::string& Mesh::GetName() const
 void Mesh::Verify()
 {
 	if (Program == nullptr)
-		throw "mesh not loaded";
+		throw EngineException("mesh not loaded");
 }

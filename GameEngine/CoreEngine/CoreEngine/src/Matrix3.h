@@ -110,6 +110,8 @@ private:
 	Reflected_Type(Matrix3);
 };
 
+#include "EngineException.h"
+
 namespace Engine
 {
 	namespace LuaTypes
@@ -159,7 +161,7 @@ namespace Engine
 					else
 						Lua::BadArgumentError(*LuaState, ArgumentNumber + 1, "Matrix3", Lua::GetType(*LuaState, index)); 
 						
-						throw "shut up, compiler"; 
+						throw EngineException("shut up, compiler"); 
 				}
 			};
 		

@@ -1,5 +1,7 @@
 #include "InputSubscriber.h"
 
+#include "EngineException.h"
+
 namespace GraphicsEngine
 {
 	InputSubscription::~InputSubscription()
@@ -43,7 +45,7 @@ namespace GraphicsEngine
 	void InputSubscription::Subscribe(const std::shared_ptr<Engine::InputObject>& input)
 	{
 		if (Input != nullptr)
-			throw std::string("Attempt to subscribe with InputSubscription that is already bound");
+			throw GameException("Attempt to subscribe with InputSubscription that is already bound");
 
 		Input = input;
 

@@ -3,6 +3,42 @@
 #include <string>
 #include <functional>
 #include <vector>
+#include <source_location>
+#include <sstream>
+
+class JsonParserException : public std::exception
+{
+public:
+	const char* Message = nullptr;
+	std::source_location Caller;
+	std::string ErrorMessage;
+
+	JsonParserException(const char* message, const std::source_location& caller = std::source_location::current()) throw()
+	{
+		Caller = caller;
+
+		std::stringstream error;
+
+		error << Caller.file_name() << " [" << Caller.line() << "]: " << Caller.function_name() << ": " << Message;
+
+		ErrorMessage = error.str();
+	}
+	JsonParserException(const std::string& message, const std::source_location& caller = std::source_location::current()) throw()
+	{
+		Caller = caller;
+
+		std::stringstream error;
+
+		error << Caller.file_name() << " [" << Caller.line() << "]: " << Caller.function_name() << ": " << Message;
+
+		ErrorMessage = error.str();
+	}
+
+	virtual const char* what() throw()
+	{
+		return ErrorMessage.c_str();
+	}
+};
 
 class JsonParser
 {

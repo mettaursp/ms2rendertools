@@ -874,7 +874,7 @@ namespace GraphicsEngine
 
 				if (PerformAnalytics)
 				{
-					thread.LightsChecked += (GetLight(-1) != nullptr ? 1 : 0) + long long(GetLights());
+					thread.LightsChecked += (GetLight(-1) != nullptr ? 1 : 0) + (long long)(GetLights());
 					thread.BouncesChecked += 1;
 				}
 			}

@@ -2,6 +2,43 @@
 
 #include <forward_list>
 #include <vector>
+#include <exception>
+#include <sstream>
+#include <source_location>
+
+class IdentifierHeapException : public std::exception
+{
+public:
+	const char* Message = nullptr;
+	std::source_location Caller;
+	std::string ErrorMessage;
+
+	IdentifierHeapException(const char* message, const std::source_location& caller = std::source_location::current()) throw()
+	{
+		Caller = caller;
+
+		std::stringstream error;
+
+		error << Caller.file_name() << " [" << Caller.line() << "]: " << Caller.function_name() << ": " << Message;
+
+		ErrorMessage = error.str();
+	}
+	IdentifierHeapException(const std::string& message, const std::source_location& caller = std::source_location::current()) throw()
+	{
+		Caller = caller;
+
+		std::stringstream error;
+
+		error << Caller.file_name() << " [" << Caller.line() << "]: " << Caller.function_name() << ": " << Message;
+
+		ErrorMessage = error.str();
+	}
+
+	virtual const char* what() throw()
+	{
+		return ErrorMessage.c_str();
+	}
+};
 
 template <typename T>
 class IDHeap
@@ -159,7 +196,7 @@ int IDHeap<T>::Allocate()
 			else if (right < int(Nodes.size()) && (!Nodes[right].Used || !Nodes[right].ChildrenUsed))
 				id = right;
 			else
-				throw "shts fucked";
+				throw IdentifierHeapException("shts fucked");
 		}
 
 		return id;
@@ -215,10 +252,10 @@ typename IDHeap<T>::Node& IDHeap<T>::GetNode(int id)
 		if (Nodes[id].Used)
 			return Nodes[id].Item;
 		else
-			throw "Attempt to access unallocated ID";
+			throw IdentifierHeapException("Attempt to access unallocated ID");
 	}
 	else
-		throw "Attempt to access out of bounds ID";
+		throw IdentifierHeapException("Attempt to access out of bounds ID");
 }
 
 template <typename T>
@@ -229,10 +266,10 @@ const typename IDHeap<T>::Node& IDHeap<T>::GetNode(int id) const
 		if (Nodes[id].Used)
 			return Nodes[id].Item;
 		else
-			throw "Attempt to access unallocated ID";
+			throw IdentifierHeapException("Attempt to access unallocated ID");
 	}
 	else
-		throw "Attempt to access out of bounds ID";
+		throw IdentifierHeapException("Attempt to access out of bounds ID");
 }
 
 template <typename T>
@@ -241,7 +278,7 @@ bool IDHeap<T>::NodeAllocated(int id) const
 	if (id >= 0 && id < int(Nodes.size()))
 		return Nodes[id].Used;
 	else
-		throw "Attempt to access out of bounds ID";
+		throw IdentifierHeapException("Attempt to access out of bounds ID");
 }
 
 template <typename T>

@@ -94,7 +94,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <ShowIncludes>false</ShowIncludes>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
@@ -201,6 +201,7 @@
     <ClCompile Include="src\DrawSceneOperation.cpp" />
     <ClCompile Include="src\DrawSceneOperation.meta.cpp" />
     <ClCompile Include="src\Engine.cpp" />
+    <ClCompile Include="src\EngineException.cpp" />
     <ClCompile Include="src\Enum.cpp" />
     <ClCompile Include="src\EnumTemplate.meta.cpp" />
     <ClCompile Include="src\Environment.cpp" />
@@ -381,6 +382,7 @@
     <ClInclude Include="src\ChunkLoaderShapeEnum.h" />
     <ClInclude Include="src\Connection.h" />
     <ClInclude Include="src\Dimensions.h" />
+    <ClInclude Include="src\EngineException.h" />
     <ClInclude Include="src\GameEngine.h" />
     <ClInclude Include="src\HDRColorCorrectionOperation.h" />
     <ClInclude Include="src\InputContext.h" />

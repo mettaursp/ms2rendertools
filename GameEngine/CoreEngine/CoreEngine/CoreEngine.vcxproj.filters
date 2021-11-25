@@ -160,6 +160,9 @@
     <Filter Include="Source Files\Source\Graphics\Objects\RenderOperations">
       <UniqueIdentifier>{60c77602-ab99-4bf3-b816-5055c33098bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Source\Engine\Exceptions">
+      <UniqueIdentifier>{0058c908-f688-4d86-9288-d8a89cdaa467}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -804,6 +807,9 @@
     <ClCompile Include="src\Reference.cpp">
       <Filter>Source Files\Source\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\EngineException.cpp">
+      <Filter>Source Files\Source\Engine\Exceptions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Graphics.h">
@@ -1222,6 +1228,9 @@
     </ClInclude>
     <ClInclude Include="src\Reference.h">
       <Filter>Source Files\Source\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EngineException.h">
+      <Filter>Source Files\Source\Engine\Exceptions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

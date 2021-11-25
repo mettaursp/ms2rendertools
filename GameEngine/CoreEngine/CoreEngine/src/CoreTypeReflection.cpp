@@ -2,6 +2,8 @@
 
 #include <sstream>
 
+#include "EngineException.h"
+
 LibraryData::LibraryData(const std::string& name, const std::string& description) : ReflectionData(name, "", description, nullptr, false, true) {}
 
 void LibraryData::Copy(void* object, void* data) const
@@ -60,7 +62,7 @@ ClassData::Property* ClassData::RegisterProperty(const std::string& name)
 	PropertyMap::iterator property = Properties.find(name);
 		
 	if (property != Properties.end())
-		throw "Attempt to register duplicate property '" + name + "'";
+		throw EngineException("Attempt to register duplicate property '" + name + "'");
 		
 	Properties[name] = Property();
 		
@@ -98,12 +100,12 @@ void ClassData::LoadProperties(const ClassData* parent)
 void ClassData::Property::AddGetter(const std::string& name, const std::string& typeName)
 {
 	if (Getter != nullptr)
-		throw "Attempt to add duplicate getter function '" + Name + "' of type '" + typeName + "' to object of type '" + ParentType->Name + "'.";
+		throw EngineException("Attempt to add duplicate getter function '" + Name + "' of type '" + typeName + "' to object of type '" + ParentType->Name + "'.");
 
 	const ReflectionData::Function* function = ParentType->GetFunction(name);
 
 	if (function == nullptr)
-		throw "Attempt to add undefined getter function '" + name + "' of type '" + typeName + "' to object of type '" + ParentType->Name + "'.";
+		throw EngineException("Attempt to add undefined getter function '" + name + "' of type '" + typeName + "' to object of type '" + ParentType->Name + "'.");
 
 	LuaFunctionOverload overload = nullptr;
 
@@ -116,7 +118,7 @@ void ClassData::Property::AddGetter(const std::string& name, const std::string& 
 	}
 
 	if (overload == nullptr)
-		throw "Attempt to add invalid getter function '" + Name + "' of type '" + typeName + "' to object of type '" + ParentType->Name + "'. Expected overload with a return value of type '" + typeName + "' and 0 arguments.";
+		throw EngineException("Attempt to add invalid getter function '" + Name + "' of type '" + typeName + "' to object of type '" + ParentType->Name + "'. Expected overload with a return value of type '" + typeName + "' and 0 arguments.");
 
 	Getter = overload;
 }
@@ -126,7 +128,7 @@ void ClassData::Property::AddSetter(const std::string& name, const std::string& 
 	const ReflectionData::Function* function = ParentType->GetFunction(name);
 
 	if (function == nullptr)
-		throw "Attempt to add undefined setter function '" + name + "' to object of type '" + ParentType->Name + "'.";
+		throw EngineException("Attempt to add undefined setter function '" + name + "' to object of type '" + ParentType->Name + "'.");
 
 	LuaFunctionOverload matchingOverload = nullptr;
 
@@ -143,7 +145,7 @@ void ClassData::Property::AddSetter(const std::string& name, const std::string& 
 	}
 
 	if (matchingOverload == nullptr)
-		throw "Attempt to add invalid setter function '" + name + "' to object of type '" + ParentType->Name + "'. Expected overload with 1 parameter of type '" + typeName + ".";
+		throw EngineException("Attempt to add invalid setter function '" + name + "' to object of type '" + ParentType->Name + "'. Expected overload with 1 parameter of type '" + typeName + ".");
 
 	Setters.push_back(matchingOverload);
 

@@ -1,5 +1,7 @@
 #include "LuaInput.h"
 
+#include "EngineException.h"
+
 namespace Engine
 {
 	bool InputData::SetState(bool state, bool suppressChanged)
@@ -245,7 +247,7 @@ namespace Engine
 	void InputDevice::Configure(::InputObject* input)
 	{
 		if (input == nullptr)
-			throw std::string("Attempt to configure InputData with a null InputObject.");
+			throw EngineException("Attempt to configure InputData with a null InputObject.");
 
 		Input = input;
 
@@ -295,7 +297,7 @@ namespace Engine
 	Enum::InputType InputDevice::GetType()
 	{
 		if (Input == nullptr)
-			throw std::string("InputData.GetType: Attempt to use unconfigured InputData.");
+			throw EngineException("InputData.GetType: Attempt to use unconfigured InputData.");
 
 		return Input->GetType();
 	}
@@ -303,7 +305,7 @@ namespace Engine
 	Enum::InputCode InputDevice::GetCode()
 	{
 		if (Input == nullptr)
-			throw std::string("InputData.GetCode: Attempt to use unconfigured InputData.");
+			throw EngineException("InputData.GetCode: Attempt to use unconfigured InputData.");
 
 		return Input->GetCode();
 	}
@@ -311,7 +313,7 @@ namespace Engine
 	Enum::BoundDevice InputDevice::GetDevice()
 	{
 		if (Input == nullptr)
-			throw std::string("InputData.GetCode: Attempt to use unconfigured InputData.");
+			throw EngineException("InputData.GetCode: Attempt to use unconfigured InputData.");
 
 		return Input->GetDevice();
 	}
@@ -319,7 +321,7 @@ namespace Engine
 	std::shared_ptr<Object> InputDevice::CreateInput(::InputObject* input)
 	{
 		if (input == nullptr)
-			throw std::string("Attempt to create InputData with a null InputObject.");
+			throw EngineException("Attempt to create InputData with a null InputObject.");
 
 		std::shared_ptr<InputDevice> data = Engine::Create<InputDevice>();
 
@@ -331,7 +333,7 @@ namespace Engine
 	void UserInput::Configure(InputHandler* handler)
 	{
 		if (handler == nullptr)
-			throw std::string("Attempt to configure UserInput with a null InputHandler.");
+			throw EngineException("Attempt to configure UserInput with a null InputHandler.");
 
 		Handler = handler;
 	}
@@ -339,7 +341,7 @@ namespace Engine
 	bool UserInput::GetState(Enum::InputCode code)
 	{
 		if (Handler == nullptr)
-			throw std::string("UserInput.GetState: Attempt to use unconfigured UserInput.");
+			throw EngineException("UserInput.GetState: Attempt to use unconfigured UserInput.");
 
 		return Handler->GetState(code);
 	}
@@ -347,7 +349,7 @@ namespace Engine
 	bool UserInput::GetStateChanged(Enum::InputCode code)
 	{
 		if (Handler == nullptr)
-			throw std::string("UserInput.GetStateChanged: Attempt to use unconfigured UserInput.");
+			throw EngineException("UserInput.GetStateChanged: Attempt to use unconfigured UserInput.");
 
 		return Handler->GetStateChanged(code);
 	}
@@ -355,7 +357,7 @@ namespace Engine
 	Enum::InputState UserInput::GetStateEnum(Enum::InputCode code)
 	{
 		if (Handler == nullptr)
-			throw std::string("UserInput.GetStateChanged: Attempt to use unconfigured UserInput.");
+			throw EngineException("UserInput.GetStateChanged: Attempt to use unconfigured UserInput.");
 
 		return Handler->GetStateEnum(code);
 	}
@@ -363,7 +365,7 @@ namespace Engine
 	const Vector3& UserInput::GetPosition(Enum::InputCode code)
 	{
 		if (Handler == nullptr)
-			throw std::string("UserInput.GetPosition: Attempt to use unconfigured UserInput.");
+			throw EngineException("UserInput.GetPosition: Attempt to use unconfigured UserInput.");
 
 		return Handler->GetPosition(code);
 	}
@@ -371,7 +373,7 @@ namespace Engine
 	const Vector3& UserInput::GetDelta(Enum::InputCode code)
 	{
 		if (Handler == nullptr)
-			throw std::string("UserInput.GetDelta: Attempt to use unconfigured UserInput.");
+			throw EngineException("UserInput.GetDelta: Attempt to use unconfigured UserInput.");
 
 		return Handler->GetDelta(code);
 	}
@@ -379,7 +381,7 @@ namespace Engine
 	Enum::InputType UserInput::GetType(Enum::InputCode code)
 	{
 		if (Handler == nullptr)
-			throw std::string("UserInput.GetType: Attempt to use unconfigured UserInput.");
+			throw EngineException("UserInput.GetType: Attempt to use unconfigured UserInput.");
 
 		return Handler->GetType(code);
 	}
@@ -387,7 +389,7 @@ namespace Engine
 	const char* UserInput::GetName(Enum::InputCode code)
 	{
 		if (Handler == nullptr)
-			throw std::string("UserInput.GetName: Attempt to use unconfigured UserInput.");
+			throw EngineException("UserInput.GetName: Attempt to use unconfigured UserInput.");
 
 		return Handler->GetName(code);
 	}
@@ -395,7 +397,7 @@ namespace Engine
 	std::shared_ptr<InputDevice> UserInput::GetInput(Enum::InputCode code)
 	{
 		if (Handler == nullptr)
-			throw std::string("UserInput.GetInput: Attempt to use unconfigured UserInput.");
+			throw EngineException("UserInput.GetInput: Attempt to use unconfigured UserInput.");
 
 		while (code >= int(Inputs.size()))
 		{

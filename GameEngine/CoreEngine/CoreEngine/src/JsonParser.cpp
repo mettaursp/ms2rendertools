@@ -12,7 +12,7 @@ JsonParser::JsonParser(const std::string& data, bool isPath)
 		std::ifstream file(data, std::ios_base::in);
 
 		if (!file.is_open() || !file.good())
-			throw std::string("cannot open file: '") + data + "'";
+			throw JsonParserException(std::string("cannot open file: '") + data + "'");
 
 		while (!file.eof())
 		{
@@ -356,7 +356,7 @@ std::string JsonParser::ReadRawString()
 	}
 
 	if (Finished())
-		throw "unclosed string";
+		throw JsonParserException("unclosed string");
 
 	std::string text(Input.data() + start, Index - start);
 
@@ -401,5 +401,5 @@ void JsonParser::Throw(const std::string& error)
 	std::stringstream message;
 	message << FilePath << " (" << LineNumber << ", " << (Index - LineStart) << "): " << error;
 
-	throw message.str();
+	throw JsonParserException(message.str());
 }

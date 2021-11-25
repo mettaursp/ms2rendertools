@@ -2,6 +2,8 @@
 
 #include <fstream>
 
+#include "EngineException.h"
+
 namespace Engine
 {
 	const std::string& LuaSource::GetPath() const
@@ -14,7 +16,7 @@ namespace Engine
 		std::fstream file(path, std::ios_base::in);
 
 		if (!file.good() || !file.is_open())
-			throw "failed to load lua script: '" + path + "'";
+			throw GameException("failed to load lua script: '" + path + "'");
 
 		char buffer[0xFFFF] = {};
 		Source = "";
@@ -34,7 +36,7 @@ namespace Engine
 		std::ofstream file(path, std::ios_base::out);
 
 		if (!file.good() || !file.is_open())
-			throw "failed to open lua script: '" + path + "'";
+			throw GameException("failed to open lua script: '" + path + "'");
 
 		file << Source;
 
