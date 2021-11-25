@@ -1,0 +1,3 @@
+[submodule "Hornet-Engine"]
+	path = Hornet-Engine
+	url = https://github.com/memlocator/Hornet-Engine.git
