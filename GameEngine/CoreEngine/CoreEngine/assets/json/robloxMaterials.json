@@ -1,0 +1,163 @@
+{
+	"Aluminum" : {
+		"RefractiveIndex" : 1.1978,
+		"Roughness" : 0.025,
+		"Metalness" : 1,
+		"Transparency" : 0,
+		"Emission" : 0
+	},
+	"Brick" : {
+		"RefractiveIndex" : 1.5,
+		"Roughness" : 0.4,
+		"Metalness" : 0,
+		"Transparency" : 0,
+		"Emission" : 0
+	},
+	"Cobblestone" : {
+		"RefractiveIndex" : 1.6,
+		"Roughness" : 0.5,
+		"Metalness" : 0.001,
+		"Transparency" : 0,
+		"Emission" : 0
+	},
+	"Concrete" : {
+		"RefractiveIndex" : 2.55,
+		"Roughness" : 1,
+		"Metalness" : 0,
+		"Transparency" : 0,
+		"Emission" : 0
+	},
+	"DiamondPlate" : {
+		"RefractiveIndex" : 3,
+		"Roughness" : 0.05,
+		"Metalness" : 1,
+		"Transparency" : 0,
+		"Emission" : 0
+	},
+	"Fabric" : {
+		"RefractiveIndex" : 1.2,
+		"Roughness" : .8,
+		"Metalness" : 0,
+		"Transparency" : 0,
+		"Emission" : 0
+	},
+	"Glass" : {
+		"RefractiveIndex" : 1.5,
+		"Roughness" : 0.001,
+		"Metalness" : 0,
+		"Transparency" : 0.9,
+		"Emission" : 0
+	},
+	"Granite" : {
+		"RefractiveIndex" : 1.4339,
+		"Roughness" : 0.3,
+		"Metalness" : 0,
+		"Transparency" : 0,
+		"Emission" : 0
+	},
+	"Grass" : {
+		"RefractiveIndex" : 1.425,
+		"Roughness" : 1,
+		"Metalness" : 0,
+		"Transparency" : 0,
+		"Emission" : 0
+	},
+	"Ice" : {
+		"RefractiveIndex" : 1.31,
+		"Roughness" : 0.1,
+		"Metalness" : 0,
+		"Transparency" : 0.8,
+		"Emission" : 0
+	},
+	"Marble" : {
+		"RefractiveIndex" : 1.5,
+		"Roughness" : 0.05,
+		"Metalness" : 0,
+		"Transparency" : 0,
+		"Emission" : 0
+	},
+	"Metal" : {
+		"RefractiveIndex" : 3,
+		"Roughness" : 0.005,
+		"Metalness" : 1,
+		"Transparency" : 0,
+		"Emission" : 0
+	},
+	"Neon" : {
+		"RefractiveIndex" : 1.1,
+		"Roughness" : 0,
+		"Metalness" : 0.5,
+		"Transparency" : 0.9,
+		"Emission" : 25
+	},
+	"Pebble" : {
+		"RefractiveIndex" : 1.4339,
+		"Roughness" : 0.5,
+		"Metalness" : 0.1,
+		"Transparency" : 0,
+		"Emission" : 0
+	},
+	"Plastic" : {
+		"RefractiveIndex" : 1.5,
+		"Roughness" : 0.1,
+		"Metalness" : 0,
+		"Transparency" : 0,
+		"Emission" : 0
+	},
+	"Rust" : {
+		"RefractiveIndex" : 2.3435,
+		"Roughness" : 0.8,
+		"Metalness" : 0.3,
+		"Transparency" : 0,
+		"Emission" : 0
+	},
+	"Sand" : {
+		"RefractiveIndex" : 1.475,
+		"Roughness" : 0.4,
+		"Metalness" : 0.005,
+		"Transparency" : 0,
+		"Emission" : 0
+	},
+	"Slate" : {
+		"RefractiveIndex" : 1.5,
+		"Roughness" : 0.2,
+		"Metalness" : 0,
+		"Transparency" : 0,
+		"Emission" : 0
+	},
+	"SmoothPlastic" : {
+		"RefractiveIndex" : 1.5,
+		"Roughness" : 0.04,
+		"Metalness" : 0,
+		"Transparency" : 0,
+		"Emission" : 0
+	},
+	"Wood" : {
+		"RefractiveIndex" : 1.41,
+		"Roughness" : 0.3,
+		"Metalness" : 0,
+		"Transparency" : 0,
+		"Emission" : 0
+	},
+	"WoodPlanks" : {
+		"RefractiveIndex" : 1.41,
+		"Roughness" : 0.15,
+		"Metalness" : 0,
+		"Transparency" : 0,
+		"Emission" : 0
+	},
+	"ForceField" : {
+		"RefractiveIndex" : 3,
+		"Roughness" : 0,
+		"Metalness" : 0,
+		"Transparency" : 0.9,
+		"Emission" : 2
+	},
+	"Water" : {
+		"RefractiveIndex" : 1.3333,
+		"Roughness" : .001,
+		"Metalness" : 0,
+		"Transparency" : 0.95,
+		"Emission" : 0
+	}
+}

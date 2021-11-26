@@ -1,0 +1,69 @@
+{
+  "EngineFire": {
+    "EmitCount": 10,
+    "EmitRate": 0.01,
+    "MaxParticles": 1000,
+
+    "Configuration": {
+      "EmitterConfig": {
+        "Color": {
+          "R": 1,
+          "G": 0.85,
+          "B": 0,
+          "A": 0
+        },
+        "GlowColor": {
+          "R": 1,
+          "G": 0.85,
+          "B": 0,
+          "A": 1
+        },
+        "UVScale": {
+          "X": 1,
+          "Y": 1
+        },
+        "UVOffset": {
+          "X": 0,
+          "Y": 0
+        },
+        "CubeMapped": false,
+        "CompressedNormalMap": false
+      },
+
+      "ConeParticleSpawner": {
+        "Scale": {
+          "Min": 0.05,
+          "Max": 0.25
+        },
+        "Speed": {
+          "Min": 3,
+          "Max": 6
+        },
+        "Lifetime": {
+          "Min": 1,
+          "Max": 2
+        },
+        "Angle": {
+          "Min": 0,
+          "Max": 0.3
+        },
+        "Position": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0,
+          "W": 1
+        },
+        "Normal": {
+          "X": 0,
+          "Y": 0,
+          "Z": 1
+        },
+        "Size": {
+          "X": 1,
+          "Y": 1,
+          "Z": 1
+        }
+      }
+    }
+  }
+}
